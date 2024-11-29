@@ -1,0 +1,86 @@
+﻿id_lieu,geo_point_2d,nom_lieu,ad_lieu,com_lieu,insee,type,date_maj,ouvert,source,xlong,ylat,nbre_pl,nbre_pmr,duree,horaires,proprio,lumiere,comm
+38540-C-001,"45.2688739236629,5.61882050229529",Les Echalières 1,Route de Montaud,Veurey-Voroize,38540,Parking,2019-07-18,true,200040715,5.61882050229529,45.2688739236629,17,0,"","",Grenoble-Alpes Métropole,true,""
+38540-C-002,"45.26779776779188,5.619226401021663",Les Echalières 2,Impasse des Echalières,Veurey-Voroize,38540,Parking,2019-07-18,true,200040715,5.619226401021663,45.26779776779188,13,0,"","",Grenoble-Alpes Métropole,true,""
+38328-C-001,"45.25334912240552,5.719981039023554",Quaix Ecole,Route de Clémencière,Quaix-en-Chartreuse,38328,Parking,2019-07-18,true,200040715,5.719981039023554,45.25334912240552,10,0,"","",Grenoble-Alpes Métropole,true,""
+38126-C-001,"45.23412697618231,5.750889334037775",Col de Vence,Route de la Chartreuse,Corenc,38126,Parking,2019-07-18,true,200040715,5.750889334037775,45.23412697618231,40,0,"","",Grenoble-Alpes Métropole,false,""
+38471-C-001,"45.26004379593453,5.7768444470292",Ecole du Sappey,L'Eglise,Le Sappey-en-Chartreuse,38471,Parking,2019-07-18,true,200040715,5.7768444470292,45.26004379593453,40,2,"","",Grenoble-Alpes Métropole,true,""
+38150-C-001,"45.20678,5.8473",P+R Les Arnauds,Rue des Contamines,Domène,38150,Parking relais,2019-07-18,true,200040715,5.8473,45.20678,40,1,"","",Grenoble-Alpes Métropole,true,""
+38533-C-001,"45.17120397769095,5.806543496181449",Pré Bousson,L'Adret,Venon,38533,Parking,2019-07-18,true,200040715,5.806543496181449,45.17120397769095,5,0,"","",Grenoble-Alpes Métropole,false,""
+38179-C-001,"45.177300685719395,5.792405630472532",Pied de Venon,Route de Venon,Gières,38179,Parking,2021-03-16,true,200040715,5.792405630472532,45.177300685719395,3,0,"","",Grenoble-Alpes Métropole,false,""
+38179-C-002,"45.179364,5.788967",Gières Avenue Duhamel,Avenue Henri Duhamel,Gières,38179,Aire de covoiturage,2019-07-18,true,200040715,5.788967,45.179364,1,0,"","",Grenoble-Alpes Métropole,false,""
+38421-C-001,"45.17349713647201,5.781166929080482",Le Mûrier,Route des Maquis,St-Martin-d'Hères,38421,Parking,2019-07-18,true,200040715,5.781166929080482,45.17349713647201,30,0,"","",Grenoble-Alpes Métropole,true,""
+38059-C-001,"45.134555827191384,5.771343609753871",P+R Tavernolles,Route de Jarrie,Brié-et-Angonnes,38059,Parking relais,2019-07-18,true,200040715,5.771343609753871,45.134555827191384,36,1,"","",Grenoble-Alpes Métropole,true,""
+38200-C-001,"45.11619933764285,5.757771322839036",Les Simianes Haute-Jarrie,Rue de la bascule,Jarrie,38200,Parking,2019-07-18,true,200040715,5.757771322839036,45.11619933764285,10,0,"","",Grenoble-Alpes Métropole,false,""
+38200-C-002,"45.11779,5.74806",Le Plâtre,Route du Plâtre,Jarrie,38200,Parking,2019-07-18,true,200040715,5.74806,45.11779,40,0,"","",Grenoble-Alpes Métropole,true,""
+38071-C-001,"45.07932921670301,5.726160676352259",Champ-sur-Drac,Route de St-Georges-de-Commiers,Champ sur Drac,38071,Parking,2019-07-18,true,200040715,5.726160676352259,45.07932921670301,20,0,"","",Grenoble-Alpes Métropole,false,""
+38071-C-002,"45.0864081615098,5.730576986220045",Pont de Champ - Navarre,Rue du Vercors,Champ sur Drac,38071,Parking,2019-07-18,true,200040715,5.730576986220045,45.0864081615098,35,0,"","",Grenoble-Alpes Métropole,false,""
+38529-C-001,"45.13646385759345,5.82488338867996",La Tuilerie,Avenue d'Uriage,Vaulnaveys-le-Haut,38529,Parking,2019-07-18,true,200040715,5.82488338867996,45.13646385759345,35,2,"","",Grenoble-Alpes Métropole,true,""
+38529-C-002,"45.121510439026274,5.813955408606665",Ecoles,Avenue d'Uriage,Vaulnaveys-le-Haut,38529,Parking,2019-10-15,true,200040715,5.813955408606665,45.121510439026274,30,0,"","",Grenoble-Alpes Métropole,true,""
+38529-C-003,"45.11527768296836,5.807944713841076",Marchandise,Avenue d'Uriage,Vaulnaveys-le-Haut,38529,Parking,2019-07-18,true,200040715,5.807944713841076,45.11527768296836,20,0,"","",Grenoble-Alpes Métropole,true,""
+38562-C-001,"45.07655675755087,5.776038040572113",Centre des Congrès La Locomotive,Route d'Uriage,Vizille,38562,Parking,2019-07-18,true,200040715,5.776038040572113,45.07655675755087,127,3,"","",Grenoble-Alpes Métropole,true,""
+38562-C-002,"45.0576724286811,5.771164976976388",Vizille le péage,Route du Maquis de L'Oisans,Vizille,38562,Parking,2019-07-18,true,200040715,5.771164976976388,45.0576724286811,10,0,"","",Grenoble-Alpes Métropole,true,""
+38478-C-001,"45.05335460636696,5.829558011135128",Gare,Route Nationale 91,Séchilienne,38478,Parking,2019-07-18,true,200040715,5.829558011135128,45.05335460636696,15,0,"","",Grenoble-Alpes Métropole,false,""
+38436-C-001,"45.07511865002056,5.661021438597112",Le Poulat,Route du Vercors,St-Paul de Varces,38436,Parking,2019-07-18,true,200040715,5.661021438597112,45.07511865002056,20,1,"","",Grenoble-Alpes Métropole,true,""
+38436-C-002,"45.07167456931503,5.642941724805576",Place de l'Eglise,Chemin Saint-Ange,St-Paul de Varces,38436,Parking,2019-07-18,true,200040715,5.642941724805576,45.07167456931503,10,2,"","",Grenoble-Alpes Métropole,true,""
+38545-C-001,"45.06626758399403,5.671417062107149",Complexe sportif Vif,Chemin de Porte Coche,Vif,38545,Parking,2019-07-18,true,200040715,5.671417062107149,45.06626758399403,35,2,"","",Grenoble-Alpes Métropole,true,""
+38388-C-001,"45.03827835427766,5.703972753070524",La Tour,Rue de la Chapelle,St-Georges-de-Commiers,38388,Parking,2019-07-18,true,200040715,5.703972753070524,45.03827835427766,10,0,"","",Grenoble-Alpes Métropole,true,""
+38388-C-002,"45.02826661331862,5.706335448754433",Eglise,Route de Saint-Pierre,St-Georges-de-Commiers,38388,Parking,2019-07-18,true,200040715,5.706335448754433,45.02826661331862,15,0,"","",Grenoble-Alpes Métropole,true,""
+38474-C-001,"45.213824,5.660985",P+R Jean Prévost,Place Jean Prévost,Sassenage,38474,Parking relais,2019-07-18,true,200040715,5.660985,45.213824,80,2,"","",Grenoble-Alpes Métropole,true,""
+38486-C-001,"45.165786,5.690837",P+R Le Prisme,"",Seyssins,38486,Parking relais,2019-07-18,false,200040715,5.690837,45.165786,100,2,"",Lu-Di 04:30 – 01:30,Grenoble-Alpes Métropole,true,""
+38486-C-002,"45.166402,5.694166",Stade Louis Armand,Avenue Louis Armand,Seyssins,38486,Parking,2019-07-18,true,200040715,5.694166,45.166402,45,2,"","",Grenoble-Alpes Métropole,true,""
+38229-C-001,"45.207501,5.767896",P+R La Revirée,Avenue de Verdun,Meylan,38229,Parking relais,2019-07-18,true,200040715,5.767896,45.207501,98,1,"","",Grenoble-Alpes Métropole,true,""
+38382-C-001,"45.235088,5.671546",P+R Saint-Egrève Gare,Rue des Bonnais,Saint-Egrève,38382,Parking relais,2019-07-18,true,200040715,5.671546,45.235088,80,2,"","",Grenoble-Alpes Métropole,true,""
+38382-C-002,"45.242759,5.669222",P+R Karben,"15, route de Lyon",Saint-Egrève,38382,Parking relais,2019-07-18,true,200040715,5.669222,45.242759,98,2,"","",Grenoble-Alpes Métropole,true,""
+38382-C-003,"45.2381165,5.6897301",La Monta,Rue de la Monta,Saint-Egrève,38382,Aire de covoiturage,2022-03-10,true,200040715,5.6897301,45.2381165,1,0,"","",Grenoble-Alpes Métropole,true,""
+38545-C-002,"45.05009,5.671126",P+R La Valonne,Boulevard de la Résistance,Vif,38545,Parking relais,2019-07-18,true,200040715,5.671126,45.05009,71,2,"","",Grenoble-Alpes Métropole,true,""
+38562-C-003,"45.080654,5.77428",P+R Chantefeuille,Avenue Gabriel Péri,Vizille,38562,Parking relais,2019-07-18,true,200040715,5.77428,45.080654,68,3,"","",Grenoble-Alpes Métropole,true,""
+38185-C-001,"45.180179,5.706421",Joseph Vallier,56 bd Joseph Vallier,Grenoble,38185,Aire de covoiturage,2019-10-15,true,200040715,5.706421,45.180179,2,0,"","",Grenoble-Alpes Métropole,true,""
+38185-C-002,"45.1942215,5.718644",Porte de France,Bd de l'Esplanade,Grenoble,38185,Aire de covoiturage,2019-07-18,true,200040715,5.718644,45.1942215,1,0,"","",Grenoble-Alpes Métropole,true,ecov
+38185-C-003,"45.204778,5.698694",Presqu'île,Rue Jules Horowitz,Grenoble,38185,Aire de covoiturage,2019-07-18,true,200040715,5.698694,45.204778,1,0,"","",Grenoble-Alpes Métropole,true,""
+38185-C-004,"45.205447,5.701262",Pont d'Oxford,"Pont d'Oxford, direction A48",Grenoble,38185,Aire de covoiturage,2020-10-12,true,200040715,5.701262,45.205447,3,0,"","",Grenoble-Alpes Métropole,true,ecov
+38185-C-005,"45.186343,5.735163",Hôtel de Ville,"Bd Jean Pain, direction Meylan",Grenoble,38185,Aire de covoiturage,2020-11-04,true,200040715,5.735163,45.186343,1,0,"","",Grenoble-Alpes Métropole,true,""
+38563-C-001,"45.35018777,5.567052357",P+R Champfeuillet,11 Route des Bois Parc de Montaly,Voiron,38563,Parking relais,2019-07-18,true,243800984,5.567052357,45.35018777,132,3,"","",Pays Voironnais,true,""
+38563-C-002,"45.350132,5.567513",Champfeuillet,Route des Bois,Voiron,38563,Aire de covoiturage,2020-10-12,true,243800984,5.567513,45.350132,1,0,"","",Pays Voironnais,true,ecov
+38337-C-001,"45.38175227,5.477001335",P+R Bièvre Dauphine,D50F,Rives,38337,Parking relais,2019-07-18,true,243800984,5.477001335,45.38175227,125,0,"","",Pays Voironnais,true,""
+38337-C-002,"45.3818,5.477376",Bièvre Dauphine,D50F,Rives,38337,Aire de covoiturage,2020-10-12,true,243800984,5.477376,45.3818,1,0,"","",Pays Voironnais,true,ecov
+38517-C-001,"45.288566,5.522132",Tullins,Chemin de la Plaine de Fures,Tullins,38517,Aire de covoiturage,2020-10-12,true,243800984,5.522132,45.288566,1,0,"","",Pays Voironnais,true,ecov
+38422-C-001,"45.14559116292778,5.829090585119586",Office de Tourisme,Avenue des Thermes,Saint-Martin-d’Uriage,38422,Parking,2019-07-18,true,200018166,5.829090585119586,45.14559116292778,100,,"","",Le Grésivaudan,"",""
+38140-C-005,"45.27986,5.88336",Les Clapisses,Place Boris Vian,Crolles,38140,Parking,2020-10-09,true,200018166,5.88336,45.27986,34,,"","",Le Grésivaudan,"",""
+38140-C-006,"45.266952,5.884651",ST Microelectronics,Entrée ST Microelectronics,Crolles,38140,Aire de covoiturage,2020-10-12,true,200018166,5.884651,45.266952,1,,"","",Le Grésivaudan,"",ecov
+38140-C-007,"45.271393,5.889029",Ambroise Croizat,Avenue Ambroise Croizat,Crolles,38140,Aire de covoiturage,2020-10-12,true,200018166,5.889029,45.271393,2,,"","",Le Grésivaudan,true,ecov
+38140-C-001,"45.277109,5.882231",Belledonne,351 Rue Léo Ferré,Crolles,38140,Parking,2019-07-18,true,200018166,5.882231,45.277109,34,,"","",Le Grésivaudan,"",""
+38140-C-002,"45.280993,5.87889",Léo Lagrange,890 rue Léo Lagrange,Crolles,38140,Parking,2019-07-18,true,200018166,5.87889,45.280993,18,,"","",Le Grésivaudan,"",""
+38140-C-003,"45.296851,5.896731",Monfort le Coteau,47 impasse Georges Sand,Crolles,38140,Parking,2019-07-18,true,200018166,5.896731,45.296851,9,,"","",Le Grésivaudan,"",""
+38140-C-004,"45.270331,5.893583",Casino,rue de Belledonne,Crolles,38140,Parking,2020-03-04,true,200018166,5.893583,45.270331,41,,"","",Le Grésivaudan,"",""
+38431-C-001,"45.25810468,5.851073894",Parking Les Ratz,516 Chemin des Ratz,Saint-Nazaire-les-Eymes,38431,Parking,2019-07-18,true,200018166,5.851073894,45.25810468,12,,"","",Le Grésivaudan,"",""
+38039-C-001,"45.264364,5.878277",Les Cloyères,Chemin des Fontaines,Bernin,38039,Parking,2019-07-18,true,200018166,5.878277,45.264364,20,,"","",Le Grésivaudan,"",""
+38039-C-002,"45.264413,5.878484",Les Cloyères,Chemin des Fontaines,Bernin,38039,Aire de covoiturage,2020-10-12,true,200018166,5.878484,45.264413,1,,"","",Le Grésivaudan,"",ecov
+38214-C-001,"45.30243664,5.907538356",Parking ZA des Longs Prés,135 Chemin des Longs Prés,Lumbin,38214,Parking,2019-07-18,true,200018166,5.907538356,45.30243664,50,,"","",Le Grésivaudan,"",""
+38006-C-001,"45.39404017,6.074773472",Place Verdun,Rue de Bréda,Allevard,38006,Parking,2019-07-18,true,200018166,6.074773472,45.39404017,,,"","",Le Grésivaudan,"",""
+38006-C-002,"45.392397,6.071227",Les Amoureux,Boulevard Jules Ferry,Allevard,38006,Aire de covoiturage,2020-10-12,true,200018166,6.071227,45.392397,1,,"","",Le Grésivaudan,true,ecov
+38547-C-001,"45.234449,5.881249",Parking Gare de Lancey,3 quai des négociants,Villard-Bonnot,38547,Parking,2019-07-18,true,200018166,5.881249,45.234449,118,,"","",Le Grésivaudan,"",""
+38249-C-001,"45.224388,5.818692",Parking Pré de l'Eau,Inovallée - 1525 Route de la Doux,Montbonnot-Saint-Martin,38249,Parking,2019-07-18,true,200018166,5.818692,45.224388,150,,"","",Le Grésivaudan,"",""
+38249-C-002,"45.223961,5.819406",Pré de l'Eau,ZA Pré Millet - Inovallée,Montbonnot-Saint-Martin,38249,Aire de covoiturage,2020-10-12,true,200018166,5.819406,45.223961,1,,"","",Le Grésivaudan,"",ecov
+38249-C-003,"45.218837,5.809946",Croix Verte,ZA Pré Millet - Inovallée,Montbonnot-Saint-Martin,38249,Aire de covoiturage,2020-10-12,true,200018166,5.809946,45.218837,1,,"","",Le Grésivaudan,"",ecov
+38397-C-001,"45.254444,5.84029",Parking Mémorial Doyen Gosse,Rue Doyen Gosse,Saint-Ismier,38397,Parking,2019-07-18,true,200018166,5.84029,45.254444,15,,"","",Le Grésivaudan,"",""
+38920-C-001,"45.262624,5.901533",Gare de Brignoud,Avenue Robert Huant,Brignoud,38920,Parking,2019-07-18,true,200018166,5.901533,45.262624,115,,"","",Le Grésivaudan,"",""
+38181-C-001,"45.347596,5.97549",Gare de Goncelin,15 place de la Gare,Goncelin,38181,Parking,2019-07-18,true,200018166,5.97549,45.347596,120,,"","",Le Grésivaudan,"",""
+38314-C-001,"45.432011,6.021332",Gare de Pontcharra,1 avenue de la Gare,Pontcharra,38314,Parking,2019-07-18,true,200018166,6.021332,45.432011,110,,"","",Le Grésivaudan,"",""
+38474-C-002,"45.212859,5.6600055",Jean Prévost,Rue du Vercors,Sassenage,38474,Aire de covoiturage,2019-10-15,true,200040715,5.6600055,45.212859,1,0,"","",Grenoble-Alpes Métropole,true,""
+38486-C-003,"45.166008,5.6889472",Le Prisme,Avenue de Grenoble,Seyssins,38486,Aire de covoiturage,2019-10-15,true,200040715,5.6889472,45.166008,1,0,"","",Grenoble-Alpes Métropole,true,""
+38068-C-001,"45.1347356,5.7144008",La Combe,Route de Champagnier,Champagnier,38068,Aire de covoiturage,2019-10-15,true,200040715,5.7144008,45.1347356,1,0,"","",Grenoble-Alpes Métropole,true,""
+38071-C-003,"45.087521,5.730325",Pont de Champ,2 route de Saint-Georges-de-Commiers,Champ-sur-Drac,38071,Aire de covoiturage,2019-10-15,true,200040715,5.730325,45.087521,1,0,"","",Grenoble-Alpes Métropole,true,""
+38529-C-004,"45.122137,5.814817",Ecoles,Avenue d'Uriage,Vaulnaveys-le-Haut,38529,Aire de covoiturage,2019-10-15,true,200040715,5.814817,45.122137,1,0,"","",Grenoble-Alpes Métropole,true,""
+38158-C-001,"45.1470454,5.7547821",Le Verderet,Route de Grenoble,Eybens,38158,Aire de covoiturage,2019-10-15,true,200040715,5.7547821,45.1470454,1,0,"","",Grenoble-Alpes Métropole,true,""
+38516-C-001,"45.204612,5.737859",Bastille,Grande Rue,La Tronche,38516,Aire de covoiturage,2019-10-17,true,200040715,5.737859,45.204612,1,0,"","",Grenoble-Alpes Métropole,true,""
+38485-C-001,"45.175942268092335,5.686616999897877",Hector Berlioz,Avenue Hector Berlioz,Seyssinet-Pariset,38485,Aire de covoiturage,2019-10-17,true,200040715,5.686616999897877,45.175942268092335,1,0,"","",Grenoble-Alpes Métropole,true,""
+38314-C-002,"45.432399,6.01902",Mairie,Avenue de la Gare,Pontcharra,38314,Aire de covoiturage,2020-03-11,true,200018166,6.01902,45.432399,1,,"","",Le Grésivaudan,"",ecov
+38439-C-001,"45.371301,6.050721",Crêts-en-Belledone - D525,Carrefour D525/D280,Crêts-en-Belledone,38439,Aire de covoiturage,2020-10-12,true,200018166,6.050721,45.371301,1,,"","",Le Grésivaudan,"",ecov
+38511-C-001,"45.357916,5.955165",Grandes Terres,D1090,Le Touvet,38511,Aire de covoiturage,2020-10-12,true,200018166,5.955165,45.357916,1,,"","",Le Grésivaudan,true,ecov
+38524-C-001,"45.102629,5.686001",Rochefort,D1075,Varces-Allières-et-Risset,38524,Aire de covoiturage,2021-02-04,true,200040715,5.686001,45.102629,1,,"","",Grenoble-Alpes Métropole,true,""
+38185-C-006,"45.180161,5.704659",Catane,"D1532, Pont de Catane",Grenoble,38185,Aire de covoiturage,2021-02-04,true,200040715,5.704659,45.180161,1,,"","",Grenoble-Alpes Métropole,true,ecov
+38185-C-007,"45.187312,5.737139",Grenoble Hôtel de Ville,Boulevard Jean Pain,Grenoble,38185,Aire de covoiturage,2021-03-18,true,200040715,5.737139,45.187312,1,,"","",Grenoble-Alpes Métropole,true,ecov
+38421-C-002,"45.18414,5.76851",Champ Roman,Champ Roman,Saint-Martin-d'Hères,38421,Aire de covoiturage,2022-02-18,true,200040715,5.76851,45.18414,1,,"","",Grenoble-Alpes Métropole,true,ecov
+38422-C-002,"45.14389,5.82955",Gare,Gare,Saint-Martin-d'Uriage,38422,Aire de covoiturage,2022-02-18,true,200040715,5.82955,45.14389,1,,"","",Grenoble-Alpes Métropole,true,ecov
+38397-C-002,"45.241137,5.846864",La Bâtie,La Bâtie,Saint-Ismier,38397,Aire de covoiturage,2022-05-12,true,200040715,5.846864,45.241137,1,,"","",Grenoble-Alpes Métropole,true,ecov
+38133-C-001,"45.353778,5.597796",Plan Menu,Plan Menu,Coublevie,38133,Aire de covoiturage,2022-09-12,true,200040715,5.597796,45.353778,1,,"","",Grenoble-Alpes Métropole,true,ecov
