@@ -2,8 +2,6 @@ import pandas as pd
 import geopandas as gpd
 import matplotlib.pyplot as plt
 
-# Chargement des données
-data = pd.read_csv("../data/demo/BASE_TD_FILO_IRIS_2021_DISP.csv", sep=";", dtype={"IRIS": str})
 codes_insee = [ # Pour limiter sur la métropole
     "38057", "38059", "38071", "38068", "38111", "38126", "38150", "38151", 
     "38158", "38169", "38170", "38179", "38185", "38188", "38200", "38516", 
@@ -13,38 +11,45 @@ codes_insee = [ # Pour limiter sur la métropole
     "38485", "38486", "38524", "38528", "38529", "38533", "38540", "38545", 
     "38562"
 ]
-data_metro = data[data["IRIS"].str[:5].isin(codes_insee)]
-
-# Chargement des contours
 gdf = gpd.read_file('../data/iris_contours/iris_contours.shp')
 back = gpd.read_file('../data/iris_contours/iris_contours.shp')
-# back_gre = back[back["CODE_IRIS"].str[:5].isin(codes_insee)]
-# back_gre.to_file("../data/iris_contours/iris_contours.shp")
 
+def load_data(filepath: str,geo: str = "IRIS"):
+    data = pd.read_csv(filepath, sep=";", dtype={geo: str})
+    return data[data[geo].str[:5].isin(codes_insee)]
 
-# Nettoyage et jointure
-gdf_new = gdf.merge(data_metro[["IRIS", "DISP_MED21"]], left_on="CODE_IRIS", right_on="IRIS", how="right")
-gdf_new['DISP_MED21'] = pd.to_numeric(gdf_new['DISP_MED21'], errors='coerce')
+def plot_iris(data_metro,obj: str,main: str,geo: str = "IRIS"):
+    if geo == "IRIS" :
+        gdf_new = gdf.merge(data_metro[["IRIS", obj]], left_on="CODE_IRIS", right_on="IRIS", how="right")
+        gdf_new[obj] = pd.to_numeric(gdf_new[obj], errors='coerce')
+        print("erreur")
+    else : 
+        gdf_new = gdf.merge(data_metro[["CODGEO", obj]], left_on="INSEE_COM", right_on="CODGEO", how="right")
+        gdf_new[obj] = pd.to_numeric(gdf_new[obj], errors='coerce')
+    fig, ax = plt.subplots(1, 1, figsize=(10, 10))
+    # Fond de carte gris
+    back.plot(ax=ax, color='lightgrey', edgecolor='none')
+    # Ajout des données et de la barre continue
+    gdf_new.plot(
+        column=obj,
+        ax=ax,
+        legend=True,
+        cmap='viridis',
+        legend_kwds={
+            'shrink': 0.7, 
+            'label': "Population", 
+            'orientation': "vertical"
+        }
+    )
 
-fig, ax = plt.subplots(1, 1, figsize=(10, 10))
+    ax.set_title(main)
+    ax.set_axis_off()
 
-# Fond de carte gris
-back.plot(ax=ax, color='lightgrey', edgecolor='none')
+    plt.show()
 
-# Ajout des données et de la barre continue
-gdf_new.plot(
-    column='DISP_MED21',
-    ax=ax,
-    legend=True,
-    cmap='viridis',
-    legend_kwds={
-        'shrink': 0.7, 
-        'label': "Médiane de revenu (€)", 
-        'orientation': "vertical"
-    }
-)
+#plot_iris(load_data("../data_insee/revenus_disponibles/BASE_TD_FILO_IRIS_2021_DISP.csv"),"DISP_MED21","Médiane de revenu")
+plot_iris(load_data("../data_insee/revenus_declares/BASE_TD_FILO_IRIS_2021_DEC.csv"),"DEC_MED21","Médiane")
+# data_metro = load_data("../data_insee/dossier_complet/dossier_complet.csv","CODGEO")
+# print(data_metro["C21_POP55P_CS7"])
+# plot_iris(data_metro,"C21_POP55P_CS7","Retraités","Commune")
 
-ax.set_title('Carte des Zones IRIS par Médiane de revenu en 2021')
-ax.set_axis_off()
-
-plt.show()
