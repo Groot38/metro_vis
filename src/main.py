@@ -1,9 +1,14 @@
 import streamlit as st
 
+
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
 def login():
+    st.snow()
+    st.title("🌟 Bienvenue sur notre plateforme")    
+    st.image("https://www.thetrainline.com/content/vul/hero-images/city/grenoble/2x.jpg")
+    st.write("Bienvenue sur notre plateforme. Connectez-vous pour accéder à toutes les fonctionnalités.")
     if st.button("Log in"):
         st.session_state.logged_in = True
         st.rerun()
