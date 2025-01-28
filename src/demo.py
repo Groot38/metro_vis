@@ -1,6 +1,7 @@
 import pandas as pd
 import geopandas as gpd
 import matplotlib.pyplot as plt
+import os
 
 codes_insee = [ # Pour limiter sur la métropole
     "38057", "38059", "38071", "38068", "38111", "38126", "38150", "38151", 
@@ -14,9 +15,19 @@ codes_insee = [ # Pour limiter sur la métropole
 gdf = gpd.read_file('../data/iris_contours/iris_contours.shp')
 back = gpd.read_file('../data/iris_contours/iris_contours.shp')
 
-def load_data(filepath: str,geo: str = "IRIS"):
-    data = pd.read_csv(filepath, sep=";", dtype={geo: str})
-    return data[data[geo].str[:5].isin(codes_insee)]
+def load_data(filepath: str,geo: str = "IRIS",filtre : bool = True):
+    data = pd.read_csv(filepath, sep=";",dtype={geo: str})
+    if filtre :
+        return data[data[geo].str[:5].isin(codes_insee)]
+    else : 
+        return(data)
+
+def update_data(filepath: str,geo: str = "IRIS"):
+    data = load_data(filepath,geo)
+    #print(data)
+    os.remove(filepath)
+    data.to_csv(filepath,index=False,encoding='utf-8')
+
 
 def plot_iris(data_metro,obj: str,main: str,geo: str = "IRIS"):
     if geo == "IRIS" :
@@ -48,8 +59,11 @@ def plot_iris(data_metro,obj: str,main: str,geo: str = "IRIS"):
     plt.show()
 
 #plot_iris(load_data("../data_insee/revenus_disponibles/BASE_TD_FILO_IRIS_2021_DISP.csv"),"DISP_MED21","Médiane de revenu")
-plot_iris(load_data("../data_insee/revenus_declares/BASE_TD_FILO_IRIS_2021_DEC.csv"),"DEC_MED21","Médiane")
+#plot_iris(load_data("../data_insee/revenus_declares/BASE_TD_FILO_IRIS_2021_DEC.csv"),"DEC_MED21","Médiane")
 # data_metro = load_data("../data_insee/dossier_complet/dossier_complet.csv","CODGEO")
 # print(data_metro["C21_POP55P_CS7"])
 # plot_iris(data_metro,"C21_POP55P_CS7","Retraités","Commune")
+
+#update_data("../data_insee/dossier_complet/dossier_complet.csv",geo= "CODGEO")
+
 
