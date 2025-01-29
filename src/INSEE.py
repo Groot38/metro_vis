@@ -12,12 +12,13 @@ codes_insee = [ # Pour limiter sur la métropole
     "38485", "38486", "38524", "38528", "38529", "38533", "38540", "38545", 
     "38562"
 ]
+
 gdf_iris = gpd.read_file('../data/iris_contours/iris_contours.shp')
 #back_iris = gdf_iris#gpd.read_file('../data/iris_contours/iris_contours.shp')
-gdf_com = gpd.read_file('../data/iris_contours/contours_communes.json')
-gdf_com = gdf_com[gdf_com["codgeo"].isin(codes_insee)]
+# gdf_com = gpd.read_file('../data/iris_contours/communes-version-simplifiee.geojson')
+# gdf_com = gdf_com[gdf_com["code"].isin(codes_insee)]
 # gdf_com.to_file("../data/iris_contours/output_file.geojson")
-# gdf_com = gpd.read_file('../data/iris_contours/output_file.geojson')
+gdf_com = gpd.read_file('../data/iris_contours/output_file.geojson')
 
 def load_data(filepath: str,geo: str = "IRIS",filtre : bool = True):
     data = pd.read_csv(filepath, sep=",",dtype={geo: str})
@@ -39,7 +40,7 @@ def plot_iris(data_metro,obj: str,main: str = "Titre à changer",geo: str = "IRI
         gdf_new[obj] = pd.to_numeric(gdf_new[obj], errors='coerce')
         back = gdf_iris
     else : 
-        gdf_new = gdf_com.merge(data_metro[["CODGEO", obj]], left_on="codgeo", right_on="CODGEO", how="right")
+        gdf_new = gdf_com.merge(data_metro[["CODGEO", obj]], left_on="code", right_on="CODGEO", how="right")
         gdf_new[obj] = pd.to_numeric(gdf_new[obj], errors='coerce')
         back = gdf_com
 
