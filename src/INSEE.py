@@ -18,7 +18,7 @@ gdf_iris = gpd.read_file('../data/iris_contours/iris_contours.shp')
 # gdf_com = gpd.read_file('../data/iris_contours/communes-version-simplifiee.geojson')
 # gdf_com = gdf_com[gdf_com["code"].isin(codes_insee)]
 # gdf_com.to_file("../data/iris_contours/output_file.geojson")
-gdf_com = gpd.read_file('../data/iris_contours/output_file.geojson')
+gdf_com = gpd.read_file('../data/iris_contours/contours_communes.geojson')
 
 def load_data(filepath: str,geo: str = "IRIS",filtre : bool = True):
     data = pd.read_csv(filepath, sep=",",dtype={geo: str})
@@ -74,5 +74,5 @@ def plot_iris(data_metro,obj: str,main: str = "Titre à changer",geo: str = "IRI
 #update_data("../data_insee/dossier_complet/dossier_complet.csv",geo= "CODGEO")
 
 data = load_data("../data_insee/dossier_complet/dossier_complet.csv",geo = "CODGEO",filtre=False)
-data['P21_POP0014_prop'] = data['P21_POP0014']/data['P21_POP']
-plot_iris(data,"P21_POP0014_prop",geo = "CODGEO")
+data['P21_POP90P_prop'] = data['P21_POP90P']/data['P21_POP']
+plot_iris(data,"P21_POP90P_prop",geo = "CODGEO")
