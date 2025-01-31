@@ -27,7 +27,7 @@ def login():
     st.write("")
     st.write("")
 
-    col1, col2,col3  = st.columns([1,2,1],border=True)
+    col1, col2,col3  = st.columns([1,2,1])
 
     with col1:
         st.image("../data/images/logo.png", use_container_width=True)

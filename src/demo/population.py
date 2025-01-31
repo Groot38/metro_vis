@@ -5,15 +5,7 @@ import plotly.express as px
 import json
 import re
 
-st.set_page_config(
-    page_title="Tableau de Bord - Démographie Française",
-    page_icon="📊",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
-
-
-@st.cache
+@st.cache_data
 def load_data():
     data = pd.read_csv("../data_insee/dossier_complet/dossier_complet.csv", sep=',')
     meta_data = pd.read_csv("../data_insee/dossier_complet/meta_dossier_complet.csv", sep=';')
@@ -31,7 +23,10 @@ geojson_commune = load_geojson()
 
 data,meta_data,nom_commune= load_data()
 #st.write(data.head())
-
+if "selected_var" in st.session_state :
+    bool_var = True
+else :
+    bool_var = False
 # Option, choix de la colonne et de l'année
 st.sidebar.title("Options")
 if st.sidebar.checkbox("Afficher les données brutes"):
@@ -55,7 +50,15 @@ filtered_meta_data = meta_data[meta_data["COD_VAR"].astype(str).str.match(patter
 variables = filtered_meta_data["LIB_VAR_LONG"].unique()
 variables = [var[:-8] for var in variables]
 
-selected_variable = st.sidebar.selectbox("Choisissez une variable à analyser", variables)
+if not bool_var :
+    
+    selected_variable = st.sidebar.selectbox("Choisissez une catégorie à analyser", variables)
+    st.write(selected_variable)
+    bool_var = False
+else : 
+    selected_variable = st.session_state["selected_var"]
+st.session_state["selected_var"] = selected_variable
+
 visualization_type = st.sidebar.radio("Type de Visualisation", ["Carte Choroplèthe", "Histogramme", "Analyse par Catégorie"])
 
 
@@ -100,23 +103,37 @@ elif visualization_type == "Histogramme":
     else:
         # Préparer les données pour Altair : transformation en format "long" (melt)
         
+        filtered_data["rank"] = filtered_data.iloc[:,1].rank(method="min",ascending=False)
+        
         melted_data = filtered_data.melt(
             id_vars=["nom_commune"],  # Maintenir CODGEO comme identifiant
             value_vars=selected_columns,  # Variables à "fondre"
             var_name="Variable",  # Nom de la colonne pour les années
             value_name="Valeur"  # Nom de la colonne pour les valeurs
-        ).sort_values(by=["nom_commune","Variable"])
+        )#.sort_values(by=["nom_commune","Variable"])
+        # Répéter les rangs pour chaque variable de la même commune
+
+        melted_data["Rank"] = melted_data["nom_commune"].map(filtered_data.set_index("nom_commune")["rank"])
+
+        # Trier proprement le tableau comme souhaité
+        melted_data = melted_data.sort_values(by=["Rank", "nom_commune", "Variable"])
+
         num_lines = st.sidebar.number_input("Nombre de lignes à afficher", min_value=1, max_value=49, value=10)
     
-
+        custom_labels = {
+        "21": "2021",
+        "15": "2015",
+        "10": "2010"
+        }
+        melted_data["Variable_Legende"] = melted_data["Variable"].str[1:3].replace(custom_labels)
         # Sélectionner les 'num_lines' premières lignes
-        melted_data_tronc = melted_data.head(num_lines*3)
-        st.write(melted_data_tronc)
+        melted_data_tronc = melted_data.head(num_lines*len(selected_years))
+        
         # Création du graphique en barres
         chart = alt.Chart(melted_data_tronc).mark_bar().encode(
             x=alt.X("nom_commune:N", title="Communes",axis=alt.Axis(labelAngle=-45),sort="-y"),  # Afficher CODGEO sur l'axe X
             y=alt.Y("Valeur:Q", title="Population", axis=alt.Axis(labelAngle=0)),  # Valeurs de la population sur l'axe Y
-            color="Variable:N",  # Colorier selon la variable (P21_POP, P15_POP, P10_POP)
+            color="Variable_Legende:N",  # Colorier selon la variable (P21_POP, P15_POP, P10_POP)
             xOffset="Variable:N"
         ).properties(
             title="Comparaison de "+selected_variable+" par commune et par année",
@@ -128,12 +145,15 @@ elif visualization_type == "Histogramme":
 
         st.altair_chart(chart, use_container_width=True)
         melted_group_data = melted_data.groupby('Variable')['Valeur'].sum().reset_index()
-        melted_group_data["nom"]= ["Grenoble Alpes Metropole"]*3
-        st.write(melted_group_data)
+        melted_group_data["nom"]= ["Grenoble Alpes Metropole"]*len(selected_years)
+
+
+        melted_group_data["Variable_Legende"] = melted_group_data["Variable"].str[1:3].replace(custom_labels)
+        
         chark = alt.Chart(melted_group_data).mark_bar(size=100).encode(
             x=alt.X("nom:N", title="Nom",axis=alt.Axis(labelAngle=-45),sort="-y"),  # Afficher CODGEO sur l'axe X
             y=alt.Y("Valeur:Q", title="Population", axis=alt.Axis(labelAngle=0)),  # Valeurs de la population sur l'axe Y
-            color="Variable:N",  # Colorier selon la variable (P21_POP, P15_POP, P10_POP)
+            color="Variable_Legende:N",  # Colorier selon la variable (P21_POP, P15_POP, P10_POP)
             xOffset="Variable:N"
         ).properties(
             title="Comparaison par année de "+selected_variable+" sur la métropole de Grenoble",
