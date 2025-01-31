@@ -4,6 +4,7 @@ import altair as alt
 import plotly.express as px
 import json
 import re
+import numpy as np
 
 @st.cache_data
 def load_data():
@@ -23,43 +24,41 @@ geojson_commune = load_geojson()
 
 data,meta_data,nom_commune= load_data()
 #st.write(data.head())
-if "selected_var" in st.session_state :
-    bool_var = True
-else :
-    bool_var = False
+
 # Option, choix de la colonne et de l'année
 st.sidebar.title("Options")
 if st.sidebar.checkbox("Afficher les données brutes"):
     st.write(data)
 selected_years = []
-if st.sidebar.checkbox("2010"):
+if st.sidebar.checkbox("2010",value = True):
     selected_years.append("10")
-if st.sidebar.checkbox("2015"):
+if st.sidebar.checkbox("2015",value = True):
     selected_years.append("15")
-if st.sidebar.checkbox("2021"):
+if st.sidebar.checkbox("2021",value = True):
     selected_years.append("21")
 
+if selected_years == []:
+    selected_years.append("21")
 # Construire dynamiquement le pattern pour les années sélectionnées
 year_pattern = "|".join(selected_years)
 
 # Générer le pattern dynamique
-pattern = re.compile(f"^[PC]({year_pattern})_[a-zA-Z0-9]+$")
+pattern = re.compile(f"^[P]({year_pattern})_[a-zA-Z0-9]+$")
 
 filtered_meta_data = meta_data[meta_data["COD_VAR"].astype(str).str.match(pattern)]
 # Filtrage des données pour analyse
-variables = filtered_meta_data["LIB_VAR_LONG"].unique()
+variables = filtered_meta_data["LIB_VAR_LONG"]
 variables = [var[:-8] for var in variables]
+unique_var = np.unique(variables, return_index=True)
+variables = pd.sort_values(unique_var[0],by = unique_var[1])
 
-if not bool_var :
-    
-    selected_variable = st.sidebar.selectbox("Choisissez une catégorie à analyser", variables)
-    st.write(selected_variable)
-    bool_var = False
-else : 
-    selected_variable = st.session_state["selected_var"]
-st.session_state["selected_var"] = selected_variable
-
-visualization_type = st.sidebar.radio("Type de Visualisation", ["Carte Choroplèthe", "Histogramme", "Analyse par Catégorie"])
+if "selected_variable" not in st.session_state or st.session_state["selected_variable"] == None: 
+    selected_variable = st.sidebar.selectbox("Choisissez une catégorie à analyser", variables,index = 0)
+    st.session_state["selected_variable"] = selected_variable
+else :
+    selected_variable = st.sidebar.selectbox("Choisissez une catégorie à analyser",variables,index = variables.index(st.session_state["selected_variable"]))
+    st.session_state["selected_variable"] = selected_variable
+visualization_type = st.sidebar.radio("Type de Visualisation", ["Carte Choroplèthe", "Histogramme"])
 
 
 
@@ -87,12 +86,13 @@ if visualization_type == "Carte Choroplèthe":
         locations="CODGEO",  # Code géographique (par exemple, code INSEE)
         featureidkey="properties.code",
         color=selected_columns[0],  # Colonne avec les valeurs numériques
-        color_continuous_scale="Viridis",
+        color_continuous_scale="Inferno",
         labels={selected_columns[0]: selected_variable},
         title=selected_variable
     )
     fig.update_geos(fitbounds="locations", visible=False)
-    st.plotly_chart(fig, use_container_width=True)
+    fig.update_layout(height=700)
+    st.plotly_chart(fig)
 
 elif visualization_type == "Histogramme":
     st.subheader(f"Histogramme : {selected_variable}")
@@ -125,7 +125,7 @@ elif visualization_type == "Histogramme":
         "15": "2015",
         "10": "2010"
         }
-        melted_data["Variable_Legende"] = melted_data["Variable"].str[1:3].replace(custom_labels)
+        melted_data["Legende"] = melted_data["Variable"].str[1:3].replace(custom_labels)
         # Sélectionner les 'num_lines' premières lignes
         melted_data_tronc = melted_data.head(num_lines*len(selected_years))
         
@@ -133,7 +133,7 @@ elif visualization_type == "Histogramme":
         chart = alt.Chart(melted_data_tronc).mark_bar().encode(
             x=alt.X("nom_commune:N", title="Communes",axis=alt.Axis(labelAngle=-45),sort="-y"),  # Afficher CODGEO sur l'axe X
             y=alt.Y("Valeur:Q", title="Population", axis=alt.Axis(labelAngle=0)),  # Valeurs de la population sur l'axe Y
-            color="Variable_Legende:N",  # Colorier selon la variable (P21_POP, P15_POP, P10_POP)
+            color="Legende:N",  # Colorier selon la variable (P21_POP, P15_POP, P10_POP)
             xOffset="Variable:N"
         ).properties(
             title="Comparaison de "+selected_variable+" par commune et par année",
@@ -148,12 +148,12 @@ elif visualization_type == "Histogramme":
         melted_group_data["nom"]= ["Grenoble Alpes Metropole"]*len(selected_years)
 
 
-        melted_group_data["Variable_Legende"] = melted_group_data["Variable"].str[1:3].replace(custom_labels)
+        melted_group_data["Legende"] = melted_group_data["Variable"].str[1:3].replace(custom_labels)
         
         chark = alt.Chart(melted_group_data).mark_bar(size=100).encode(
             x=alt.X("nom:N", title="Nom",axis=alt.Axis(labelAngle=-45),sort="-y"),  # Afficher CODGEO sur l'axe X
             y=alt.Y("Valeur:Q", title="Population", axis=alt.Axis(labelAngle=0)),  # Valeurs de la population sur l'axe Y
-            color="Variable_Legende:N",  # Colorier selon la variable (P21_POP, P15_POP, P10_POP)
+            color="Legende:N",  # Colorier selon la variable (P21_POP, P15_POP, P10_POP)
             xOffset="Variable:N"
         ).properties(
             title="Comparaison par année de "+selected_variable+" sur la métropole de Grenoble",
@@ -166,13 +166,3 @@ elif visualization_type == "Histogramme":
         )
 
         st.altair_chart(chark, use_container_width=True)
-        
-
-
-
-elif visualization_type == "Analyse par Catégorie":
-    st.subheader("Analyse par Catégorie")
-    selected_category = st.selectbox("Choisissez une catégorie", filtered_data["LIB_MOD"].unique())
-    category_data = filtered_data[filtered_data["LIB_MOD"] == selected_category]
-    st.write(f"Données pour {selected_category}")
-    st.write(category_data)
