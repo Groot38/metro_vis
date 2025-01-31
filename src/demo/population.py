@@ -4,7 +4,7 @@ import altair as alt
 import plotly.express as px
 import json
 import re
-import numpy as np
+
 
 @st.cache_data
 def load_data():
@@ -43,14 +43,13 @@ if selected_years == []:
 year_pattern = "|".join(selected_years)
 
 # Générer le pattern dynamique
-pattern = re.compile(f"^[P]({year_pattern})_[a-zA-Z0-9]+$")
+#pattern = re.compile(f"^[P]({year_pattern})_[PFH][O0-9][a-zA-Z0-9]*$")
+pattern = re.compile(f"^[P]({year_pattern})_(POP|F|H)(H|F|[0-9]|$)[a-zA-Z0-9]*$")
 
 filtered_meta_data = meta_data[meta_data["COD_VAR"].astype(str).str.match(pattern)]
 # Filtrage des données pour analyse
 variables = filtered_meta_data["LIB_VAR_LONG"]
-variables = [var[:-8] for var in variables]
-unique_var = np.unique(variables, return_index=True)
-variables = pd.sort_values(unique_var[0],by = unique_var[1])
+variables=list(dict.fromkeys(var[:-8] for var in variables))
 
 if "selected_variable" not in st.session_state or st.session_state["selected_variable"] == None: 
     selected_variable = st.sidebar.selectbox("Choisissez une catégorie à analyser", variables,index = 0)
@@ -58,7 +57,7 @@ if "selected_variable" not in st.session_state or st.session_state["selected_var
 else :
     selected_variable = st.sidebar.selectbox("Choisissez une catégorie à analyser",variables,index = variables.index(st.session_state["selected_variable"]))
     st.session_state["selected_variable"] = selected_variable
-visualization_type = st.sidebar.radio("Type de Visualisation", ["Carte Choroplèthe", "Histogramme"])
+visualization_type = st.sidebar.radio("Type de Visualisation", ["Carte Choroplèthe", "Histogramme","Diagramme Circulaire"])
 
 
 
@@ -73,7 +72,6 @@ filtered_data = data[["CODGEO"] + selected_columns]
 filtered_data = filtered_data.merge(nom_commune[["code_insee", "nom_commune"]], 
                                      left_on="CODGEO", right_on="code_insee", 
                                      how="left").drop(columns=["code_insee"])
-st.write(filtered_data)
 
 
 
@@ -166,3 +164,42 @@ elif visualization_type == "Histogramme":
         )
 
         st.altair_chart(chark, use_container_width=True)
+
+elif visualization_type == "Diagramme Circulaire":
+    pattern2021POP = re.compile(f"^[P]({year_pattern})_(PO)(P0014|P1529|P3044|P4559|P6074|P7589|P90P)*$")
+    filtered_meta_data = meta_data[meta_data["COD_VAR"].astype(str).str.match(pattern2021POP)]
+    variables = filtered_meta_data["LIB_VAR_LONG"]
+    variables=list(dict.fromkeys(var[:-8] for var in variables))
+    meta_data["LIB_VAR_LONG_trimmed"] = filtered_meta_data["LIB_VAR_LONG"].str[:-8]
+    filtered_meta_data = meta_data[meta_data["LIB_VAR_LONG_trimmed"].isin(variables)]
+
+    cod_var = filtered_meta_data["COD_VAR"]
+
+    selected_columns = [col for col in data.columns if col in cod_var.values]
+
+    filtered_data = data[["CODGEO"] + selected_columns]
+    filtered_data = filtered_data.merge(nom_commune[["code_insee", "nom_commune"]], 
+                                        left_on="CODGEO", right_on="code_insee", 
+                                        how="left").drop(columns=["code_insee"])
+    
+    melted_data = filtered_data.melt(
+        id_vars=["nom_commune"],  # Maintenir CODGEO comme identifiant
+        value_vars=selected_columns,  # Variables à "fondre"
+        var_name="Variable",  # Nom de la colonne pour les années
+        value_name="Valeur"  # Nom de la colonne pour les valeurs
+    )
+    
+
+    melted_group_data = melted_data.groupby('Variable')['Valeur'].sum().reset_index()
+    st.write(melted_group_data.sort_values(by="Variable"))
+    variables_trimmed = [var[23:] for var in variables]
+    fig = px.pie(melted_group_data, 
+             names=variables_trimmed,  # Colonnes pour les noms des secteurs
+             values='Valeur',  # Colonnes pour les valeurs
+             title="Distribution des valeurs par Variable",
+             color='Variable',  # Colorie les secteurs par "Variable"
+             color_discrete_sequence=px.colors.qualitative.Set1
+             )  # Palette de couleurs
+    st.write(melted_group_data["Variable"].sort_values())
+    # Affichage du graphique dans Streamlit
+    st.write(fig)
