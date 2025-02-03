@@ -4,25 +4,13 @@ import altair as alt
 import plotly.express as px
 import json
 import re
+import matplotlib.pyplot as plt
+from utils import load_data,load_geojson
 
-
-@st.cache_data
-def load_data():
-    data = pd.read_csv("../data_insee/dossier_complet/dossier_complet.csv", sep=',')
-    meta_data = pd.read_csv("../data_insee/dossier_complet/meta_dossier_complet.csv", sep=';')
-    nom_commune = pd.read_csv("../data/communes.csv", sep=',')
-    return data,meta_data,nom_commune
-
-@st.cache_data
-def load_geojson():
-    with open("../data/iris_contours/contours_communes.geojson", "r", encoding="utf-8") as f:
-        geojson_data = json.load(f)
-    return geojson_data
 
 geojson_commune = load_geojson()
-
-
 data,meta_data,nom_commune= load_data()
+
 #st.write(data.head())
 
 # Option, choix de la colonne et de l'année
@@ -62,8 +50,8 @@ visualization_type = st.sidebar.radio("Type de Visualisation", ["Carte Choroplè
 
 
 # Filtrer les données pour la variable choisie
-meta_data["LIB_VAR_LONG_trimmed"] = filtered_meta_data["LIB_VAR_LONG"].str[:-8]
-filtered_meta_data = meta_data[meta_data["LIB_VAR_LONG_trimmed"] == selected_variable]
+filtered_meta_data["LIB_VAR_LONG_trimmed"] = filtered_meta_data["LIB_VAR_LONG"].str[:-8]
+filtered_meta_data = filtered_meta_data[filtered_meta_data["LIB_VAR_LONG_trimmed"] == selected_variable]
 cod_var = filtered_meta_data["COD_VAR"]
 
 selected_columns = [col for col in data.columns if col in cod_var.values]
