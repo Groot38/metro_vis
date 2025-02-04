@@ -12,32 +12,35 @@ def meteo_page():
 
 st.title("Etude de températures")
 
-# 📂 Charger les données
-file_path_vent_2000_2005 = "../data/environnement/meteo/clim-base_quot_vent-38-2000-2005.csv"
-file_path_vent_2005_2010 = "../data/environnement/meteo/clim-base_quot_vent-38-2005-2010.csv"
-file_path_vent_2010_2015 = "../data/environnement/meteo/clim-base_quot_vent-38-2010-2015.csv"
-file_path_vent_2015_2020 = "../data/environnement/meteo/clim-base_quot_vent-38-2015-2020.csv"
-file_path_vent_2020_2025 = "../data/environnement/meteo/clim-base_quot_vent-38-2020-2025.csv"
+@st.cache_data
+def load_data_meteo():
+        # 📂 Charger les données
+    file_path_vent_2000_2005 = "../data/environnement/meteo/clim-base_quot_vent-38-2000-2005.csv"
+    file_path_vent_2005_2010 = "../data/environnement/meteo/clim-base_quot_vent-38-2005-2010.csv"
+    file_path_vent_2010_2015 = "../data/environnement/meteo/clim-base_quot_vent-38-2010-2015.csv"
+    file_path_vent_2015_2020 = "../data/environnement/meteo/clim-base_quot_vent-38-2015-2020.csv"
+    file_path_vent_2020_2025 = "../data/environnement/meteo/clim-base_quot_vent-38-2020-2025.csv"
 
-file_path_autre_2000_2005 = "../data/environnement/meteo/clim-base_quot_autres-38-2000-2005.csv"
-file_path_autre_2005_2010 = "../data/environnement/meteo/clim-base_quot_autres-38-2005-2010.csv"
-file_path_autre_2010_2015 = "../data/environnement/meteo/clim-base_quot_autres-38-2010-2015.csv"
-file_path_autre_2015_2020 = "../data/environnement/meteo/clim-base_quot_autres-38-2015-2020.csv"
-file_path_autre_2020_2025 = "../data/environnement/meteo/clim-base_quot_autres-38-2020-2025.csv"
+    file_path_autre_2000_2005 = "../data/environnement/meteo/clim-base_quot_autres-38-2000-2005.csv"
+    file_path_autre_2005_2010 = "../data/environnement/meteo/clim-base_quot_autres-38-2005-2010.csv"
+    file_path_autre_2010_2015 = "../data/environnement/meteo/clim-base_quot_autres-38-2010-2015.csv"
+    file_path_autre_2015_2020 = "../data/environnement/meteo/clim-base_quot_autres-38-2015-2020.csv"
+    file_path_autre_2020_2025 = "../data/environnement/meteo/clim-base_quot_autres-38-2020-2025.csv"
 
-df_2000_2005 = pd.read_csv(file_path_vent_2010_2015)
-df_2005_2010 = pd.read_csv(file_path_vent_2005_2010)
-df_2010_2015 = pd.read_csv(file_path_vent_2010_2015)
-df_2015_2020 = pd.read_csv(file_path_vent_2015_2020)
-df_2020_2025 = pd.read_csv(file_path_vent_2020_2025)
+    df_2000_2005 = pd.read_csv(file_path_vent_2010_2015)
+    df_2005_2010 = pd.read_csv(file_path_vent_2005_2010)
+    df_2010_2015 = pd.read_csv(file_path_vent_2010_2015)
+    df_2015_2020 = pd.read_csv(file_path_vent_2015_2020)
+    df_2020_2025 = pd.read_csv(file_path_vent_2020_2025)
 
-df2_2000_2005 = pd.read_csv(file_path_vent_2000_2005)
-df2_2005_2010 = pd.read_csv(file_path_vent_2005_2010)
-df2_2010_2015 = pd.read_csv(file_path_autre_2010_2015)
-df2_2015_2020 = pd.read_csv(file_path_autre_2015_2020)
-df2_2020_2025 = pd.read_csv(file_path_autre_2020_2025)
+    df2_2000_2005 = pd.read_csv(file_path_vent_2000_2005)
+    df2_2005_2010 = pd.read_csv(file_path_vent_2005_2010)
+    df2_2010_2015 = pd.read_csv(file_path_autre_2010_2015)
+    df2_2015_2020 = pd.read_csv(file_path_autre_2015_2020)
+    df2_2020_2025 = pd.read_csv(file_path_autre_2020_2025)
+    return(df_2000_2005,df_2005_2010,df_2010_2015,df_2015_2020,df_2020_2025,df2_2000_2005,df2_2005_2010,df2_2010_2015,df2_2015_2020,df2_2020_2025)
 
-
+df_2000_2005,df_2005_2010,df_2010_2015,df_2015_2020,df_2020_2025,df2_2000_2005,df2_2005_2010,df2_2010_2015,df2_2015_2020,df2_2020_2025=load_data_meteo()
 df = pd.concat([df_2000_2005,df_2005_2010,df_2010_2015, df_2015_2020,df_2020_2025], ignore_index=True)
 df2 = pd.concat([df2_2000_2005,df2_2005_2010,df2_2010_2015, df2_2015_2020,df2_2020_2025], ignore_index=True)
 
