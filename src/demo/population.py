@@ -6,6 +6,7 @@ import json
 import re
 import matplotlib.pyplot as plt
 from utils import load_data,load_geojson
+import numpy as np
 
 
 geojson_commune = load_geojson()
@@ -30,11 +31,27 @@ if selected_years == []:
 # Construire dynamiquement le pattern pour les années sélectionnées
 year_pattern = "|".join(selected_years)
 
-# Générer le pattern dynamique
-#pattern = re.compile(f"^[P]({year_pattern})_[PFH][O0-9][a-zA-Z0-9]*$")
-pattern = re.compile(f"^[P]({year_pattern})_(POP|F|H)(H|F|[0-9]|$)[a-zA-Z0-9]*$")
+selection_sex = st.sidebar.radio(
+    "",
+    ("Homme", "Femme", "Les deux"),
+)
 
+# Affichage du bouton sélectionné
+if selection_sex  == "Homme":
+    pattern_sex = re.compile(f"^[P]({year_pattern})_(POPH|H)(0014|1529|3044|4559|6074|7589|90P|^$)*$")
+    st.session_state["selected_variable"] = None
+elif selection_sex  == "Femme":
+    pattern_sex = re.compile(f"^[P]({year_pattern})_(POPF|F)(0014|1529|3044|4559|6074|7589|90P|^$)*$")
+    st.session_state["selected_variable"] = None
+else:
+    pattern_sex = re.compile(f"^[P]({year_pattern})_(POP)(0014|1529|3044|4559|6074|7589|90P|^$)*$")
+    st.session_state["selected_variable"] = None
+# Premier filtre
+pattern = re.compile(f"^[P]({year_pattern})_(POP|F|H)(H|F|[0-9]|$)[a-zA-Z0-9]*$")
 filtered_meta_data = meta_data[meta_data["COD_VAR"].astype(str).str.match(pattern)]
+# Deuxième filtre sur le sexe
+filtered_meta_data = meta_data[meta_data["COD_VAR"].astype(str).str.match(pattern_sex)]
+
 # Filtrage des données pour analyse
 variables = filtered_meta_data["LIB_VAR_LONG"]
 variables=list(dict.fromkeys(var[:-8] for var in variables))
@@ -45,7 +62,7 @@ if "selected_variable" not in st.session_state or st.session_state["selected_var
 else :
     selected_variable = st.sidebar.selectbox("Choisissez une catégorie à analyser",variables,index = variables.index(st.session_state["selected_variable"]))
     st.session_state["selected_variable"] = selected_variable
-visualization_type = st.sidebar.radio("Type de Visualisation", ["Carte Choroplèthe", "Histogramme","Diagramme Circulaire"])
+visualization_type = st.sidebar.radio("Type de Visualisation", ["Carte", "Histogramme","Diagramme Circulaire"])
 
 
 
@@ -63,8 +80,8 @@ filtered_data = filtered_data.merge(nom_commune[["code_insee", "nom_commune"]],
 
 
 
-if visualization_type == "Carte Choroplèthe":
-    st.subheader(f"Carte Choroplèthe : {selected_variable}")
+if visualization_type == "Carte":
+    st.subheader(f"Cartes : {selected_variable}")
     # Exemple de visualisation avec Plotly
     fig = px.choropleth(
         filtered_data,
@@ -74,11 +91,42 @@ if visualization_type == "Carte Choroplèthe":
         color=selected_columns[0],  # Colonne avec les valeurs numériques
         color_continuous_scale="Inferno",
         labels={selected_columns[0]: selected_variable},
-        title=selected_variable
+        title=f"{selected_variable} par commune",
+        hover_data = "nom_commune"
     )
     fig.update_geos(fitbounds="locations", visible=False)
     fig.update_layout(height=700)
     st.plotly_chart(fig)
+
+    if len(selected_years) > 1 :
+        filtered_data["evolution"] = (filtered_data.iloc[:,1]/filtered_data.iloc[:,2])
+
+        min_val = min(filtered_data["evolution"])
+        max_val = max(filtered_data["evolution"])
+
+        # Palette personnalisée pour les couleurs
+        color_scale = [
+            [0, "red"],  # Rouge pour les plus petites valeurs
+            [(1 - min_val) / (max_val - min_val), "white"],  # Blanc autour de 1
+            [1, "green"]  # Vert pour les grandes valeurs
+        ]
+        
+        # Exemple de visualisation avec Plotly
+        nb_annee = len(selected_years)
+        figue = px.choropleth(
+            filtered_data,
+            geojson=geojson_commune,
+            locations="CODGEO",  # Code géographique (par exemple, code INSEE)
+            featureidkey="properties.code",
+            color="evolution",  # Colonne avec les valeurs numériques
+            color_continuous_scale=color_scale,
+            labels={selected_columns[0]: selected_variable},
+            title=f"Evolution de {selected_variable} par commune entre 20{selected_years[nb_annee-2]} et 20{selected_years[nb_annee-1]}",
+            hover_data = "nom_commune"
+        )
+        figue.update_geos(fitbounds="locations", visible=False)
+        figue.update_layout(height=700)
+        st.plotly_chart(figue)
 
 elif visualization_type == "Histogramme":
     st.subheader(f"Histogramme : {selected_variable}")
@@ -154,8 +202,10 @@ elif visualization_type == "Histogramme":
         st.altair_chart(chark, use_container_width=True)
 
 elif visualization_type == "Diagramme Circulaire":
-    pattern2021POP = re.compile(f"^[P]({year_pattern})_(PO)(P0014|P1529|P3044|P4559|P6074|P7589|P90P)*$")
-    filtered_meta_data = meta_data[meta_data["COD_VAR"].astype(str).str.match(pattern2021POP)]
+    filtered_meta_data = meta_data[meta_data["COD_VAR"].astype(str).str.match(pattern_sex)]
+    year_pattern = max(selected_years)
+    pattern_pie = re.compile(f"^[P]({year_pattern})_\\w+\\d+$")
+    filtered_meta_data = filtered_meta_data[filtered_meta_data["COD_VAR"].astype(str).str.match(pattern_pie)]
     variables = filtered_meta_data["LIB_VAR_LONG"]
     variables=list(dict.fromkeys(var[:-8] for var in variables))
     meta_data["LIB_VAR_LONG_trimmed"] = filtered_meta_data["LIB_VAR_LONG"].str[:-8]
@@ -179,7 +229,6 @@ elif visualization_type == "Diagramme Circulaire":
     
 
     melted_group_data = melted_data.groupby('Variable')['Valeur'].sum().reset_index()
-    st.write(melted_group_data.sort_values(by="Variable"))
     variables_trimmed = [var[23:] for var in variables]
     fig = px.pie(melted_group_data, 
              names=variables_trimmed,  # Colonnes pour les noms des secteurs
@@ -188,6 +237,5 @@ elif visualization_type == "Diagramme Circulaire":
              color='Variable',  # Colorie les secteurs par "Variable"
              color_discrete_sequence=px.colors.qualitative.Set1
              )  # Palette de couleurs
-    st.write(melted_group_data["Variable"].sort_values())
     # Affichage du graphique dans Streamlit
     st.write(fig)
