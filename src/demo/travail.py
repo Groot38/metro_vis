@@ -62,39 +62,29 @@ selected_columns = [col for col in data.columns if col in cod_var.values]
 #                                      left_on="CODGEO", right_on="code_insee", 
 #                                      how="left").drop(columns=["code_insee"])
 
-col_CSP1, col_CSP2  = st.columns([1,4],vertical_alignment="center")
+filtered_data_global = pd.DataFrame(data[selected_columns].apply(sum,axis = 0))
+filtered_data_global["subcat"] = filtered_data_global.index.str[-3:]
+filtered_data_global["Catégorie"] = filtered_data_global.index.str[:3]
+filtered_data_global["Valeur"] = filtered_data_global[0]
+CSP = pd.DataFrame(filtered_meta_data["CSP"].drop_duplicates())
+CSP["indice"] = range(1,9)
+filtered_data_global["indice"] = filtered_data_global["subcat"].str[2].astype(int)
+resultat = pd.merge(filtered_data_global, CSP, on="indice", how="left").sort_values(by = "Catégorie",ascending=True)
+resultat["Année"] = "20"+resultat["Catégorie"].str[1:]
+# Création du barplot empilé avec Plotly Express
+fig = px.bar(
+    resultat, 
+    x="Année", 
+    y="Valeur", 
+    color="CSP", 
+    title="Diagramme empilé des catégories socio-professionneles", 
+    labels={"Category": "Catégories", "Value": "Valeurs", "Subcategory": "Sous-catégories"},
+    barmode="stack"
+)
+fig.update_traces(width=1)
 
-with col_CSP1 :
-    # 🎛️ Sélecteur pour choisir les secteurs à afficher
-    CSP = pd.DataFrame(filtered_meta_data["CSP"].drop_duplicates())
-    CSP["indice"] = range(1,9)
-    selected_CSP = st.multiselect("Sélectionnez les filières à afficher :", CSP["CSP"], default=CSP["CSP"])
-
-with col_CSP2 :
-    filtered_data_global = pd.DataFrame(data[selected_columns].apply(sum,axis = 0))
-    filtered_data_global["subcat"] = filtered_data_global.index.str[-3:]
-    filtered_data_global["Catégorie"] = filtered_data_global.index.str[:3]
-    filtered_data_global["Valeur"] = filtered_data_global[0]
-    CSP = pd.DataFrame(filtered_meta_data["CSP"].drop_duplicates())
-    CSP["indice"] = range(1,9)
-    filtered_data_global["indice"] = filtered_data_global["subcat"].str[2].astype(int)
-    resultat = pd.merge(filtered_data_global, CSP, on="indice", how="left").sort_values(by = "Catégorie",ascending=True)
-    resultat["Année"] = "20"+resultat["Catégorie"].str[1:]
-    resultat = resultat[resultat["CSP"].isin(selected_CSP)]
-    # Création du barplot empilé avec Plotly Express
-    fig = px.bar(
-        resultat, 
-        x="Année", 
-        y="Valeur", 
-        color="CSP", 
-        title="Diagramme empilé des catégories socio-professionneles", 
-        labels={"Category": "Catégories", "Value": "Valeurs", "Subcategory": "Sous-catégories"},
-        barmode="stack"
-    )
-    fig.update_traces(width=1)
-
-    # Affichage de la figure
-    st.write(fig)
+# Affichage de la figure
+st.write(fig)
 
 
 
