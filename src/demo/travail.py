@@ -4,6 +4,8 @@ from utils import load_data
 import pandas as pd
 import re
 import plotly.express as px
+from plotly.subplots import make_subplots
+import plotly.graph_objects as go
 
 data,meta_data,nom_commune= load_data()
 
@@ -60,171 +62,105 @@ selected_columns = [col for col in data.columns if col in cod_var.values]
 #                                      left_on="CODGEO", right_on="code_insee", 
 #                                      how="left").drop(columns=["code_insee"])
 
-filtered_data_global = pd.DataFrame(data[selected_columns].apply(sum,axis = 0))
-filtered_data_global["subcat"] = filtered_data_global.index.str[-3:]
-filtered_data_global["Catégorie"] = filtered_data_global.index.str[:3]
-filtered_data_global["Valeur"] = filtered_data_global[0]
-CSP = pd.DataFrame(filtered_meta_data["CSP"].drop_duplicates())
-CSP["indice"] = range(1,9)
-filtered_data_global["indice"] = filtered_data_global["subcat"].str[2].astype(int)
-resultat = pd.merge(filtered_data_global, CSP, on="indice", how="left").sort_values(by = "Catégorie",ascending=True)
-st.write(resultat)
-resultat["Année"] = "20"+resultat["Catégorie"].str[1:]
-# Création du barplot empilé avec Plotly Express
-fig = px.bar(
-    resultat, 
-    x="Année", 
-    y="Valeur", 
-    color="CSP", 
-    title="Diagramme empilé des catégories socio-professionneles", 
-    labels={"Category": "Catégories", "Value": "Valeurs", "Subcategory": "Sous-catégories"},
-    barmode="stack"
-)
-fig.update_traces(width=1)
-
-# Affichage de la figure
-st.write(fig)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
-
-# Données fournies
-actifs = data[["P10_ACTOCC15P", "P15_ACTOCC15P", "P21_ACTOCC15P"]]
-retraites = data[["C10_POP15P_CS7", "C15_POP15P_CS7", "C21_POP15P_CS7"]]
-prop_actifs_retraites = pd.DataFrame(index=range(49), columns=["2010", "2015", "2020"])
-
-# Calcul des proportions actifs/retraités
-for i in range(len(actifs)):
-    for j in range(3):
-        act = actifs.iloc[i, j]
-        ret = retraites.iloc[i, j]
-        prop_actifs_retraites.iloc[i, j] = act / (act + ret) if (act + ret) != 0 else 0
-
-# Moyennes des proportions par année
-sum_prop_ar = prop_actifs_retraites.apply(pd.Series.mean, axis=0)
-
-# Création de la figure avec Plotly
-fig = go.Figure()
+col_CSP1, col_CSP2  = st.columns([1,4],vertical_alignment="center")
+
+with col_CSP1 :
+    # 🎛️ Sélecteur pour choisir les secteurs à afficher
+    CSP = pd.DataFrame(filtered_meta_data["CSP"].drop_duplicates())
+    CSP["indice"] = range(1,9)
+    selected_CSP = st.multiselect("Sélectionnez les filières à afficher :", CSP["CSP"], default=CSP["CSP"])
+
+with col_CSP2 :
+    filtered_data_global = pd.DataFrame(data[selected_columns].apply(sum,axis = 0))
+    filtered_data_global["subcat"] = filtered_data_global.index.str[-3:]
+    filtered_data_global["Catégorie"] = filtered_data_global.index.str[:3]
+    filtered_data_global["Valeur"] = filtered_data_global[0]
+    CSP = pd.DataFrame(filtered_meta_data["CSP"].drop_duplicates())
+    CSP["indice"] = range(1,9)
+    filtered_data_global["indice"] = filtered_data_global["subcat"].str[2].astype(int)
+    resultat = pd.merge(filtered_data_global, CSP, on="indice", how="left").sort_values(by = "Catégorie",ascending=True)
+    resultat["Année"] = "20"+resultat["Catégorie"].str[1:]
+    resultat = resultat[resultat["CSP"].isin(selected_CSP)]
+    # Création du barplot empilé avec Plotly Express
+    fig = px.bar(
+        resultat, 
+        x="Année", 
+        y="Valeur", 
+        color="CSP", 
+        title="Diagramme empilé des catégories socio-professionneles", 
+        labels={"Category": "Catégories", "Value": "Valeurs", "Subcategory": "Sous-catégories"},
+        barmode="stack"
+    )
+    fig.update_traces(width=1)
+
+    # Affichage de la figure
+    st.write(fig)
+
+
+
+
+
+
+
+
+
+# Sélection avec une regex pour récuperer les colonnes
+pit = data.filter(regex = f"^[C]({year_pattern})_({pattern_sex})15P_CS[1-6]$")
+retraites = data.filter(regex=fr'^C({year_pattern})_({pattern_sex})15P_CS7$')
+if pattern_sex == "POP" :
+    chomeurs = data.filter(regex=fr'^P({year_pattern})_CHOM1564')
+else :
+    chomeurs = data.filter(regex=fr'^P({year_pattern})_({pattern_sex})CHOM1564$')
+
+actifs_mel = pit.T
+actifs_mel["Année"] = "20"+actifs_mel.index.str[1:3]
+actifs_mel = actifs_mel.groupby(by='Année').sum().apply(sum,axis=1)
+chomeurs = chomeurs.T.apply(sum,axis = 1)
+chomeurs.index = ["20" + year for year in selected_years]
+actifs = actifs_mel-chomeurs
+#P21_CHOM1564
+retraites = retraites.T.apply(sum,axis=1)
+retraites.index = ["20" + year for year in selected_years]
+rapport = actifs/retraites
+
+# Création de la figure avec des axes secondaires
+fig = make_subplots(specs=[[{"secondary_y": True}]])
+st.write(actifs.iloc[:, 0])
+# Ajout de la première courbe (rapport démographique)
 fig.add_trace(go.Scatter(
-    x=[2010, 2015, 2020],
-    y=sum_prop_ar.values,
+    x=selected_years,
+    y=rapport[0],
     mode='lines+markers',
-    name='Proportion Actifs/Retraites'
-))
+    name='Rapport démographique'
+), secondary_y=False)
 
-# Mise en forme du graphique
+# Ajout de la deuxième courbe (actifs)
+fig.add_trace(go.Scatter(
+    x=selected_years,
+    y=actifs[0],  # Assure la compatibilité avec les séries ou DataFrame
+    mode='lines+markers',
+    name='Actifs occupés'
+), secondary_y=True)
+
+fig.add_trace(go.Scatter(
+    x=selected_years,
+    y=retraites[0],  # Assure la compatibilité avec les séries ou DataFrame
+    mode='lines+markers',
+    name='Retraités'
+), secondary_y=True)
+
+# Mise en forme des titres et axes
 fig.update_layout(
-    title="Proportion d'actifs par rapport aux retraités",
+    title="Rapport des actifs occupés par rapport aux retraités",
     xaxis_title="Années",
-    yaxis_title="Proportion",
-    xaxis=dict(tickmode='array', tickvals=[2010, 2015, 2020]),
+    xaxis=dict(tickmode='array', tickvals=selected_years),
     yaxis=dict(range=[0, 1])
 )
 
-# Affichage
-st.write(fig)
+fig.update_yaxes(title_text="Proportion", range=[0, max(sum_prop_ar)*1.2], secondary_y=False)
+fig.update_yaxes(title_text="Population", range=[0, max(actifs.values.flatten()) * 1.2], secondary_y=True)
+
+# Affichage dans Streamlit
+st.plotly_chart(fig)
+
 
