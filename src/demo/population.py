@@ -97,6 +97,11 @@ if visualization_type == "Carte":
     fig.update_geos(fitbounds="locations", visible=False)
     fig.update_layout(height=700)
     st.plotly_chart(fig)
+    st.markdown(
+        "<p style='text-align: left; color: gray;'>"
+        "Source : INSEE, Dossier Complet 2024</p>",
+        unsafe_allow_html=True
+    )
 
     if len(selected_years) > 1 :
         filtered_data["evolution"] = (filtered_data.iloc[:,1]/filtered_data.iloc[:,2])
@@ -121,12 +126,18 @@ if visualization_type == "Carte":
             color="evolution",  # Colonne avec les valeurs numériques
             color_continuous_scale=color_scale,
             labels={selected_columns[0]: selected_variable},
-            title=f"Evolution de {selected_variable} par commune entre 20{selected_years[nb_annee-2]} et 20{selected_years[nb_annee-1]}",
+            title=f"Evolution * de {selected_variable} par commune entre 20{selected_years[nb_annee-2]} et 20{selected_years[nb_annee-1]}",
             hover_data = "nom_commune"
         )
         figue.update_geos(fitbounds="locations", visible=False)
         figue.update_layout(height=700)
         st.plotly_chart(figue)
+        st.markdown(
+            "<p style='text-align: left; color: gray;'>"
+            "* L'évolution a été calculé en faisant le rapport des années sélectionnées <br>"
+            "Source : INSEE, Dossier Complet 2024</p>",
+            unsafe_allow_html=True
+        )
 
 elif visualization_type == "Histogramme":
     st.subheader(f"Histogramme : {selected_variable}")
