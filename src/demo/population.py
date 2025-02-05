@@ -98,6 +98,11 @@ if visualization_type == "Cartes":
     fig.update_geos(fitbounds="locations", visible=False)
     fig.update_layout(height=700)
     st.plotly_chart(fig)
+    st.markdown(
+        "<p style='text-align: left; color: gray;'>"
+        "Source : INSEE, Dossier Complet 2024</p>",
+        unsafe_allow_html=True
+    )
 
     if len(selected_years) > 1 :
         filtered_data["evolution"] = (filtered_data.iloc[:,1]/filtered_data.iloc[:,2])
@@ -122,12 +127,18 @@ if visualization_type == "Cartes":
             color="evolution",  # Colonne avec les valeurs numériques
             color_continuous_scale=color_scale,
             labels={selected_columns[0]: selected_variable},
-            title=f"Evolution de {selected_variable} par commune entre 20{selected_years[nb_annee-2]} et 20{selected_years[nb_annee-1]}",
+            title=f"Evolution * de {selected_variable} par commune entre 20{selected_years[nb_annee-2]} et 20{selected_years[nb_annee-1]}",
             hover_data = "nom_commune"
         )
         figue.update_geos(fitbounds="locations", visible=False)
         figue.update_layout(height=700)
         st.plotly_chart(figue)
+        st.markdown(
+            "<p style='text-align: left; color: gray;'>"
+            "* L'évolution a été calculé en faisant le rapport des années sélectionnées <br>"
+            "Source : INSEE, Dossier Complet 2024</p>",
+            unsafe_allow_html=True
+        )
 
 elif visualization_type == "Histogrammes":
     st.subheader(f"Histogramme : {selected_variable}")
@@ -179,6 +190,13 @@ elif visualization_type == "Histogrammes":
         )
 
         st.altair_chart(chart, use_container_width=True)
+        st.markdown(
+            "<p style='text-align: left; color: gray;'>"
+            "Source : INSEE, Dossier Complet 2024</p>",
+            unsafe_allow_html=True
+        )
+
+
         melted_group_data = melted_data.groupby('Variable')['Valeur'].sum().reset_index()
         melted_group_data["nom"]= ["Grenoble Alpes Metropole"]*len(selected_years)
 
@@ -186,7 +204,7 @@ elif visualization_type == "Histogrammes":
         melted_group_data["Legende"] = melted_group_data["Variable"].str[1:3].replace(custom_labels)
         
         chark = alt.Chart(melted_group_data).mark_bar(size=100).encode(
-            x=alt.X("nom:N", title="Nom",axis=alt.Axis(labelAngle=-45),sort="-y"),  # Afficher CODGEO sur l'axe X
+            x=alt.X("nom:N", title="Année",axis=alt.Axis(labelAngle=-45),sort="-y"),  # Afficher CODGEO sur l'axe X
             y=alt.Y("Valeur:Q", title="Population", axis=alt.Axis(labelAngle=0)),  # Valeurs de la population sur l'axe Y
             color="Legende:N",  # Colorier selon la variable (P21_POP, P15_POP, P10_POP)
             xOffset="Variable:N"
@@ -201,6 +219,11 @@ elif visualization_type == "Histogrammes":
         )
 
         st.altair_chart(chark, use_container_width=True)
+        st.markdown(
+            "<p style='text-align: left; color: gray;'>"
+            "Source : INSEE, Dossier Complet 2024</p>",
+            unsafe_allow_html=True
+        )
 
 elif visualization_type == "Catégorie d'age":
     filtered_meta_data = meta_data[meta_data["COD_VAR"].astype(str).str.match(pattern_sex)]
