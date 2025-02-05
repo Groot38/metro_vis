@@ -57,11 +57,6 @@ cod_var = filtered_meta_data["COD_VAR"]
 
 selected_columns = [col for col in data.columns if col in cod_var.values]
 
-# filtered_data_geo = data[["CODGEO"] + selected_columns]
-# filtered_data_geo = filtered_data_geo.merge(nom_commune[["code_insee", "nom_commune"]], 
-#                                      left_on="CODGEO", right_on="code_insee", 
-#                                      how="left").drop(columns=["code_insee"])
-
 filtered_data_global = pd.DataFrame(data[selected_columns].apply(sum,axis = 0))
 filtered_data_global["subcat"] = filtered_data_global.index.str[-3:]
 filtered_data_global["Catégorie"] = filtered_data_global.index.str[:3]
@@ -71,7 +66,8 @@ CSP["indice"] = range(1,9)
 filtered_data_global["indice"] = filtered_data_global["subcat"].str[2].astype(int)
 resultat = pd.merge(filtered_data_global, CSP, on="indice", how="left").sort_values(by = "Catégorie",ascending=True)
 resultat["Année"] = "20"+resultat["Catégorie"].str[1:]
-# Création du barplot empilé avec Plotly Express
+
+# Création du barplot
 fig = px.bar(
     resultat, 
     x="Année", 
@@ -85,13 +81,11 @@ fig.update_traces(width=1)
 
 # Affichage de la figure
 st.write(fig)
-
-
-
-
-
-
-
+st.markdown(
+    "<p style='text-align: left; color: gray;'>"
+    "Source : INSEE, Dossier Complet 2024</p>",
+    unsafe_allow_html=True
+)
 
 
 # Sélection avec une regex pour récuperer les colonnes
@@ -109,7 +103,6 @@ chomeurs = chomeurs.T.apply(sum,axis = 1)
 chomeurs.index = ["20" + year for year in reversed(selected_years)]
 cotisant = actifs_mel-chomeurs
 cotisant = cotisant.sort_index()
-#P21_CHOM1564
 retraites = retraites.T.apply(sum,axis=1)
 retraites.index = ["20" + year for year in reversed(selected_years)]
 retraites = retraites.sort_index()
@@ -117,7 +110,6 @@ rapport = cotisant/retraites
 
 # Création de la figure avec des axes secondaires
 fig = make_subplots(specs=[[{"secondary_y": True}]])
-st.write(retraites.sort_index())
 # Ajout de la première courbe (rapport démographique)
 fig.add_trace(go.Scatter(
     x=rapport.index,
@@ -131,7 +123,7 @@ fig.add_trace(go.Scatter(
     x=rapport.index,
     y=cotisant.values,  # Assure la compatibilité avec les séries ou DataFrame
     mode='lines+markers',
-    name="Cotisant"
+    name="Cotisant *"
 ), secondary_y=False)
 
 fig.add_trace(go.Scatter(

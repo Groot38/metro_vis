@@ -7,6 +7,7 @@ import re
 import matplotlib.pyplot as plt
 from utils import load_data,load_geojson
 import numpy as np
+import plotly.graph_objects as go
 
 
 geojson_commune = load_geojson()
@@ -62,7 +63,7 @@ if "selected_variable" not in st.session_state or st.session_state["selected_var
 else :
     selected_variable = st.sidebar.selectbox("Choisissez une catégorie à analyser",variables,index = variables.index(st.session_state["selected_variable"]))
     st.session_state["selected_variable"] = selected_variable
-visualization_type = st.sidebar.radio("Type de Visualisation", ["Carte", "Histogramme","Diagramme Circulaire"])
+visualization_type = st.sidebar.radio("Type de Visualisation", ["Cartes", "Histogrammes","Catégorie d'age"])
 
 
 
@@ -80,7 +81,7 @@ filtered_data = filtered_data.merge(nom_commune[["code_insee", "nom_commune"]],
 
 
 
-if visualization_type == "Carte":
+if visualization_type == "Cartes":
     st.subheader(f"Cartes : {selected_variable}")
     # Exemple de visualisation avec Plotly
     fig = px.choropleth(
@@ -128,7 +129,7 @@ if visualization_type == "Carte":
         figue.update_layout(height=700)
         st.plotly_chart(figue)
 
-elif visualization_type == "Histogramme":
+elif visualization_type == "Histogrammes":
     st.subheader(f"Histogramme : {selected_variable}")
 
     # Vérification que des colonnes sont bien sélectionnées
@@ -201,9 +202,8 @@ elif visualization_type == "Histogramme":
 
         st.altair_chart(chark, use_container_width=True)
 
-elif visualization_type == "Diagramme Circulaire":
+elif visualization_type == "Catégorie d'age":
     filtered_meta_data = meta_data[meta_data["COD_VAR"].astype(str).str.match(pattern_sex)]
-    year_pattern = max(selected_years)
     pattern_pie = re.compile(f"^[P]({year_pattern})_\\w+\\d+$")
     filtered_meta_data = filtered_meta_data[filtered_meta_data["COD_VAR"].astype(str).str.match(pattern_pie)]
     variables = filtered_meta_data["LIB_VAR_LONG"]
@@ -219,23 +219,39 @@ elif visualization_type == "Diagramme Circulaire":
     filtered_data = filtered_data.merge(nom_commune[["code_insee", "nom_commune"]], 
                                         left_on="CODGEO", right_on="code_insee", 
                                         how="left").drop(columns=["code_insee"])
-    
     melted_data = filtered_data.melt(
         id_vars=["nom_commune"],  # Maintenir CODGEO comme identifiant
         value_vars=selected_columns,  # Variables à "fondre"
-        var_name="Variable",  # Nom de la colonne pour les années
+        var_name="LIB_V",  # Nom de la colonne pour les années
         value_name="Valeur"  # Nom de la colonne pour les valeurs
     )
-    
+    melted_data = melted_data.merge(
+        filtered_meta_data[["COD_VAR", "LIB_VAR_LONG"]],
+        left_on="LIB_V",  # Colonne dans `melted_data`
+        right_on="COD_VAR",  # Colonne dans `filtered_meta_data`
+        how="inner"  # Pour ne pas perdre d'informations
+    )
 
-    melted_group_data = melted_data.groupby('Variable')['Valeur'].sum().reset_index()
-    variables_trimmed = [var[23:] for var in variables]
-    fig = px.pie(melted_group_data, 
-             names=variables_trimmed,  # Colonnes pour les noms des secteurs
-             values='Valeur',  # Colonnes pour les valeurs
-             title="Distribution des valeurs par Variable",
-             color='Variable',  # Colorie les secteurs par "Variable"
-             color_discrete_sequence=px.colors.qualitative.Set1
-             )  # Palette de couleurs
-    # Affichage du graphique dans Streamlit
+    melted_group_data = melted_data.groupby(['LIB_VAR_LONG',"LIB_V"]).sum(numeric_only=True).reset_index()
+    melted_group_data["Année"] = melted_group_data["LIB_V"].str[1:3]
+    melted_group_data["Catégorie"] = melted_group_data["LIB_VAR_LONG"].str[:-8]
+
+    # Création du barplot
+    fig = px.bar(
+        melted_group_data, 
+        x="Année", 
+        y="Valeur", 
+        color="Catégorie", 
+        title="Diagramme empilé des catégories socio-professionneles", 
+        labels={"Category": "Catégories", "Value": "Valeurs", "Subcategory": "Sous-catégories"},
+        barmode="stack"
+    )
+    fig.update_traces(width=1)
+
+    # Affichage de la figure
     st.write(fig)
+    st.markdown(
+        "<p style='text-align: left; color: gray;'>"
+        "Source : INSEE, Dossier Complet 2024</p>",
+        unsafe_allow_html=True
+    )
