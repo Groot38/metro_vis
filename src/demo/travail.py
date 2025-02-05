@@ -116,38 +116,40 @@ actifs_mel = pit.T
 actifs_mel["Année"] = "20"+actifs_mel.index.str[1:3]
 actifs_mel = actifs_mel.groupby(by='Année').sum().apply(sum,axis=1)
 chomeurs = chomeurs.T.apply(sum,axis = 1)
-chomeurs.index = ["20" + year for year in selected_years]
-actifs = actifs_mel-chomeurs
+chomeurs.index = ["20" + year for year in reversed(selected_years)]
+cotisant = actifs_mel-chomeurs
+cotisant = cotisant.sort_index()
 #P21_CHOM1564
 retraites = retraites.T.apply(sum,axis=1)
-retraites.index = ["20" + year for year in selected_years]
-rapport = actifs/retraites
+retraites.index = ["20" + year for year in reversed(selected_years)]
+retraites = retraites.sort_index()
+rapport = cotisant/retraites
 
 # Création de la figure avec des axes secondaires
 fig = make_subplots(specs=[[{"secondary_y": True}]])
-st.write(actifs.iloc[:, 0])
+st.write(retraites.sort_index())
 # Ajout de la première courbe (rapport démographique)
 fig.add_trace(go.Scatter(
-    x=selected_years,
-    y=rapport[0],
+    x=rapport.index,
+    y=rapport.values,
     mode='lines+markers',
-    name='Rapport démographique'
-), secondary_y=False)
+    name='Rapport démographique **'
+), secondary_y=True)
 
 # Ajout de la deuxième courbe (actifs)
 fig.add_trace(go.Scatter(
-    x=selected_years,
-    y=actifs[0],  # Assure la compatibilité avec les séries ou DataFrame
+    x=rapport.index,
+    y=cotisant.values,  # Assure la compatibilité avec les séries ou DataFrame
     mode='lines+markers',
-    name='Actifs occupés'
-), secondary_y=True)
+    name="Cotisant"
+), secondary_y=False)
 
 fig.add_trace(go.Scatter(
-    x=selected_years,
-    y=retraites[0],  # Assure la compatibilité avec les séries ou DataFrame
+    x=rapport.index,
+    y=retraites.values,  # Assure la compatibilité avec les séries ou DataFrame
     mode='lines+markers',
     name='Retraités'
-), secondary_y=True)
+), secondary_y=False)
 
 # Mise en forme des titres et axes
 fig.update_layout(
@@ -157,10 +159,24 @@ fig.update_layout(
     yaxis=dict(range=[0, 1])
 )
 
-fig.update_yaxes(title_text="Proportion", range=[0, max(sum_prop_ar)*1.2], secondary_y=False)
-fig.update_yaxes(title_text="Population", range=[0, max(actifs.values.flatten()) * 1.2], secondary_y=True)
+fig.update_yaxes(title_text="Proportion", range=[0, max(rapport.values)*1.5], secondary_y=True)
+fig.update_yaxes(title_text="Population", range=[0, max(cotisant.values.flatten()) * 1.2], secondary_y=False)
 
 # Affichage dans Streamlit
 st.plotly_chart(fig)
-
+st.markdown(
+    "<p style='text-align: left; color: gray;'>"
+    "* Le nombre de cotisants a été calculé avec les 6 catégories socio-professionnelles suivantes et en retirant le nombre de chômeurs :<br>"
+    "1. Agriculteurs exploitants<br>"
+    "2. Artisans, commerçants et chefs d’entreprise<br>"
+    "3. Cadres et professions intellectuelles supérieures<br>"
+    "4. Professions Intermédiaires<br>"
+    "5. Employés<br>"
+    "6. Ouvriers<br>"
+    "<br>"
+    "** Le rapport démographique a été calculé en divisant le nombre de cotisants par le nombre de retraités.<br>"
+    "<br>"
+    "Source : INSEE, Dossier Complet 2024</p>",
+    unsafe_allow_html=True
+)
 
