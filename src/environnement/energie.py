@@ -201,10 +201,6 @@ df2021bis = df2021.drop(df2020.index[[0]])
 df2022bis = df2022.drop(df2020.index[[0]])
 df2023bis = df2023.drop(df2020.index[[0]])
 
-
-df2020bis
-
-
 df2020GRE = df2020bis[df2020bis["Code géographique du territoire - Code de la zone"].isin(codes_insee)]
 df2020GRE.rename(columns={"Niveau de rejet de CO2 des réseaux (en kg/kWh)": "Niveau de rejet direct en CO2 des réseaux (en kg/kWh)"}, inplace=True)
 
@@ -220,48 +216,47 @@ df2023GRE.rename(columns={"Code.géographique.du.territoire - Code de la zone": 
 df2023GRE.rename(columns={"Millésime.des.données": "Millésime des données"}, inplace=True)
 df2023GRE.rename(columns={"Niveau.de.rejet.direct.en.CO2.des.réseaux..en.kg.kWh.": "Niveau de rejet direct en CO2 des réseaux (en kg/kWh)"}, inplace=True)
 
-
-df2020GRE["Niveau de rejet direct en CO2 des réseaux (en kg/kWh)"]
-df2021GRE["Niveau de rejet direct en CO2 des réseaux (en kg/kWh)"]
-df2022GRE["Niveau de rejet direct en CO2 des réseaux (en kg/kWh)"]
-df2023GRE["Niveau de rejet direct en CO2 des réseaux (en kg/kWh)"]
-
-
 df2020_2023GRE = pd.concat([df2020GRE,df2021GRE,df2022GRE,df2023GRE], ignore_index=True)
-df2020_2023GRE
 
-année_selectionnée = st.selectbox("Sélectionnez une année", sorted(df2020_2023GRE["Millésime des données"].unique(), reverse=True))
-op_selectionné_nom = st.selectbox("Sélectionnez un opérateur", sorted(df2020_2023GRE["Opérateur"].unique(), reverse=True))
+col21, col22  = st.columns([1,3],vertical_alignment="center")
+
+with col21 : 
+    année_selectionnée = st.selectbox("Sélectionnez une année", sorted(df2020_2023GRE["Millésime des données"].unique(), reverse=True))
+    op_selectionné_nom = st.selectbox("Sélectionnez un opérateur", sorted(df2020_2023GRE["Opérateur"].unique(), reverse=True))
 
 
-# 🎯 Filtrer le DataFrame pour récupérer la valeur correspondante
-df_filtré = df2020_2023GRE[(df2020_2023GRE["Millésime des données"] == année_selectionnée) & (df2020_2023GRE["Opérateur"] == op_selectionné_nom)]
+    # 🎯 Filtrer le DataFrame pour récupérer la valeur correspondante
+    df_filtré = df2020_2023GRE[(df2020_2023GRE["Millésime des données"] == année_selectionnée) & (df2020_2023GRE["Opérateur"] == op_selectionné_nom)]
 
-# 📊 Afficher la métrique si des données existent
-if not df_filtré.empty:
-    valeur_rejet = float(df_filtré["Niveau de rejet direct en CO2 des réseaux (en kg/kWh)"].values[0])
-    st.metric(
-        label=f"Rejet direct en CO2 des réseaux ({op_selectionné_nom} - {année_selectionnée})",
-        value=f"{valeur_rejet:.2f} kg/kWh"
-    )
-else:
-    st.warning("Aucune donnée disponible pour cette sélection.")
+    # 📊 Afficher la métrique si des données existent
+    if not df_filtré.empty:
+        valeur_rejet = float(df_filtré["Niveau de rejet direct en CO2 des réseaux (en kg/kWh)"].values[0])
+        st.metric(
+            label=f"Rejet direct en CO2 des réseaux ({op_selectionné_nom} - {année_selectionnée})",
+            value=f"{valeur_rejet:.4f} kg/kWh"
+        )
+    else:
+        st.warning("Aucune donnée disponible pour cette sélection.")
 
 ######################################
 
-df2020_2023GRE["Millésime des données"] = pd.to_numeric(df2020_2023GRE["Millésime des données"], errors="coerce")
+with col22 :
+
+    df2020_2023GRE["Millésime des données"] = pd.to_numeric(df2020_2023GRE["Millésime des données"], errors="coerce")
 
 
-# 📈 Tracer la courbe d'évolution des rejets en CO₂ sur les années
-fig = px.line(
-    df2020_2023GRE, 
-    x="Millésime des données", 
-    y="Niveau de rejet direct en CO2 des réseaux (en kg/kWh)",
-    color="Opérateur",
-    markers=True,  # Ajouter des points sur la courbe
-    title=f"Évolution du rejet direct en CO₂",
-    labels={"Millésime des données": "Année", "Niveau de rejet direct en CO2 des réseaux (en kg/kWh)": "CO₂ (kg/kWh)"},
-)
+    # 📈 Tracer la courbe d'évolution des rejets en CO₂ sur les années
+    fig = px.line(
+        df2020_2023GRE, 
+        x="Millésime des données", 
+        y="Niveau de rejet direct en CO2 des réseaux (en kg/kWh)",
+        color="Opérateur",
+        markers=True,  # Ajouter des points sur la courbe
+        title=f"Évolution du rejet direct en CO₂",
+        labels={"Millésime des données": "Année", "Niveau de rejet direct en CO2 des réseaux (en kg/kWh)": "CO₂ (kg/kWh)"},
+    )
 
-# 📊 Affichage dans Streamlit
-st.plotly_chart(fig)
+    # 📊 Affichage dans Streamlit
+    st.plotly_chart(fig)
+
+###################################################################################
