@@ -97,7 +97,8 @@ travail = st.Page("demo/travail.py", title="Travail", icon="💼")
 tourisme = st.Page("demo/tourisme.py", title="Tourisme", icon="✈️")
 
 meteo = st.Page("environnement/meteo.py", title="Météo", icon="🌧️")
-energie = st.Page("environnement/energie.py", title="Energie", icon="♻️")
+energie = st.Page("environnement/energie.py", title="Energie", icon="⚡")
+atmo = st.Page("environnement/atmo.py",title= "Qualité de l'air",icon = "🌫️")
 
 # ---- Gestion de la navigation ----
 if st.session_state.logged_in:
@@ -105,7 +106,7 @@ if st.session_state.logged_in:
         {
             "🏠 Accueil": [logout_page],
             "📊 Démographie": [population, travail, tourisme],
-            "🌱 Environnement": [meteo, energie],
+            "🌱 Environnement": [meteo, energie,atmo],
         }
     )
 else:
