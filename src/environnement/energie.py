@@ -4,9 +4,6 @@ import numpy as np
 import plotly.express as px
 
 
-
-st.title("Etude de consommation de Gaz")
-
 #dépenses dans domaine environnement
 # type dep T2 ; 
 @st.cache_data
@@ -26,11 +23,12 @@ gaz,elec,elec_bat,elec_tot = load_data_energie()
 gaz["Date"] = pd.to_datetime(gaz["Date"], format="%Y-%m")
 elec["Date"] = pd.to_datetime(elec["Date"], format="%Y-%m-%d")
 
-
+######################################################################
+st.title("Etude de consommation de Gaz")
 
 st.bar_chart(gaz,x="Date", y= "Consommation de gaz (en KWh PCS 0°C)")
 
-
+#####################################################################
 
 st.title("Etude de consommation d'Electricité")
 
@@ -47,9 +45,6 @@ elec_mensuel["Année-Mois"] = elec_mensuel["Année-Mois"].dt.to_timestamp()
 st.bar_chart(elec_mensuel, x="Année-Mois", y="Consommation (MW)")
 
 #############################################################################
-
-# 📂 Charger les données
-
 
 # 📆 Convertir la colonne date_releve en datetime
 elec_bat["date_releve"] = pd.to_datetime(elec_bat["date_releve"])
@@ -92,8 +87,6 @@ with col2 :
 
 ########################################################################################
 
-
-
 col3, col4  = st.columns([1,4],vertical_alignment="center")
 
 
@@ -120,3 +113,155 @@ with col4 :
 
     # 📈 Affichage dans Streamlit
     st.plotly_chart(fig)
+
+col11, col12, col13,col14  = st.columns([1,1,1,1],vertical_alignment="center")
+
+with col11 :
+    with st.expander("Industrie"):
+                st.write('''
+                    Le secteur industriel comprend les activités économiques qui combinent des facteurs de production 
+                    (installations, approvisionnements, travail, savoir) pour produire des biens matériels destinés au marché.
+                    ''')
+                
+with col12 :
+    with st.expander("Tertiaire"):
+                st.write('''
+                    Le secteur tertiaire recouvre un vaste champ d'activités qui s'étend du commerce à l'administration,
+                    en passant par les transports, les activités financières et immobilières, 
+                    les services aux entreprises et services aux particuliers, l'éducation, la santé et l'action sociale.
+                    ''')
+                
+with col13 :
+    with st.expander("Résidentiel"):
+                st.write('''
+                    Ce secteur d’utilisation de l’énergie consiste en des quartiers d’habitation.
+                    ''')
+
+with col14 :
+             
+    with st.expander("Agriculture"):
+                st.write('''
+                    Ce secteur de l'économie comprend les cultures, l'élevage, la chasse, la pêche et la sylviculture.
+                    ''')
+
+
+    #########################################################################
+
+elec_annuel_tot = elec_tot[elec_tot["CODE GRAND SECTEUR"] == "RESIDENTIEL"]
+elec_annuel_tot["Rapport par habitant"] = elec_annuel_tot["Conso totale (MWh)"]/elec_annuel_tot["Nombre d'habitants"]
+elec_annuel_tot_commune = elec_annuel_tot.groupby(["Année", "Nom Commune"])["Rapport par habitant"].mean().reset_index()
+
+
+elec_annuel_tot_commune_2023= elec_annuel_tot_commune[elec_annuel_tot_commune["Année"] == 2023]
+
+
+fig = px.bar(
+        elec_annuel_tot_commune_2023, 
+        x="Nom Commune", 
+        y="Rapport par habitant",  
+        barmode="stack",  # Empilement des filières
+        title="Rapport consommation d'électricité/hab en 2023"
+        )
+
+
+st.plotly_chart(fig.update_layout(xaxis={'categoryorder': 'total descending'}))
+
+
+###################################################
+
+
+@st.cache_data
+def load_data_energie():
+    file_path_2020 = "../data/environnement/elec/dido/Donnees-de-consommation-et-de-points-de-livraison-denergie-a-la-maille-commune-chaleur-e.2020-10.csv"
+    file_path_2021 = "../data/environnement/elec/dido/Donnees-de-consommation-et-de-points-de-livraison-denergie-a-la-maille-commune-chaleur-e.2021-10.csv"
+    file_path_2022 = "../data/environnement/elec/dido/Donnees-de-consommation-et-de-points-de-livraison-denergie-a-la-maille-commune-chaleur-e.2022-09.csv"
+    file_path_2023 = "../data/environnement/elec/dido/Donnees-de-consommation-et-de-points-de-livraison-denergie-a-la-maille-commune-chaleur-e.2023-09.csv"
+
+    df2020 = pd.read_csv(file_path_2020,sep = ";")
+    df2021 = pd.read_csv(file_path_2021,sep = ";")
+    df2022 = pd.read_csv(file_path_2022,sep = ";")
+    df2023 = pd.read_csv(file_path_2023,sep = ";")
+
+    return(df2020,df2021,df2022,df2023)
+
+df2020,df2021,df2022,df2023 = load_data_energie()
+
+codes_insee = [ # Pour limiter sur la métropole
+    "38057", "38059", "38071", "38068", "38111", "38126", "38150", "38151", 
+    "38158", "38169", "38170", "38179", "38185", "38188", "38200", "38516", 
+    "38187", "38317", "38471", "38229", "38235", "38258", "38252", "38271", 
+    "38277", "38279", "38281", "38309", "38325", "38328", "38364", "38382", 
+    "38388", "38421", "38423", "38436", "38445", "38472", "38474", "38478", 
+    "38485", "38486", "38524", "38528", "38529", "38533", "38540", "38545", 
+    "38562"
+]
+
+df2020bis = df2020.drop(df2020.index[[0]])
+df2021bis = df2021.drop(df2020.index[[0]])
+df2022bis = df2022.drop(df2020.index[[0]])
+df2023bis = df2023.drop(df2020.index[[0]])
+
+
+df2020bis
+
+
+df2020GRE = df2020bis[df2020bis["Code géographique du territoire - Code de la zone"].isin(codes_insee)]
+df2020GRE.rename(columns={"Niveau de rejet de CO2 des réseaux (en kg/kWh)": "Niveau de rejet direct en CO2 des réseaux (en kg/kWh)"}, inplace=True)
+
+df2021GRE = df2021bis[df2021bis["Code géographique du territoire - Code de la zone"].isin(codes_insee)]
+df2022GRE = df2022bis[df2022bis["Code.géographique.du.territoire - Code de la zone"].isin(codes_insee)]
+df2022GRE.rename(columns={"Code.géographique.du.territoire - Code de la zone": "Code géographique du territoire - Code de la zone"}, inplace=True)
+df2022GRE.rename(columns={"Millésime.des.données": "Millésime des données"}, inplace=True)
+df2022GRE.rename(columns={"Niveau.de.rejet.direct.en.CO2.des.réseaux..en.kg.kWh.": "Niveau de rejet direct en CO2 des réseaux (en kg/kWh)"}, inplace=True)
+
+
+df2023GRE = df2023bis[df2023bis["Code.géographique.du.territoire - Code de la zone"].isin(codes_insee)]
+df2023GRE.rename(columns={"Code.géographique.du.territoire - Code de la zone": "Code géographique du territoire - Code de la zone"}, inplace=True)
+df2023GRE.rename(columns={"Millésime.des.données": "Millésime des données"}, inplace=True)
+df2023GRE.rename(columns={"Niveau.de.rejet.direct.en.CO2.des.réseaux..en.kg.kWh.": "Niveau de rejet direct en CO2 des réseaux (en kg/kWh)"}, inplace=True)
+
+
+df2020GRE["Niveau de rejet direct en CO2 des réseaux (en kg/kWh)"]
+df2021GRE["Niveau de rejet direct en CO2 des réseaux (en kg/kWh)"]
+df2022GRE["Niveau de rejet direct en CO2 des réseaux (en kg/kWh)"]
+df2023GRE["Niveau de rejet direct en CO2 des réseaux (en kg/kWh)"]
+
+
+df2020_2023GRE = pd.concat([df2020GRE,df2021GRE,df2022GRE,df2023GRE], ignore_index=True)
+df2020_2023GRE
+
+année_selectionnée = st.selectbox("Sélectionnez une année", sorted(df2020_2023GRE["Millésime des données"].unique(), reverse=True))
+op_selectionné_nom = st.selectbox("Sélectionnez un opérateur", sorted(df2020_2023GRE["Opérateur"].unique(), reverse=True))
+
+
+# 🎯 Filtrer le DataFrame pour récupérer la valeur correspondante
+df_filtré = df2020_2023GRE[(df2020_2023GRE["Millésime des données"] == année_selectionnée) & (df2020_2023GRE["Opérateur"] == op_selectionné_nom)]
+
+# 📊 Afficher la métrique si des données existent
+if not df_filtré.empty:
+    valeur_rejet = float(df_filtré["Niveau de rejet direct en CO2 des réseaux (en kg/kWh)"].values[0])
+    st.metric(
+        label=f"Rejet direct en CO2 des réseaux ({op_selectionné_nom} - {année_selectionnée})",
+        value=f"{valeur_rejet:.2f} kg/kWh"
+    )
+else:
+    st.warning("Aucune donnée disponible pour cette sélection.")
+
+######################################
+
+df2020_2023GRE["Millésime des données"] = pd.to_numeric(df2020_2023GRE["Millésime des données"], errors="coerce")
+
+
+# 📈 Tracer la courbe d'évolution des rejets en CO₂ sur les années
+fig = px.line(
+    df2020_2023GRE, 
+    x="Millésime des données", 
+    y="Niveau de rejet direct en CO2 des réseaux (en kg/kWh)",
+    color="Opérateur",
+    markers=True,  # Ajouter des points sur la courbe
+    title=f"Évolution du rejet direct en CO₂",
+    labels={"Millésime des données": "Année", "Niveau de rejet direct en CO2 des réseaux (en kg/kWh)": "CO₂ (kg/kWh)"},
+)
+
+# 📊 Affichage dans Streamlit
+st.plotly_chart(fig)
