@@ -177,7 +177,7 @@ elif visualization_type == "Histogrammes":
         
         # Création du graphique en barres
         chart = alt.Chart(melted_data_tronc).mark_bar().encode(
-            x=alt.X("nom_commune:N", title="Communes",axis=alt.Axis(labelAngle=-45),sort="-y"),  # Afficher CODGEO sur l'axe X
+            x=alt.X("nom_commune:N", title="Communes",axis=alt.Axis(labelAngle=90),sort="-y"),  # Afficher CODGEO sur l'axe X
             y=alt.Y("Valeur:Q", title="Population", axis=alt.Axis(labelAngle=0)),  # Valeurs de la population sur l'axe Y
             color="Legende:N",  # Colorier selon la variable (P21_POP, P15_POP, P10_POP)
             xOffset="Variable:N"
@@ -204,7 +204,7 @@ elif visualization_type == "Histogrammes":
         melted_group_data["Legende"] = melted_group_data["Variable"].str[1:3].replace(custom_labels)
         
         chark = alt.Chart(melted_group_data).mark_bar(size=100).encode(
-            x=alt.X("nom:N", title="Année",axis=alt.Axis(labelAngle=-45),sort="-y"),  # Afficher CODGEO sur l'axe X
+            x=alt.X("nom:N", title="Année",axis=alt.Axis(labelAngle=0),sort="-y"),  # Afficher CODGEO sur l'axe X
             y=alt.Y("Valeur:Q", title="Population", axis=alt.Axis(labelAngle=0)),  # Valeurs de la population sur l'axe Y
             color="Legende:N",  # Colorier selon la variable (P21_POP, P15_POP, P10_POP)
             xOffset="Variable:N"
@@ -265,7 +265,7 @@ elif visualization_type == "Histogrammes empilés":
         x="Année", 
         y="Valeur", 
         color="Catégorie", 
-        title="Diagramme empilé des catégories socio-professionneles", 
+        title="Diagramme empilé des catégories d'âge", 
         labels={"Category": "Catégories", "Value": "Valeurs", "Subcategory": "Sous-catégories"},
         barmode="stack"
     )

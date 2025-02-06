@@ -4,6 +4,7 @@ import plotly.express as px
 import pydeck as pdk
 
 
+
 def meteo_page():
     st.title("Sous-page : Météo")
     st.write("Bienvenue dans la sous-page Météo.")
@@ -38,6 +39,8 @@ def load_data_meteo():
     df2_2010_2015 = pd.read_csv(file_path_autre_2010_2015)
     df2_2015_2020 = pd.read_csv(file_path_autre_2015_2020)
     df2_2020_2025 = pd.read_csv(file_path_autre_2020_2025)
+
+
     return(df_2000_2005,df_2005_2010,df_2010_2015,df_2015_2020,df_2020_2025,df2_2000_2005,df2_2005_2010,df2_2010_2015,df2_2015_2020,df2_2020_2025)
 
 df_2000_2005,df_2005_2010,df_2010_2015,df_2015_2020,df_2020_2025,df2_2000_2005,df2_2005_2010,df2_2010_2015,df2_2015_2020,df2_2020_2025=load_data_meteo()
@@ -213,3 +216,10 @@ with col3:
 
     # 🖼️ Affichage du graphique dans Streamlit
     st.plotly_chart(fig)
+
+
+
+#############################################################
+
+
+
