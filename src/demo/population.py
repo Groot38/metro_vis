@@ -63,7 +63,7 @@ if "selected_variable" not in st.session_state or st.session_state["selected_var
 else :
     selected_variable = st.sidebar.selectbox("Choisissez une catégorie à analyser",variables,index = variables.index(st.session_state["selected_variable"]))
     st.session_state["selected_variable"] = selected_variable
-visualization_type = st.sidebar.radio("Type de Visualisation", ["Cartes", "Histogrammes","Catégorie d'age"])
+visualization_type = st.sidebar.radio("Type de Visualisation", ["Cartes", "Histogrammes","Histogrammes empilés"])
 
 
 
@@ -225,7 +225,7 @@ elif visualization_type == "Histogrammes":
             unsafe_allow_html=True
         )
 
-elif visualization_type == "Catégorie d'age":
+elif visualization_type == "Histogrammes empilés":
     filtered_meta_data = meta_data[meta_data["COD_VAR"].astype(str).str.match(pattern_sex)]
     pattern_pie = re.compile(f"^[P]({year_pattern})_\\w+\\d+$")
     filtered_meta_data = filtered_meta_data[filtered_meta_data["COD_VAR"].astype(str).str.match(pattern_pie)]
