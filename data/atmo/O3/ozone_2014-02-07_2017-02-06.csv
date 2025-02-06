@@ -1,0 +1,399 @@
+﻿Date,ozone  (µg/m³),Station
+2014-03-01,,Champ-sur-Drac
+2014-04-01,,Champ-sur-Drac
+2014-05-01,,Champ-sur-Drac
+2014-06-01,,Champ-sur-Drac
+2014-07-01,,Champ-sur-Drac
+2014-08-01,,Champ-sur-Drac
+2014-09-01,,Champ-sur-Drac
+2014-10-01,31,Champ-sur-Drac
+2014-11-01,17,Champ-sur-Drac
+2014-12-01,21,Champ-sur-Drac
+2015-01-01,25,Champ-sur-Drac
+2015-02-01,31,Champ-sur-Drac
+2015-03-01,39,Champ-sur-Drac
+2015-04-01,63,Champ-sur-Drac
+2015-05-01,66,Champ-sur-Drac
+2015-06-01,76,Champ-sur-Drac
+2015-07-01,96,Champ-sur-Drac
+2015-08-01,70,Champ-sur-Drac
+2015-09-01,51,Champ-sur-Drac
+2015-10-01,18,Champ-sur-Drac
+2015-11-01,15,Champ-sur-Drac
+2015-12-01,6,Champ-sur-Drac
+2016-01-01,19,Champ-sur-Drac
+2016-02-01,34,Champ-sur-Drac
+2016-03-01,51,Champ-sur-Drac
+2016-04-01,63,Champ-sur-Drac
+2016-05-01,66,Champ-sur-Drac
+2016-06-01,63,Champ-sur-Drac
+2016-07-01,74,Champ-sur-Drac
+2016-08-01,71,Champ-sur-Drac
+2016-09-01,61,Champ-sur-Drac
+2016-10-01,24,Champ-sur-Drac
+2016-11-01,22,Champ-sur-Drac
+2016-12-01,6.2,Champ-sur-Drac
+2017-01-01,17.8,Champ-sur-Drac
+2017-02-01,36,Champ-sur-Drac
+2014-03-01,51,Voiron Urbain
+2014-04-01,64,Voiron Urbain
+2014-05-01,69,Voiron Urbain
+2014-06-01,82,Voiron Urbain
+2014-07-01,57,Voiron Urbain
+2014-08-01,56,Voiron Urbain
+2014-09-01,46,Voiron Urbain
+2014-10-01,28,Voiron Urbain
+2014-11-01,14,Voiron Urbain
+2014-12-01,16,Voiron Urbain
+2015-01-01,21,Voiron Urbain
+2015-02-01,33,Voiron Urbain
+2015-03-01,43,Voiron Urbain
+2015-04-01,69,Voiron Urbain
+2015-05-01,70,Voiron Urbain
+2015-06-01,77,Voiron Urbain
+2015-07-01,94,Voiron Urbain
+2015-08-01,71,Voiron Urbain
+2015-09-01,53,Voiron Urbain
+2015-10-01,22,Voiron Urbain
+2015-11-01,17,Voiron Urbain
+2015-12-01,6,Voiron Urbain
+2016-01-01,19,Voiron Urbain
+2016-02-01,31,Voiron Urbain
+2016-03-01,44,Voiron Urbain
+2016-04-01,57,Voiron Urbain
+2016-05-01,63,Voiron Urbain
+2016-06-01,59,Voiron Urbain
+2016-07-01,69,Voiron Urbain
+2016-08-01,67,Voiron Urbain
+2016-09-01,58,Voiron Urbain
+2016-10-01,24,Voiron Urbain
+2016-11-01,19,Voiron Urbain
+2016-12-01,6.7,Voiron Urbain
+2017-01-01,21.7,Voiron Urbain
+2017-02-01,32,Voiron Urbain
+2014-03-01,43,St-Martin-d'Hères
+2014-04-01,56,St-Martin-d'Hères
+2014-05-01,61,St-Martin-d'Hères
+2014-06-01,77,St-Martin-d'Hères
+2014-07-01,56,St-Martin-d'Hères
+2014-08-01,50,St-Martin-d'Hères
+2014-09-01,39,St-Martin-d'Hères
+2014-10-01,20,St-Martin-d'Hères
+2014-11-01,11,St-Martin-d'Hères
+2014-12-01,12,St-Martin-d'Hères
+2015-01-01,20,St-Martin-d'Hères
+2015-02-01,29,St-Martin-d'Hères
+2015-03-01,37,St-Martin-d'Hères
+2015-04-01,66,St-Martin-d'Hères
+2015-05-01,66,St-Martin-d'Hères
+2015-06-01,73,St-Martin-d'Hères
+2015-07-01,91,St-Martin-d'Hères
+2015-08-01,63,St-Martin-d'Hères
+2015-09-01,47,St-Martin-d'Hères
+2015-10-01,17,St-Martin-d'Hères
+2015-11-01,9,St-Martin-d'Hères
+2015-12-01,4,St-Martin-d'Hères
+2016-01-01,16,St-Martin-d'Hères
+2016-02-01,26,St-Martin-d'Hères
+2016-03-01,38,St-Martin-d'Hères
+2016-04-01,52,St-Martin-d'Hères
+2016-05-01,61,St-Martin-d'Hères
+2016-06-01,60,St-Martin-d'Hères
+2016-07-01,75,St-Martin-d'Hères
+2016-08-01,70,St-Martin-d'Hères
+2016-09-01,58,St-Martin-d'Hères
+2016-10-01,19,St-Martin-d'Hères
+2016-11-01,16,St-Martin-d'Hères
+2016-12-01,3.4,St-Martin-d'Hères
+2017-01-01,14.7,St-Martin-d'Hères
+2017-02-01,27.5,St-Martin-d'Hères
+2014-03-01,42,Grenoble les Frênes
+2014-04-01,47,Grenoble les Frênes
+2014-05-01,54,Grenoble les Frênes
+2014-06-01,67,Grenoble les Frênes
+2014-07-01,48,Grenoble les Frênes
+2014-08-01,41,Grenoble les Frênes
+2014-09-01,33,Grenoble les Frênes
+2014-10-01,20,Grenoble les Frênes
+2014-11-01,11,Grenoble les Frênes
+2014-12-01,12,Grenoble les Frênes
+2015-01-01,14,Grenoble les Frênes
+2015-02-01,18,Grenoble les Frênes
+2015-03-01,25,Grenoble les Frênes
+2015-04-01,46,Grenoble les Frênes
+2015-05-01,50,Grenoble les Frênes
+2015-06-01,64,Grenoble les Frênes
+2015-07-01,88,Grenoble les Frênes
+2015-08-01,61,Grenoble les Frênes
+2015-09-01,44,Grenoble les Frênes
+2015-10-01,12,Grenoble les Frênes
+2015-11-01,9,Grenoble les Frênes
+2015-12-01,4,Grenoble les Frênes
+2016-01-01,12,Grenoble les Frênes
+2016-02-01,26,Grenoble les Frênes
+2016-03-01,37,Grenoble les Frênes
+2016-04-01,51,Grenoble les Frênes
+2016-05-01,57,Grenoble les Frênes
+2016-06-01,56,Grenoble les Frênes
+2016-07-01,67,Grenoble les Frênes
+2016-08-01,65,Grenoble les Frênes
+2016-09-01,57,Grenoble les Frênes
+2016-10-01,16,Grenoble les Frênes
+2016-11-01,15,Grenoble les Frênes
+2016-12-01,3.2,Grenoble les Frênes
+2017-01-01,11.9,Grenoble les Frênes
+2017-02-01,23,Grenoble les Frênes
+2014-03-01,62,Grenoble Periurbain Sud
+2014-04-01,68,Grenoble Periurbain Sud
+2014-05-01,73,Grenoble Periurbain Sud
+2014-06-01,86,Grenoble Periurbain Sud
+2014-07-01,61,Grenoble Periurbain Sud
+2014-08-01,57,Grenoble Periurbain Sud
+2014-09-01,54,Grenoble Periurbain Sud
+2014-10-01,37,Grenoble Periurbain Sud
+2014-11-01,22,Grenoble Periurbain Sud
+2014-12-01,21,Grenoble Periurbain Sud
+2015-01-01,28,Grenoble Periurbain Sud
+2015-02-01,40,Grenoble Periurbain Sud
+2015-03-01,48,Grenoble Periurbain Sud
+2015-04-01,72,Grenoble Periurbain Sud
+2015-05-01,72,Grenoble Periurbain Sud
+2015-06-01,81,Grenoble Periurbain Sud
+2015-07-01,97,Grenoble Periurbain Sud
+2015-08-01,76,Grenoble Periurbain Sud
+2015-09-01,55,Grenoble Periurbain Sud
+2015-10-01,25,Grenoble Periurbain Sud
+2015-11-01,26,Grenoble Periurbain Sud
+2015-12-01,16,Grenoble Periurbain Sud
+2016-01-01,30,Grenoble Periurbain Sud
+2016-02-01,44,Grenoble Periurbain Sud
+2016-03-01,61,Grenoble Periurbain Sud
+2016-04-01,65,Grenoble Periurbain Sud
+2016-05-01,66,Grenoble Periurbain Sud
+2016-06-01,61,Grenoble Periurbain Sud
+2016-07-01,76,Grenoble Periurbain Sud
+2016-08-01,78,Grenoble Periurbain Sud
+2016-09-01,67,Grenoble Periurbain Sud
+2016-10-01,26,Grenoble Periurbain Sud
+2016-11-01,21,Grenoble Periurbain Sud
+2016-12-01,6.8,Grenoble Periurbain Sud
+2017-01-01,19.1,Grenoble Periurbain Sud
+2017-02-01,39.3,Grenoble Periurbain Sud
+2014-03-01,45,Gresivaudan Periurbain
+2014-04-01,54,Gresivaudan Periurbain
+2014-05-01,58,Gresivaudan Periurbain
+2014-06-01,71,Gresivaudan Periurbain
+2014-07-01,47,Gresivaudan Periurbain
+2014-08-01,43,Gresivaudan Periurbain
+2014-09-01,37,Gresivaudan Periurbain
+2014-10-01,21,Gresivaudan Periurbain
+2014-11-01,11,Gresivaudan Periurbain
+2014-12-01,11,Gresivaudan Periurbain
+2015-01-01,18,Gresivaudan Periurbain
+2015-02-01,21,Gresivaudan Periurbain
+2015-03-01,29,Gresivaudan Periurbain
+2015-04-01,56,Gresivaudan Periurbain
+2015-05-01,56,Gresivaudan Periurbain
+2015-06-01,66,Gresivaudan Periurbain
+2015-07-01,86,Gresivaudan Periurbain
+2015-08-01,57,Gresivaudan Periurbain
+2015-09-01,44,Gresivaudan Periurbain
+2015-10-01,15,Gresivaudan Periurbain
+2015-11-01,10,Gresivaudan Periurbain
+2015-12-01,7,Gresivaudan Periurbain
+2016-01-01,18,Gresivaudan Periurbain
+2016-02-01,29,Gresivaudan Periurbain
+2016-03-01,41,Gresivaudan Periurbain
+2016-04-01,52,Gresivaudan Periurbain
+2016-05-01,63,Gresivaudan Periurbain
+2016-06-01,56,Gresivaudan Periurbain
+2016-07-01,62,Gresivaudan Periurbain
+2016-08-01,,Gresivaudan Periurbain
+2016-09-01,,Gresivaudan Periurbain
+2016-10-01,20,Gresivaudan Periurbain
+2016-11-01,15,Gresivaudan Periurbain
+2016-12-01,4,Gresivaudan Periurbain
+2017-01-01,15,Gresivaudan Periurbain
+2017-02-01,28,Gresivaudan Periurbain
+2014-03-01,44,Roussillon
+2014-04-01,53,Roussillon
+2014-05-01,64,Roussillon
+2014-06-01,67,Roussillon
+2014-07-01,40,Roussillon
+2014-08-01,36,Roussillon
+2014-09-01,35,Roussillon
+2014-10-01,23,Roussillon
+2014-11-01,17,Roussillon
+2014-12-01,19,Roussillon
+2015-01-01,21,Roussillon
+2015-02-01,36,Roussillon
+2015-03-01,29,Roussillon
+2015-04-01,47,Roussillon
+2015-05-01,57,Roussillon
+2015-06-01,65,Roussillon
+2015-07-01,77,Roussillon
+2015-08-01,63,Roussillon
+2015-09-01,43,Roussillon
+2015-10-01,17,Roussillon
+2015-11-01,14,Roussillon
+2015-12-01,17,Roussillon
+2016-01-01,21,Roussillon
+2016-02-01,28,Roussillon
+2016-03-01,40,Roussillon
+2016-04-01,54,Roussillon
+2016-05-01,60,Roussillon
+2016-06-01,52,Roussillon
+2016-07-01,64,Roussillon
+2016-08-01,58,Roussillon
+2016-09-01,54,Roussillon
+2016-10-01,24,Roussillon
+2016-11-01,22,Roussillon
+2016-12-01,7.4,Roussillon
+2017-01-01,25,Roussillon
+2017-02-01,35.7,Roussillon
+2014-03-01,65,Roches-de-Condrieu
+2014-04-01,50,Roches-de-Condrieu
+2014-05-01,64,Roches-de-Condrieu
+2014-06-01,83,Roches-de-Condrieu
+2014-07-01,56,Roches-de-Condrieu
+2014-08-01,47,Roches-de-Condrieu
+2014-09-01,45,Roches-de-Condrieu
+2014-10-01,24,Roches-de-Condrieu
+2014-11-01,16,Roches-de-Condrieu
+2014-12-01,17,Roches-de-Condrieu
+2015-01-01,16,Roches-de-Condrieu
+2015-02-01,28,Roches-de-Condrieu
+2015-03-01,29,Roches-de-Condrieu
+2015-04-01,47,Roches-de-Condrieu
+2015-05-01,73,Roches-de-Condrieu
+2015-06-01,81,Roches-de-Condrieu
+2015-07-01,89,Roches-de-Condrieu
+2015-08-01,72,Roches-de-Condrieu
+2015-09-01,54,Roches-de-Condrieu
+2015-10-01,24,Roches-de-Condrieu
+2015-11-01,18,Roches-de-Condrieu
+2015-12-01,15,Roches-de-Condrieu
+2016-01-01,,Roches-de-Condrieu
+2016-02-01,,Roches-de-Condrieu
+2016-03-01,,Roches-de-Condrieu
+2016-04-01,,Roches-de-Condrieu
+2016-05-01,70,Roches-de-Condrieu
+2016-06-01,61,Roches-de-Condrieu
+2016-07-01,75,Roches-de-Condrieu
+2016-08-01,64,Roches-de-Condrieu
+2016-09-01,55,Roches-de-Condrieu
+2016-10-01,30,Roches-de-Condrieu
+2016-11-01,26,Roches-de-Condrieu
+2016-12-01,6.8,Roches-de-Condrieu
+2017-01-01,24.3,Roches-de-Condrieu
+2017-02-01,37.8,Roches-de-Condrieu
+2014-03-01,52,Sablons
+2014-04-01,59,Sablons
+2014-05-01,72,Sablons
+2014-06-01,86,Sablons
+2014-07-01,63,Sablons
+2014-08-01,53,Sablons
+2014-09-01,51,Sablons
+2014-10-01,34,Sablons
+2014-11-01,25,Sablons
+2014-12-01,25,Sablons
+2015-01-01,28,Sablons
+2015-02-01,41,Sablons
+2015-03-01,45,Sablons
+2015-04-01,68,Sablons
+2015-05-01,77,Sablons
+2015-06-01,81,Sablons
+2015-07-01,92,Sablons
+2015-08-01,78,Sablons
+2015-09-01,59,Sablons
+2015-10-01,30,Sablons
+2015-11-01,20,Sablons
+2015-12-01,24,Sablons
+2016-01-01,30,Sablons
+2016-02-01,38,Sablons
+2016-03-01,56,Sablons
+2016-04-01,68,Sablons
+2016-05-01,70,Sablons
+2016-06-01,60,Sablons
+2016-07-01,68,Sablons
+2016-08-01,65,Sablons
+2016-09-01,61,Sablons
+2016-10-01,30,Sablons
+2016-11-01,28,Sablons
+2016-12-01,7.4,Sablons
+2017-01-01,30,Sablons
+2017-02-01,44.4,Sablons
+2014-03-01,49,Bourgoin-Jallieu
+2014-04-01,57,Bourgoin-Jallieu
+2014-05-01,66,Bourgoin-Jallieu
+2014-06-01,80,Bourgoin-Jallieu
+2014-07-01,53,Bourgoin-Jallieu
+2014-08-01,48,Bourgoin-Jallieu
+2014-09-01,46,Bourgoin-Jallieu
+2014-10-01,33,Bourgoin-Jallieu
+2014-11-01,20,Bourgoin-Jallieu
+2014-12-01,16,Bourgoin-Jallieu
+2015-01-01,23,Bourgoin-Jallieu
+2015-02-01,35,Bourgoin-Jallieu
+2015-03-01,37,Bourgoin-Jallieu
+2015-04-01,62,Bourgoin-Jallieu
+2015-05-01,68,Bourgoin-Jallieu
+2015-06-01,71,Bourgoin-Jallieu
+2015-07-01,86,Bourgoin-Jallieu
+2015-08-01,72,Bourgoin-Jallieu
+2015-09-01,49,Bourgoin-Jallieu
+2015-10-01,20,Bourgoin-Jallieu
+2015-11-01,15,Bourgoin-Jallieu
+2015-12-01,19,Bourgoin-Jallieu
+2016-01-01,27,Bourgoin-Jallieu
+2016-02-01,31,Bourgoin-Jallieu
+2016-03-01,42,Bourgoin-Jallieu
+2016-04-01,56,Bourgoin-Jallieu
+2016-05-01,63,Bourgoin-Jallieu
+2016-06-01,54,Bourgoin-Jallieu
+2016-07-01,66,Bourgoin-Jallieu
+2016-08-01,59,Bourgoin-Jallieu
+2016-09-01,55,Bourgoin-Jallieu
+2016-10-01,21,Bourgoin-Jallieu
+2016-11-01,24,Bourgoin-Jallieu
+2016-12-01,7.3,Bourgoin-Jallieu
+2017-01-01,20.6,Bourgoin-Jallieu
+2017-02-01,32.2,Bourgoin-Jallieu
+2014-03-01,73,Plateau de Bonnevaux
+2014-04-01,69,Plateau de Bonnevaux
+2014-05-01,,Plateau de Bonnevaux
+2014-06-01,,Plateau de Bonnevaux
+2014-07-01,,Plateau de Bonnevaux
+2014-08-01,,Plateau de Bonnevaux
+2014-09-01,62,Plateau de Bonnevaux
+2014-10-01,52,Plateau de Bonnevaux
+2014-11-01,41,Plateau de Bonnevaux
+2014-12-01,37,Plateau de Bonnevaux
+2015-01-01,49,Plateau de Bonnevaux
+2015-02-01,56,Plateau de Bonnevaux
+2015-03-01,65,Plateau de Bonnevaux
+2015-04-01,86,Plateau de Bonnevaux
+2015-05-01,83,Plateau de Bonnevaux
+2015-06-01,89,Plateau de Bonnevaux
+2015-07-01,100,Plateau de Bonnevaux
+2015-08-01,88,Plateau de Bonnevaux
+2015-09-01,74,Plateau de Bonnevaux
+2015-10-01,50,Plateau de Bonnevaux
+2015-11-01,52,Plateau de Bonnevaux
+2015-12-01,55,Plateau de Bonnevaux
+2016-01-01,52,Plateau de Bonnevaux
+2016-02-01,57,Plateau de Bonnevaux
+2016-03-01,69,Plateau de Bonnevaux
+2016-04-01,85,Plateau de Bonnevaux
+2016-05-01,85,Plateau de Bonnevaux
+2016-06-01,70,Plateau de Bonnevaux
+2016-07-01,81,Plateau de Bonnevaux
+2016-08-01,78,Plateau de Bonnevaux
+2016-09-01,73,Plateau de Bonnevaux
+2016-10-01,43,Plateau de Bonnevaux
+2016-11-01,50,Plateau de Bonnevaux
+2016-12-01,38,Plateau de Bonnevaux
+2017-01-01,52,Plateau de Bonnevaux
+2017-02-01,65,Plateau de Bonnevaux
+2014-02-07,,Creys-Mépieu
+2017-02-06,,Creys-Mépieu

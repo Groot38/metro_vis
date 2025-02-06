@@ -3,7 +3,7 @@ from PIL import Image
 import time
 import pandas as pd
 import numpy as np
-
+import random
 
 
 # Configuration de la page
@@ -48,7 +48,7 @@ def login():
 
         # Initialiser l'index de l'image dans la session Streamlit
         if "image_index" not in st.session_state:
-            st.session_state.image_index = 0
+            st.session_state.image_index = random.choice([-1,0,1])
 
         # Fonction pour changer d'image
         def previous_image():
