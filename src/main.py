@@ -99,7 +99,7 @@ tourisme = st.Page("demo/tourisme.py", title="Tourisme", icon="✈️")
 meteo = st.Page("environnement/meteo.py", title="Météo", icon="🌧️")
 energie = st.Page("environnement/energie.py", title="Energie", icon="⚡")
 atmo = st.Page("environnement/atmo.py",title= "Qualité de l'air",icon = "🌫️")
-zfe = st.Page("environnement/zfe.py",title= "ZFE et parc automobile",icon = "🌫️")
+zfe = st.Page("environnement/zfe.py",title= "ZFE et parc automobile",icon = "🚗")
 
 
 # ---- Gestion de la navigation ----
