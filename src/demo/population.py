@@ -80,33 +80,41 @@ filtered_data = filtered_data.merge(nom_commune[["code_insee", "nom_commune"]],
                                      how="left").drop(columns=["code_insee"])
 
 
-
+###############################################################################################################
 if visualization_type == "Population par commune":
-    st.subheader(f"Cartes : {selected_variable}")
-    # Exemple de visualisation avec Plotly
-    color_scale = [
-            [0, "white"],  # Rouge pour les plus petites valeurs
-            [1, "blue"]  # Vert pour les grandes valeurs
-        ]
-    fig = px.choropleth(
-        filtered_data,
-        geojson=geojson_commune,
-        locations="CODGEO",  # Code géographique (par exemple, code INSEE)
-        featureidkey="properties.code",
-        color=selected_columns[0],  # Colonne avec les valeurs numériques
-        color_continuous_scale=color_scale,
-        labels={selected_columns[0]: selected_variable},
-        title=f"{selected_variable} par commune en {"20" + max(selected_years)}",
-        hover_data = "nom_commune"
-    )
-    fig.update_geos(fitbounds="locations", visible=False)
-    fig.update_layout(height=700)
-    st.plotly_chart(fig)
-    st.markdown(
-        "<p style='text-align: left; color: gray;'>"
-        "Source : INSEE, Dossier Complet 2024</p>",
-        unsafe_allow_html=True
-    )
+    st.subheader(f"Cartes de la Métropole de Grenoble en fonction de : {selected_variable}")
+    colpop, colage  = st.columns([1,1],vertical_alignment="center")
+    with colpop:
+        # Exemple de visualisation avec Plotly
+        color_scale = [
+                [0, "white"],  # Rouge pour les plus petites valeurs
+                [1, "blue"]  # Vert pour les grandes valeurs
+            ]
+        fig = px.choropleth_mapbox(
+            filtered_data,
+            geojson=geojson_commune,
+            locations="CODGEO",  # Code géographique (par exemple, code INSEE)
+            featureidkey="properties.code",
+            color=selected_columns[0],  # Colonne avec les valeurs numériques
+            color_continuous_scale=color_scale,
+            labels={selected_columns[0]: "Population"},
+            title=f"{selected_variable} par commune en {"20" + max(selected_years)}",
+            hover_data = "nom_commune"
+        )
+        fig.update_geos(fitbounds="locations", visible=False)
+        fig.update_layout(
+            mapbox_style="open-street-map",  # Fond de carte OSM
+            mapbox_zoom=9,  # Zoom initial, ajuste selon besoin
+            mapbox_center={"lat": 45.166672, "lon": 5.71667},
+            height=700  # Centre de la France (ajuste selon tes données)
+        )
+        fig.update_traces(marker=dict(opacity=0.7))
+        st.plotly_chart(fig)
+        st.markdown(
+            "<p style='text-align: left; color: gray; margin-top: -80px;'>"
+            "Source : INSEE, Dossier Complet 2024</p><br><br>",
+            unsafe_allow_html=True
+        )
 
     if len(selected_years) > 1 :
         filtered_data["evolution"] = (filtered_data.iloc[:,1]/filtered_data.iloc[:,2])
@@ -123,26 +131,33 @@ if visualization_type == "Population par commune":
         
         # Exemple de visualisation avec Plotly
         nb_annee = len(selected_years)
-        figue = px.choropleth(
-            filtered_data,
-            geojson=geojson_commune,
-            locations="CODGEO",  # Code géographique (par exemple, code INSEE)
-            featureidkey="properties.code",
-            color="evolution",  # Colonne avec les valeurs numériques
-            color_continuous_scale=color_scale,
-            labels={selected_columns[0]: selected_variable},
-            title=f"Evolution * de {selected_variable} par commune entre 20{selected_years[nb_annee-2]} et 20{selected_years[nb_annee-1]}",
-            hover_data = "nom_commune"
-        )
-        figue.update_geos(fitbounds="locations", visible=False)
-        figue.update_layout(height=700)
-        st.plotly_chart(figue)
-        st.markdown(
-            "<p style='text-align: left; color: gray;'>"
-            "* L'évolution a été calculé en faisant le rapport des années sélectionnées <br>"
-            "Source : INSEE, Dossier Complet 2024</p>",
-            unsafe_allow_html=True
-        )
+        with colage:
+            figue = px.choropleth_mapbox(
+                filtered_data,
+                geojson=geojson_commune,
+                locations="CODGEO",  # Code géographique (par exemple, code INSEE)
+                featureidkey="properties.code",
+                color="evolution",  # Colonne avec les valeurs numériques
+                color_continuous_scale=color_scale,
+                labels={selected_columns[0]: selected_variable},
+                title=f"Evolution * de {selected_variable} par commune entre 20{selected_years[nb_annee-2]} et 20{selected_years[nb_annee-1]}",
+                hover_data = "nom_commune"
+            )
+            figue.update_geos(fitbounds="locations", visible=False)
+            figue.update_layout(
+                mapbox_style="open-street-map",  # Fond de carte OSM
+                mapbox_zoom=9,  # Zoom initial, ajuste selon besoin
+                mapbox_center={"lat": 45.166672, "lon": 5.71667},
+                height=700  # Centre de la France (ajuste selon tes données)
+            )
+            figue.update_traces(marker=dict(opacity=0.7))
+            st.plotly_chart(figue)
+            st.markdown(
+                "<p style='text-align: left; color: gray; margin-top: -80px;'>"
+                "* L'évolution a été calculé en faisant le rapport des années sélectionnées <br>"
+                "Source : INSEE, Dossier Complet 2024</p>",
+                unsafe_allow_html=True
+            )
     
     # Carte de la moyenne d'age par commune :
     # Calcul de la moyenne d'age par commune
@@ -162,8 +177,9 @@ if visualization_type == "Population par commune":
             [0.5, "forestgreen"],
             [1, "darkred"]
         ]
-
-    abricot = px.choropleth(
+    
+    
+    abricot = px.choropleth_mapbox(
         filtered_data,
         geojson=geojson_commune,
         locations="CODGEO",  # Code géographique (par exemple, code INSEE)
@@ -175,15 +191,21 @@ if visualization_type == "Population par commune":
         hover_data = "nom_commune"
     )
     abricot.update_geos(fitbounds="locations", visible=False)
-    abricot.update_layout(height=700)
+    abricot.update_layout(
+        mapbox_style="open-street-map",  # Fond de carte OSM
+        mapbox_zoom=9,  # Zoom initial, ajuste selon besoin
+        mapbox_center={"lat": 45.166672, "lon": 5.71667},
+        height=700  # Centre de la France (ajuste selon tes données)
+    )
+    abricot.update_traces(marker=dict(opacity=0.7))
     st.plotly_chart(abricot)
     st.markdown(
-        "<p style='text-align: left; color: gray;'>"
+        "<p style='text-align: left; color: gray; margin-top: -80px;'>"
         "La moyenne est une estimation calculée à partir des catégories d'âge de la population <br>"
         "Source : INSEE, Dossier Complet 2024</p>",
         unsafe_allow_html=True
     )
-
+################################################################################################################
 elif visualization_type == "Evolution de la population":
     st.subheader(f"Histogramme : {selected_variable}")
 
@@ -235,7 +257,7 @@ elif visualization_type == "Evolution de la population":
 
         st.altair_chart(chart, use_container_width=True)
         st.markdown(
-            "<p style='text-align: left; color: gray;'>"
+            "<p style='text-align: left; color: gray; margin-top: -80px;'>"
             "Source : INSEE, Dossier Complet 2024</p>",
             unsafe_allow_html=True
         )
