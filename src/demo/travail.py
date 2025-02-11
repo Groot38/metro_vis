@@ -99,9 +99,9 @@ else :
 actifs_mel = pit.T
 actifs_mel["Année"] = "20"+actifs_mel.index.str[1:3]
 actifs_mel = actifs_mel.groupby(by='Année').sum().apply(sum,axis=1)
-chomeurs = chomeurs.T.apply(sum,axis = 1)
-chomeurs.index = ["20" + year for year in reversed(selected_years)]
-cotisant = actifs_mel-chomeurs
+#chomeurs = chomeurs.T.apply(sum,axis = 1)
+#chomeurs.index = ["20" + year for year in reversed(selected_years)]
+cotisant = actifs_mel#-chomeurs
 cotisant = cotisant.sort_index()
 retraites = retraites.T.apply(sum,axis=1)
 retraites.index = ["20" + year for year in reversed(selected_years)]
@@ -123,7 +123,7 @@ fig.add_trace(go.Scatter(
     x=rapport.index,
     y=cotisant.values,  # Assure la compatibilité avec les séries ou DataFrame
     mode='lines+markers',
-    name="Cotisant *"
+    name="Cotisants *"
 ), secondary_y=False)
 
 fig.add_trace(go.Scatter(
@@ -148,7 +148,7 @@ fig.update_yaxes(title_text="Population", range=[0, max(cotisant.values.flatten(
 st.plotly_chart(fig)
 st.markdown(
     "<p style='text-align: left; color: gray;'>"
-    "* Le nombre de cotisants a été calculé avec les 6 catégories socio-professionnelles suivantes et en retirant le nombre de chômeurs :<br>"
+    "* Le nombre de cotisants a été calculé avec les 6 catégories socio-professionnelles suivantes :<br>"
     "1. Agriculteurs exploitants<br>"
     "2. Artisans, commerçants et chefs d’entreprise<br>"
     "3. Cadres et professions intellectuelles supérieures<br>"

@@ -34,7 +34,7 @@ year_pattern = "|".join(selected_years)
 
 selection_sex = st.sidebar.radio(
     "",
-    ("Homme", "Femme", "Les deux"),
+    ("Les deux", "Homme", "Femme"),
 )
 
 # Affichage du bouton sélectionné
@@ -52,7 +52,7 @@ pattern = re.compile(f"^[P]({year_pattern})_(POP|F|H)(H|F|[0-9]|$)[a-zA-Z0-9]*$"
 filtered_meta_data = meta_data[meta_data["COD_VAR"].astype(str).str.match(pattern)]
 # Deuxième filtre sur le sexe
 filtered_meta_data = meta_data[meta_data["COD_VAR"].astype(str).str.match(pattern_sex)]
-
+meta_data_age_répartition = filtered_meta_data
 # Filtrage des données pour analyse
 variables = filtered_meta_data["LIB_VAR_LONG"]
 variables=list(dict.fromkeys(var[:-8] for var in variables))
@@ -63,7 +63,7 @@ if "selected_variable" not in st.session_state or st.session_state["selected_var
 else :
     selected_variable = st.sidebar.selectbox("Choisissez une catégorie à analyser",variables,index = variables.index(st.session_state["selected_variable"]))
     st.session_state["selected_variable"] = selected_variable
-visualization_type = st.sidebar.radio("Type de Visualisation", ["Cartes", "Histogrammes","Histogrammes empilés"])
+visualization_type = st.sidebar.radio("Type de Visualisation", ["Population par commune", "Evolution de la population","Repartition par âge"])
 
 
 
@@ -81,18 +81,22 @@ filtered_data = filtered_data.merge(nom_commune[["code_insee", "nom_commune"]],
 
 
 
-if visualization_type == "Cartes":
+if visualization_type == "Population par commune":
     st.subheader(f"Cartes : {selected_variable}")
     # Exemple de visualisation avec Plotly
+    color_scale = [
+            [0, "white"],  # Rouge pour les plus petites valeurs
+            [1, "blue"]  # Vert pour les grandes valeurs
+        ]
     fig = px.choropleth(
         filtered_data,
         geojson=geojson_commune,
         locations="CODGEO",  # Code géographique (par exemple, code INSEE)
         featureidkey="properties.code",
         color=selected_columns[0],  # Colonne avec les valeurs numériques
-        color_continuous_scale="Inferno",
+        color_continuous_scale=color_scale,
         labels={selected_columns[0]: selected_variable},
-        title=f"{selected_variable} par commune",
+        title=f"{selected_variable} par commune en {"20" + max(selected_years)}",
         hover_data = "nom_commune"
     )
     fig.update_geos(fitbounds="locations", visible=False)
@@ -139,8 +143,48 @@ if visualization_type == "Cartes":
             "Source : INSEE, Dossier Complet 2024</p>",
             unsafe_allow_html=True
         )
+    
+    # Carte de la moyenne d'age par commune :
+    # Calcul de la moyenne d'age par commune
+    cod_var = meta_data_age_répartition["COD_VAR"]
+    selected_columns = [col for col in data.columns if col in cod_var.values]
 
-elif visualization_type == "Histogrammes":
+    filtered_data = data[["CODGEO"] + selected_columns]
+    filtered_data = filtered_data.merge(nom_commune[["code_insee", "nom_commune"]], 
+                                        left_on="CODGEO", right_on="code_insee", 
+                                        how="left").drop(columns=["code_insee"])
+    
+    #vecteurs des centres de chaque catégorie :
+    centres = [7, 22, 37, 52, 67, 82, 92]
+    filtered_data["age_moy"] = np.dot(filtered_data.iloc[:,2:9],centres)/ filtered_data.iloc[:,1]
+    color_scale = [
+            [0, "limegreen"],
+            [0.5, "forestgreen"],
+            [1, "darkred"]
+        ]
+
+    abricot = px.choropleth(
+        filtered_data,
+        geojson=geojson_commune,
+        locations="CODGEO",  # Code géographique (par exemple, code INSEE)
+        featureidkey="properties.code",
+        color="age_moy",  # Colonne avec les valeurs numériques
+        color_continuous_scale=color_scale,
+        labels={"age_moy"},
+        title=f"Moyenne d'âge par commune en {"20" + max(selected_years)}",
+        hover_data = "nom_commune"
+    )
+    abricot.update_geos(fitbounds="locations", visible=False)
+    abricot.update_layout(height=700)
+    st.plotly_chart(abricot)
+    st.markdown(
+        "<p style='text-align: left; color: gray;'>"
+        "La moyenne est une estimation calculée à partir des catégories d'âge de la population <br>"
+        "Source : INSEE, Dossier Complet 2024</p>",
+        unsafe_allow_html=True
+    )
+
+elif visualization_type == "Evolution de la population":
     st.subheader(f"Histogramme : {selected_variable}")
 
     # Vérification que des colonnes sont bien sélectionnées
@@ -225,7 +269,7 @@ elif visualization_type == "Histogrammes":
             unsafe_allow_html=True
         )
 
-elif visualization_type == "Histogrammes empilés":
+elif visualization_type == "Repartition par âge":
     filtered_meta_data = meta_data[meta_data["COD_VAR"].astype(str).str.match(pattern_sex)]
     pattern_pie = re.compile(f"^[P]({year_pattern})_\\w+\\d+$")
     filtered_meta_data = filtered_meta_data[filtered_meta_data["COD_VAR"].astype(str).str.match(pattern_pie)]
