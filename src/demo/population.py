@@ -139,7 +139,7 @@ if visualization_type == "Population par commune":
                 featureidkey="properties.code",
                 color="evolution",  # Colonne avec les valeurs numériques
                 color_continuous_scale=color_scale,
-                labels={selected_columns[0]: selected_variable},
+                labels={"evolution": "Évolution"},
                 title=f"Evolution * de {selected_variable} par commune entre 20{selected_years[nb_annee-2]} et 20{selected_years[nb_annee-1]}",
                 hover_data = "nom_commune"
             )
@@ -186,7 +186,7 @@ if visualization_type == "Population par commune":
         featureidkey="properties.code",
         color="age_moy",  # Colonne avec les valeurs numériques
         color_continuous_scale=color_scale,
-        labels={"age_moy"},
+        labels={"age_moy" : "Âge moyen"},
         title=f"Moyenne d'âge par commune en {"20" + max(selected_years)}",
         hover_data = "nom_commune"
     )

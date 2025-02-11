@@ -96,7 +96,8 @@ with col3 :
     secteur_selectionné = st.selectbox("Sélectionnez un secteur :", secteurs_disponibles)
 # 📌 Filtrer les données selon le secteur sélectionné
 elec_tot_filtré = elec_tot[(elec_tot["FILIERE"] == secteur_selectionné)]
-
+elec_tot_filtré = elec_tot_filtré.groupby(['CODE GRAND SECTEUR','Année']).sum(numeric_only=True).reset_index()
+#melted_group_data = melted_data.groupby(['LIB_VAR_LONG',"LIB_V"]).sum(numeric_only=True).reset_index()
 with col4 :
     # 📊 Création du barplot empilé
     fig = px.bar(
