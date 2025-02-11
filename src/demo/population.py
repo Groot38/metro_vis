@@ -97,9 +97,10 @@ if visualization_type == "Population par commune":
             featureidkey="properties.code",
             color=selected_columns[0],  # Colonne avec les valeurs numériques
             color_continuous_scale=color_scale,
-            labels={selected_columns[0]: "Population"},
+            labels={selected_columns[0]: "Population",
+                    "nom_commune" : "Commune"},
             title=f"{selected_variable} par commune en {"20" + max(selected_years)}",
-            hover_data = "nom_commune"
+            hover_data={"CODGEO": False, "nom_commune": True}
         )
         fig.update_geos(fitbounds="locations", visible=False)
         fig.update_layout(
@@ -139,9 +140,10 @@ if visualization_type == "Population par commune":
                 featureidkey="properties.code",
                 color="evolution",  # Colonne avec les valeurs numériques
                 color_continuous_scale=color_scale,
-                labels={"evolution": "Évolution"},
+                labels={"evolution": "Évolution",
+                        "nom_commune" : "Commune"},
                 title=f"Evolution * de {selected_variable} par commune entre 20{selected_years[nb_annee-2]} et 20{selected_years[nb_annee-1]}",
-                hover_data = "nom_commune"
+                hover_data={"CODGEO": False, "nom_commune": True}
             )
             figue.update_geos(fitbounds="locations", visible=False)
             figue.update_layout(
@@ -186,9 +188,10 @@ if visualization_type == "Population par commune":
         featureidkey="properties.code",
         color="age_moy",  # Colonne avec les valeurs numériques
         color_continuous_scale=color_scale,
-        labels={"age_moy" : "Âge moyen"},
+        labels={"age_moy" : "Âge moyen",
+                "nom_commune" : "Commune"},
         title=f"Moyenne d'âge par commune en {"20" + max(selected_years)}",
-        hover_data = "nom_commune"
+        hover_data={"CODGEO": False, "nom_commune": True}
     )
     abricot.update_geos(fitbounds="locations", visible=False)
     abricot.update_layout(
