@@ -94,7 +94,8 @@ logout_page = st.Page(logout, title="Log out", icon="🚪")
 
 population = st.Page("demo/population.py", title="Population", icon="👥")
 travail = st.Page("demo/travail.py", title="Travail", icon="💼")
-tourisme = st.Page("demo/tourisme.py", title="Tourisme", icon="✈️")
+menages = st.Page("demo/menages.py", title="Ménages", icon="🧹")
+
 
 meteo = st.Page("environnement/meteo.py", title="Météo", icon="🌧️")
 energie = st.Page("environnement/energie.py", title="Energie", icon="⚡")
@@ -107,7 +108,7 @@ if st.session_state.logged_in:
     pg = st.navigation(
         {
             "🏠 Accueil": [logout_page],
-            "📊 Démographie": [population, travail, tourisme],
+            "📊 Démographie": [population, travail, menages],
             "🌱 Environnement": [meteo, energie,atmo,zfe],
         }
     )

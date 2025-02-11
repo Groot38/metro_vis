@@ -34,7 +34,7 @@ year_pattern = "|".join(selected_years)
 
 selection_sex = st.sidebar.radio(
     "",
-    ("Homme", "Femme", "Les deux"),
+    ("Les deux", "Homme", "Femme"),
 )
 
 # Affichage du bouton sélectionné
@@ -63,7 +63,7 @@ if "selected_variable" not in st.session_state or st.session_state["selected_var
 else :
     selected_variable = st.sidebar.selectbox("Choisissez une catégorie à analyser",variables,index = variables.index(st.session_state["selected_variable"]))
     st.session_state["selected_variable"] = selected_variable
-visualization_type = st.sidebar.radio("Type de Visualisation", ["Cartes", "Histogrammes","Histogrammes empilés"])
+visualization_type = st.sidebar.radio("Type de Visualisation", ["Population par commune", "Evolution de la population","Repartition par âge"])
 
 
 
@@ -81,7 +81,7 @@ filtered_data = filtered_data.merge(nom_commune[["code_insee", "nom_commune"]],
 
 
 
-if visualization_type == "Cartes":
+if visualization_type == "Population par commune":
     st.subheader(f"Cartes : {selected_variable}")
     # Exemple de visualisation avec Plotly
     color_scale = [
@@ -184,7 +184,7 @@ if visualization_type == "Cartes":
         unsafe_allow_html=True
     )
 
-elif visualization_type == "Histogrammes":
+elif visualization_type == "Evolution de la population":
     st.subheader(f"Histogramme : {selected_variable}")
 
     # Vérification que des colonnes sont bien sélectionnées
@@ -269,7 +269,7 @@ elif visualization_type == "Histogrammes":
             unsafe_allow_html=True
         )
 
-elif visualization_type == "Histogrammes empilés":
+elif visualization_type == "Repartition par âge":
     filtered_meta_data = meta_data[meta_data["COD_VAR"].astype(str).str.match(pattern_sex)]
     pattern_pie = re.compile(f"^[P]({year_pattern})_\\w+\\d+$")
     filtered_meta_data = filtered_meta_data[filtered_meta_data["COD_VAR"].astype(str).str.match(pattern_pie)]
