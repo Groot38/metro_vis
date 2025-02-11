@@ -141,7 +141,7 @@ if visualization_type == "Population par commune":
                 color_continuous_scale=color_scale,
                 labels={"evolution": "Évolution",
                         "nom_commune" : "Commune"},
-                title=f"Evolution * de {selected_variable} par commune entre 20{selected_years[nb_annee-2]} et 20{selected_years[nb_annee-1]}",
+                title=f"Evolution de {selected_variable} par commune entre 20{selected_years[nb_annee-2]} et 20{selected_years[nb_annee-1]}",
                 hover_data={"CODGEO": False, "nom_commune": True}
             )
             figue.update_geos(fitbounds="locations", visible=False)
@@ -328,9 +328,8 @@ elif visualization_type == "Repartition par âge":
     )
 
     melted_group_data = melted_data.groupby(['LIB_VAR_LONG',"LIB_V"]).sum(numeric_only=True).reset_index()
-    melted_group_data["Année"] = melted_group_data["LIB_V"].str[1:3]
+    melted_group_data["Année"] = "20"+melted_group_data["LIB_V"].str[1:3]
     melted_group_data["Catégorie"] = melted_group_data["LIB_VAR_LONG"].str[:-8]
-
     # Création du barplot
     fig = px.bar(
         melted_group_data, 
