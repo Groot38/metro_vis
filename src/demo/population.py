@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import altair as alt
 import plotly.express as px
 import json
 import re
@@ -216,78 +215,82 @@ elif visualization_type == "Evolution de la population":
     if not selected_columns:
         st.warning("Aucune année sélectionnée pour l'histogramme.")
     else:
-        # Préparer les données pour Altair : transformation en format "long" (melt)
-        
-        filtered_data["rank"] = filtered_data.iloc[:,1].rank(method="min",ascending=False)
-        
+        # Ajouter le classement
+        filtered_data["rank"] = filtered_data.iloc[:, 1].rank(method="min", ascending=False)
+
+        # Transformer les données
         melted_data = filtered_data.melt(
-            id_vars=["nom_commune"],  # Maintenir CODGEO comme identifiant
-            value_vars=selected_columns,  # Variables à "fondre"
-            var_name="Variable",  # Nom de la colonne pour les années
-            value_name="Valeur"  # Nom de la colonne pour les valeurs
-        )#.sort_values(by=["nom_commune","Variable"])
-        # Répéter les rangs pour chaque variable de la même commune
-
-        melted_data["Rank"] = melted_data["nom_commune"].map(filtered_data.set_index("nom_commune")["rank"])
-
-        # Trier proprement le tableau comme souhaité
-        melted_data = melted_data.sort_values(by=["Rank", "nom_commune", "Variable"])
-
-        num_lines = st.sidebar.number_input("Nombre de lignes à afficher", min_value=1, max_value=49, value=10)
-    
-        custom_labels = {
-        "21": "2021",
-        "15": "2015",
-        "10": "2010"
-        }
-        melted_data["Legende"] = melted_data["Variable"].str[1:3].replace(custom_labels)
-        # Sélectionner les 'num_lines' premières lignes
-        melted_data_tronc = melted_data.head(num_lines*len(selected_years))
-        
-        # Création du graphique en barres
-        chart = alt.Chart(melted_data_tronc).mark_bar().encode(
-            x=alt.X("nom_commune:N", title="Communes",axis=alt.Axis(labelAngle=90),sort="-y"),  # Afficher CODGEO sur l'axe X
-            y=alt.Y("Valeur:Q", title="Population", axis=alt.Axis(labelAngle=0)),  # Valeurs de la population sur l'axe Y
-            color="Legende:N",  # Colorier selon la variable (P21_POP, P15_POP, P10_POP)
-            xOffset="Variable:N"
-        ).properties(
-            title="Comparaison de "+selected_variable+" par commune et par année",
-            width=150,  # Largeur de chaque barre
-            height=650  # Hauteur du graphique
-        ).configure_view(
-            stroke=None  # Enlever les bordures autour des graphiques
+            id_vars=["nom_commune"],
+            value_vars=selected_columns,
+            var_name="Variable",
+            value_name="Valeur"
         )
 
-        st.altair_chart(chart, use_container_width=True)
+        # Ajouter les rangs pour chaque commune
+        melted_data["Rank"] = melted_data["nom_commune"].map(filtered_data.set_index("nom_commune")["rank"])
+        melted_data = melted_data.sort_values(by=["Rank", "nom_commune", "Variable"])
+
+        # Sélectionner le nombre de lignes affichées
+        num_lines = st.sidebar.number_input("Nombre de lignes à afficher", min_value=1, max_value=49, value=10)
+        custom_labels = {"21": "2021", "15": "2015", "10": "2010"}
+
+        melted_data["Legende"] = melted_data["Variable"].str[1:3].replace(custom_labels)
+        melted_data_tronc = melted_data.head(num_lines * len(selected_years))
+
+        # Premier graphique en barres
+        mandarine = px.bar(
+            melted_data_tronc,
+            x="nom_commune",
+            y="Valeur",
+            color="Legende",
+            #text="Valeur",
+            barmode="group",
+            title=f"Comparaison de {selected_variable} par commune et par année",
+            labels={"nom_commune": "Communes", "Valeur": "Population", "Legende": "Année"}
+        )
+
+        mandarine.update_layout(
+            xaxis_title="Communes",
+            yaxis_title="Population",
+            width=900,
+            height=650,
+            bargap=0.15,
+            xaxis_tickangle=90
+        )
+
+        st.plotly_chart(mandarine, use_container_width=True)
         st.markdown(
             "<p style='text-align: left; color: gray; margin-top: -80px;'>"
+            "<br>"
             "Source : INSEE, Dossier Complet 2024</p>",
             unsafe_allow_html=True
         )
 
-
+        # Données regroupées pour la métropole de Grenoble
         melted_group_data = melted_data.groupby('Variable')['Valeur'].sum().reset_index()
-        melted_group_data["nom"]= ["Grenoble Alpes Metropole"]*len(selected_years)
-
-
+        melted_group_data["nom"] = ["Grenoble Alpes Metropole"] * len(selected_years)
         melted_group_data["Legende"] = melted_group_data["Variable"].str[1:3].replace(custom_labels)
-        
-        chark = alt.Chart(melted_group_data).mark_bar(size=100).encode(
-            x=alt.X("nom:N", title="Année",axis=alt.Axis(labelAngle=0),sort="-y"),  # Afficher CODGEO sur l'axe X
-            y=alt.Y("Valeur:Q", title="Population", axis=alt.Axis(labelAngle=0)),  # Valeurs de la population sur l'axe Y
-            color="Legende:N",  # Colorier selon la variable (P21_POP, P15_POP, P10_POP)
-            xOffset="Variable:N"
-        ).properties(
-            title="Comparaison par année de "+selected_variable+" sur la métropole de Grenoble",
-            width=650,  # Largeur de chaque barre
-            height=650  # Hauteur du graphique
-        ).configure_view(
-            stroke=None  # Enlever les bordures autour des graphiques
-        ).configure_scale(
-            bandPaddingInner=0
+
+        # Deuxième graphique en barres
+        banane = px.bar(
+            melted_group_data,
+            x="nom",
+            y="Valeur",
+            color="Legende",
+            barmode="group",
+            title=f"Comparaison par année de {selected_variable} sur la métropole de Grenoble",
+            labels={"nom": "Grenoble Alpes Métropole", "Valeur": "Population", "Legende": "Année"}
         )
 
-        st.altair_chart(chark, use_container_width=True)
+        banane.update_layout(
+            xaxis_title="Année",
+            yaxis_title="Population",
+            width=650,
+            height=650,
+            bargap=0.15
+        )
+
+        st.plotly_chart(banane, use_container_width=True)
         st.markdown(
             "<p style='text-align: left; color: gray;'>"
             "Source : INSEE, Dossier Complet 2024</p>",
