@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import pydeck as pdk
+import numpy as np
 
 
 
@@ -51,15 +52,80 @@ df2 = pd.concat([df2_2000_2005,df2_2005_2010,df2_2010_2015, df2_2015_2020,df2_20
 df["aaaammjj"] = pd.to_datetime(df["aaaammjj"], format="%Y%m%d")
 df2["aaaammjj"] = pd.to_datetime(df2["aaaammjj"], format="%Y%m%d")
 
+#######################################################################################
+st.subheader("Etude de températures globales sur 20 ans.")
 
-df["Moyenne Glissante"] = df.groupby("nom_usuel")["tntxm"].transform(lambda x: x.rolling(window=50, min_periods=1).mean())
+col1, col2  = st.columns([2,1],vertical_alignment="top")
+df["Moyenne Glissante"] = df.groupby("nom_usuel")["tntxm"].transform(lambda x: x.rolling(window=100, min_periods=50).mean())
+df = df.rename(columns={"tntxm": "Moyenne entre la température min et max"})
+
+with col1:
+    # 🎨 Afficher le graphique avec et sans la moyenne glissante
+    st.line_chart(df, x="aaaammjj", y=["Moyenne entre la température min et max", "Moyenne Glissante"], color="nom_usuel",x_label="Date",y_label="moyenne de températures en °C")
+
+#######################
+
+# 📌 Convertir les dates en format datetime
+df["aaaammjj"] = pd.to_datetime(df["aaaammjj"])
+df["Année"] = df["aaaammjj"].dt.year  # Extraire l'année
+
+# 📈 Moyenne des températures par année
+df_annee = df.groupby("Année")["Moyenne entre la température min et max"].mean().reset_index()
+
+# 🔢 Calcul de la tendance linéaire avec NumPy
+pente, intercept = np.polyfit(df_annee["Année"], df_annee["Moyenne entre la température min et max"], 1)
+
+# 🔺 Calcul de l'augmentation totale sur la période
+augmentation_temp = pente * (df_annee["Année"].max() - df_annee["Année"].min())
+
+with col2:
+    # 🎯 Affichage du chiffre clé avec Streamlit
+    st.metric(
+        label="Augmentation de la température sur la période",
+        value=f"{augmentation_temp:.2f}°C",
+        delta=f"{pente:.2f}°C/an",
+        delta_color="inverse" if pente < 0 else "normal",
+    )
+
+    multi='''
+            La tendance des températures au cours des années est positive.   
+            Les températures augmentents en moyenne de :red[0.09 °C/an].  
+            En 20 ans, la température a augmenté de :red[1.73 °C].
+             '''
+    st.markdown(multi)
+
+######################
+
+st.subheader("Etude de températures annuelles")
+
+multi='''
+            On observe mieux cette tendance en observant sur les moyennes annuelles.
+             '''
+st.markdown(multi)
 
 
-# 🎨 Afficher le graphique avec et sans la moyenne glissante
-st.line_chart(df, x="aaaammjj", y=["tntxm", "Moyenne Glissante"], color="nom_usuel",x_label="Date",y_label="moyenne de températures en °C")
+# 📊 Graphique avec tendance
+df_annee["Tendance Linéaire"] = intercept + pente * df_annee["Année"]
+fig = px.line(df_annee, x="Année", y=["Moyenne entre la température min et max", "Tendance Linéaire"])
+
+# 🎨 Mise à jour des labels des axes
+fig.update_layout(
+    xaxis_title="Année",
+    yaxis_title="Moyenne de température annuelle (°C)",
+    yaxis=dict(
+        range=[0, 20]  # Limiter l'axe y entre 0 et 15
+    )
+)
+st.plotly_chart(fig)
 
 
 ############################################""
+
+multi='''
+            Les données météo sont prises à partir de différents postes sur Grenoble. Certains postes ont étés mis en place plus tard.  
+            Les températures peuvent différer selon la localisation du poste (proche montagne, cours d'eau ou pleine ville).
+             '''
+st.markdown(multi)
 
 df["année"] = df["aaaammjj"].dt.year
 df2["année"] = df2["aaaammjj"].dt.year
@@ -72,16 +138,17 @@ df_filtré = df[df["nom_usuel"].isin(stations_interessantes)]
 
 
 # 📊 Calculer la température moyenne par année et par station météo
-df_temp_annuelle = df_filtré.groupby(["année","nom_usuel"])["tntxm"].mean().reset_index()
+df_temp_annuelle = df_filtré.groupby(["année","nom_usuel"])["Moyenne entre la température min et max"].mean().reset_index()
 
 # 🖼️ Afficher les données
 #st.write("Température moyenne annuelle par station météo :", df_temp_annuelle)
 
 col1, col2  = st.columns([2,1],vertical_alignment="center")
-
 with col1:
+    
     # 📊 Tracer le barchart
-    st.bar_chart(df_temp_annuelle, x="année", y="tntxm", color="nom_usuel", stack=False, y_label="moyenne de températures en °C")
+    st.bar_chart(df_temp_annuelle, x="année", y="Moyenne entre la température min et max", color="nom_usuel", stack=False, y_label="moyenne de températures en °C")
+
 
 with col2:
     layer = pdk.Layer(
@@ -111,6 +178,7 @@ with col2:
 
 ###################################################
 
+st.subheader("Etude de températures mensuelles")
 # 📆 Dictionnaire des mois
 mois_dict = {
     1: "Janvier", 2: "Février", 3: "Mars", 4: "Avril",
@@ -119,7 +187,7 @@ mois_dict = {
 }
 
 # 🌍 Colonnes pour l'affichage
-col1, col2, col3 = st.columns([1, 2, 2])
+col1, col2 = st.columns([1,3],vertical_alignment="center")
 
 with col1:
     # 🎛️ Sélecteur d'année
@@ -151,7 +219,7 @@ df_filtré = df_station[(df_station["année"] == année_selectionnée) & (df_sta
 
 # 🏷️ Catégoriser les températures
 df_filtré["Catégorie Température"] = pd.cut(
-    df_filtré["tntxm"],
+    df_filtré["Moyenne entre la température min et max"],
     bins=[-float("inf"), 5, 15, 25, float("inf")],
     labels=["< 5°C", "5-15°C", "15-25°C", "> 25°C"]
 )
@@ -182,12 +250,15 @@ with col2:
     # 🖼️ Affichage du camembert dans Streamlit
     st.plotly_chart(fig)
 
-with col3:
+col11, col21 = st.columns([2,3],vertical_alignment="center")
+
+
+with col11:
     # 🎯 Calculer la moyenne de tntxm pour l'année et le mois sélectionnés
-    moyenne_selectionnée = df_filtré["tntxm"].mean()
+    moyenne_selectionnée = df_filtré["Moyenne entre la température min et max"].mean()
 
     # 📊 Calculer la moyenne des mêmes mois sur les autres années
-    moyenne_autres_annees = df[df["mois"] == mois_selectionné]["tntxm"].mean()
+    moyenne_autres_annees = df[df["mois"] == mois_selectionné]["Moyenne entre la température min et max"].mean()
 
     # 🔼🔽 Calculer la différence entre les deux moyennes
     variation = moyenne_selectionnée - moyenne_autres_annees
@@ -199,17 +270,25 @@ with col3:
         delta=f"{variation:.2f}°C",
         delta_color="inverse" if variation < 0 else "normal",
     )
-     # 📊 Calculer la moyenne de température par année pour le mois sélectionné
-    df_moyennes_mois = df[df["mois"] == mois_selectionné].groupby("année")["tntxm"].mean().reset_index()
 
+    multi = '''
+            En sélectionnant le mois de l'année d'intérêt, cette métrique indique la température moyenne du mois ainsi que l'écart de température avec la moyenne du même mois de toutes les autres années.  
+            Cela vous indiquera si ce mois a été plus chaud ou plus froid que les mêmes mois des autres années.
+
+            '''
+    st.markdown(multi)
+     # 📊 Calculer la moyenne de température par année pour le mois sélectionné
+    df_moyennes_mois = df[df["mois"] == mois_selectionné].groupby("année")["Moyenne entre la température min et max"].mean().reset_index()
+
+with col21 : 
     # 🎨 Création du graphique avec Plotly
     fig = px.line(
         df_moyennes_mois, 
         x="année", 
-        y="tntxm", 
+        y="Moyenne entre la température min et max", 
         markers=True,
         title=f"📈 Températures moyennes en {mois_selectionné_nom} (toutes années)",
-        labels={"tntxm": "Température moyenne (°C)", "année": "Année"},
+        labels={"Moyenne entre la température min et max": "Température moyenne (°C)", "année": "Année"},
         line_shape="linear",
         range_y=[-10, 35]
     )
@@ -217,6 +296,8 @@ with col3:
     # 🖼️ Affichage du graphique dans Streamlit
     st.plotly_chart(fig)
 
+
+st.link_button("Source Météo France", "https://meteo.data.gouv.fr/form")
 
 
 #############################################################
