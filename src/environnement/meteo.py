@@ -86,13 +86,13 @@ with col2:
         delta=f"{pente:.2f}°C/an",
         delta_color="inverse" if pente < 0 else "normal",
     )
-
-    multi='''
+    with st.expander("Infos"):
+        st.write('''
             La tendance des températures au cours des années est positive.   
             Les températures augmentents en moyenne de :red[0.09 °C/an].  
             En 20 ans, la température a augmenté de :red[1.73 °C].
-             '''
-    st.markdown(multi)
+             ''')
+
 
 ######################
 
@@ -120,12 +120,11 @@ st.plotly_chart(fig)
 
 
 ############################################""
-
-multi='''
+with st.expander("Infos"):
+    st.write('''
             Les données météo sont prises à partir de différents postes sur Grenoble. Certains postes ont étés mis en place plus tard.  
             Les températures peuvent différer selon la localisation du poste (proche montagne, cours d'eau ou pleine ville).
-             '''
-st.markdown(multi)
+             ''')
 
 df["année"] = df["aaaammjj"].dt.year
 df2["année"] = df2["aaaammjj"].dt.year
@@ -143,7 +142,7 @@ df_temp_annuelle = df_filtré.groupby(["année","nom_usuel"])["Moyenne entre la 
 # 🖼️ Afficher les données
 #st.write("Température moyenne annuelle par station météo :", df_temp_annuelle)
 
-col1, col2  = st.columns([2,1],vertical_alignment="center")
+col1, col2  = st.columns([1,1],vertical_alignment="top")
 with col1:
     
     # 📊 Tracer le barchart
@@ -164,7 +163,7 @@ with col2:
     # Vue de la carte avec pydeck
     view_state = pdk.ViewState(latitude=df_filtré["lat"].mean(), longitude=df_filtré["lon"].mean(), zoom=9)
 
-    # Tooltip pour afficher le nom de la station dans l'infobulle
+     # Tooltip pour afficher le nom de la station dans l'infobulle
     tooltip = {
         "html": "<b>Poste :</b> {nom_usuel}",  # Afficher la valeur de 'nom_usuel' dans l'infobulle
         "style": {"backgroundColor": "white", "color": "black"}  # Style de l'infobulle
@@ -187,7 +186,7 @@ mois_dict = {
 }
 
 # 🌍 Colonnes pour l'affichage
-col1, col2 = st.columns([1,3],vertical_alignment="center")
+col1, col2 = st.columns([2,3],vertical_alignment="top")
 
 with col1:
     # 🎛️ Sélecteur d'année
@@ -270,13 +269,11 @@ with col11:
         delta=f"{variation:.2f}°C",
         delta_color="inverse" if variation < 0 else "normal",
     )
-
-    multi = '''
+    with st.expander("Infos"):
+        st.write('''
             En sélectionnant le mois de l'année d'intérêt, cette métrique indique la température moyenne du mois ainsi que l'écart de température avec la moyenne du même mois de toutes les autres années.  
             Cela vous indiquera si ce mois a été plus chaud ou plus froid que les mêmes mois des autres années.
-
-            '''
-    st.markdown(multi)
+            ''')
      # 📊 Calculer la moyenne de température par année pour le mois sélectionné
     df_moyennes_mois = df[df["mois"] == mois_selectionné].groupby("année")["Moyenne entre la température min et max"].mean().reset_index()
 
