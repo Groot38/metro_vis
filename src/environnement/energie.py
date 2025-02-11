@@ -24,13 +24,13 @@ gaz["Date"] = pd.to_datetime(gaz["Date"], format="%Y-%m")
 elec["Date"] = pd.to_datetime(elec["Date"], format="%Y-%m-%d")
 
 ######################################################################
-st.title("Etude de consommation de Gaz")
+st.title("Evolution de la consommation de Gaz")
 
-st.bar_chart(gaz,x="Date", y= "Consommation de gaz (en KWh PCS 0°C)")
+st.line_chart(gaz,x="Date", y= "Consommation de gaz (en KWh PCS 0°C)")
 
 #####################################################################
 
-st.title("Etude de consommation d'Electricité")
+st.title("Evolution de la consommation d'Electricité")
 
 # Extraire l'année et le mois pour regrouper les données
 elec["Année-Mois"] = elec["Date"].dt.to_period("M")
@@ -42,7 +42,7 @@ elec_mensuel["Année-Mois"] = elec_mensuel["Année-Mois"].dt.to_timestamp()
 
 
 # Graphique
-st.bar_chart(elec_mensuel, x="Année-Mois", y="Consommation (MW)")
+st.line_chart(elec_mensuel, x="Année-Mois", y="Consommation (MW)")
 
 #############################################################################
 
@@ -66,14 +66,14 @@ col1, col2  = st.columns([1,4],vertical_alignment="center")
 with col1 : 
     # 🎛️ Sélecteur pour choisir UNE SEULE catégorie à afficher
     libelles_disponibles = elec_annuel_bat["libelle_niv__4"].unique()
-    libelle_selectionne = st.selectbox("Sélectionnez une catégorie à afficher :", libelles_disponibles)
+    libelle_selectionne = st.selectbox("Sélectionnez une catégorie à afficher :", "ECLAIRAGE PUBLIC")
 
 # 📌 Filtrer les données selon la catégorie choisie
 elec_filtré = elec_annuel_bat[elec_annuel_bat["libelle_niv__4"] == libelle_selectionne]
 
 with col2 :
     # 📊 Créer un bar chart avec la catégorie sélectionnée
-    fig = px.bar(
+    fig = px.line(
         elec_filtré, 
         x="Année", 
         y="quantite_kwh",  
@@ -94,12 +94,10 @@ with col3 :
     # 🎛️ Sélecteur pour choisir les secteurs à afficher
     secteurs_disponibles = elec_tot["FILIERE"].unique()
     secteur_selectionné = st.selectbox("Sélectionnez un secteur :", secteurs_disponibles)
-    filieres_disponibles = elec_tot["CODE GRAND SECTEUR"].unique()
-    filieres_selectionnees = st.multiselect("Sélectionnez les filières à afficher :", filieres_disponibles, default=filieres_disponibles)
-
 # 📌 Filtrer les données selon le secteur sélectionné
-elec_tot_filtré = elec_tot[(elec_tot["FILIERE"] == secteur_selectionné) & (elec_tot["CODE GRAND SECTEUR"].isin(filieres_selectionnees))]
-
+elec_tot_filtré = elec_tot[(elec_tot["FILIERE"] == secteur_selectionné)]
+elec_tot_filtré = elec_tot_filtré.groupby(['CODE GRAND SECTEUR','Année']).sum(numeric_only=True).reset_index()
+#melted_group_data = melted_data.groupby(['LIB_VAR_LONG',"LIB_V"]).sum(numeric_only=True).reset_index()
 with col4 :
     # 📊 Création du barplot empilé
     fig = px.bar(
