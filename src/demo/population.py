@@ -154,7 +154,7 @@ if visualization_type == "Population par commune":
             st.plotly_chart(figue)
             st.markdown(
                 "<p style='text-align: left; color: gray; margin-top: -80px;'>"
-                "* L'évolution a été calculé en faisant le rapport des années sélectionnées <br>"
+                "L'évolution a été calculé en faisant le rapport des années sélectionnées <br>"
                 "Source : INSEE, Dossier Complet 2024</p>",
                 unsafe_allow_html=True
             )
@@ -187,7 +187,7 @@ if visualization_type == "Population par commune":
         color="age_moy",  # Colonne avec les valeurs numériques
         color_continuous_scale=color_scale,
         labels={"age_moy" : "Âge moyen"},
-        title=f"Moyenne d'âge par commune en {"20" + max(selected_years)}",
+        title = f"Moyenne d'âge{' ' if selection_sex == 'Les deux' else " des "+selection_sex + 's'} par commune en {'20' + max(selected_years)}",
         hover_data = "nom_commune"
     )
     abricot.update_geos(fitbounds="locations", visible=False)
