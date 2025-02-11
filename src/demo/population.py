@@ -14,6 +14,7 @@ geojson_commune = load_geojson()
 data,meta_data,nom_commune= load_data()
 
 #st.write(data.head())
+visualization_type = st.sidebar.radio("Type de Visualisation", ["Population par commune", "Evolution de la population","Repartition par âge"])
 
 # Option, choix de la colonne et de l'année
 st.sidebar.title("Options")
@@ -63,7 +64,6 @@ if "selected_variable" not in st.session_state or st.session_state["selected_var
 else :
     selected_variable = st.sidebar.selectbox("Choisissez une catégorie à analyser",variables,index = variables.index(st.session_state["selected_variable"]))
     st.session_state["selected_variable"] = selected_variable
-visualization_type = st.sidebar.radio("Type de Visualisation", ["Population par commune", "Evolution de la population","Repartition par âge"])
 
 
 
