@@ -99,7 +99,7 @@ if visualization_type == "Population par commune":
             color_continuous_scale=color_scale,
             labels={selected_columns[0]: "Population",
                     "nom_commune" : "Commune"},
-            title=f"{selected_variable} par commune en {"20" + max(selected_years)}",
+            title=f"{selected_variable} par commune en 20{max(selected_years)}",
             hover_data={"CODGEO": False, "nom_commune": True}
         )
         fig.update_geos(fitbounds="locations", visible=False)
