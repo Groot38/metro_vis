@@ -45,7 +45,7 @@ elif selection_sex  == "Femme":
     pattern_sex = re.compile(f"^[P]({year_pattern})_(POPF|F)(0014|1529|3044|4559|6074|7589|90P|^$)*$")
     st.session_state["selected_variable"] = None
 else:
-    pattern_sex = re.compile(f"^[P]({year_pattern})_(POP)(0014|1529|3044|4559|6074|7589|90P|^$)*$")
+    pattern_sex = re.compile(f"^[P]({year_pattern})_(POP)(0014|1529|3044|4559|6074|7589|90P|^$|75P)*$")
     st.session_state["selected_variable"] = None
 # Premier filtre
 pattern = re.compile(f"^[P]({year_pattern})_(POP|F|H)(H|F|[0-9]|$)[a-zA-Z0-9]*$")
@@ -117,7 +117,7 @@ if visualization_type == "Population par commune":
         )
 
     if len(selected_years) > 1 :
-        filtered_data["evolution"] = (filtered_data.iloc[:,1]/filtered_data.iloc[:,2])
+        filtered_data["evolution"] = (filtered_data.iloc[:,1]/filtered_data.iloc[:,len(selected_years)])
 
         min_val = min(filtered_data["evolution"])
         max_val = max(filtered_data["evolution"])
@@ -141,7 +141,7 @@ if visualization_type == "Population par commune":
                 color_continuous_scale=color_scale,
                 labels={"evolution": "Évolution",
                         "nom_commune" : "Commune"},
-                title=f"Evolution de {selected_variable} par commune entre 20{selected_years[nb_annee-2]} et 20{selected_years[nb_annee-1]}",
+                title=f"Evolution de {selected_variable} par commune entre 20{selected_years[nb_annee-len(selected_years)]} et 20{selected_years[nb_annee-1]}",
                 hover_data={"CODGEO": False, "nom_commune": True}
             )
             figue.update_geos(fitbounds="locations", visible=False)
@@ -243,10 +243,9 @@ elif visualization_type == "Evolution de la population":
             x="nom_commune",
             y="Valeur",
             color="Legende",
-            #text="Valeur",
             barmode="group",
             title=f"Comparaison de {selected_variable} par commune et par année",
-            labels={"nom_commune": "Communes", "Valeur": "Population", "Legende": "Année"}
+            labels={"nom_commune": "Commune", "Valeur": "Population", "Legende": "Année"}
         )
 
         mandarine.update_layout(
@@ -279,15 +278,17 @@ elif visualization_type == "Evolution de la population":
             color="Legende",
             barmode="group",
             title=f"Comparaison par année de {selected_variable} sur la métropole de Grenoble",
-            labels={"nom": "Grenoble Alpes Métropole", "Valeur": "Population", "Legende": "Année"}
+            labels={"nom": "Grenoble Alpes Métropole", "Valeur": "Population", "Legende": "Année"},
+            hover_data={"nom" : False} 
         )
 
         banane.update_layout(
             xaxis_title="Année",
             yaxis_title="Population",
-            width=650,
-            height=650,
-            bargap=0.15
+            #width=650,
+            #height=650,
+            #bargap=0.75,
+            bargroupgap=0.75
         )
 
         st.plotly_chart(banane, use_container_width=True)
@@ -299,7 +300,7 @@ elif visualization_type == "Evolution de la population":
 
 elif visualization_type == "Repartition par âge":
     filtered_meta_data = meta_data[meta_data["COD_VAR"].astype(str).str.match(pattern_sex)]
-    pattern_pie = re.compile(f"^[P]({year_pattern})_\\w+\\d+$")
+    pattern_pie = re.compile(f"^P({year_pattern})_\w+\d+.*")
     filtered_meta_data = filtered_meta_data[filtered_meta_data["COD_VAR"].astype(str).str.match(pattern_pie)]
     variables = filtered_meta_data["LIB_VAR_LONG"]
     variables=list(dict.fromkeys(var[:-8] for var in variables))
@@ -330,6 +331,8 @@ elif visualization_type == "Repartition par âge":
     melted_group_data = melted_data.groupby(['LIB_VAR_LONG',"LIB_V"]).sum(numeric_only=True).reset_index()
     melted_group_data["Année"] = "20"+melted_group_data["LIB_V"].str[1:3]
     melted_group_data["Catégorie"] = melted_group_data["LIB_VAR_LONG"].str[:-8]
+    melted_group_data
+    #melted_group_data["Pourcentage"] = melted_group_data[]
     # Création du barplot
     fig = px.bar(
         melted_group_data, 
@@ -341,6 +344,7 @@ elif visualization_type == "Repartition par âge":
         barmode="stack"
     )
     fig.update_traces(width=1)
+    fig.update_layout(xaxis=dict(tickmode='array', tickvals=melted_group_data["Année"].unique()))
 
     # Affichage de la figure
     st.write(fig)
