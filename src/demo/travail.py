@@ -78,6 +78,7 @@ fig = px.bar(
     barmode="stack"
 )
 fig.update_traces(width=1)
+fig.update_layout(xaxis=dict(tickmode='array', tickvals=resultat["Année"].unique()))
 
 # Affichage de la figure
 st.write(fig)

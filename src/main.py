@@ -20,7 +20,7 @@ if "logged_in" not in st.session_state:
 
 # ---- Fonction de login ----
 def login():
-    st.title("🌟 Bienvenue sur notre plateforme",)
+    st.title("🌟 Bienvenue",)
     st.subheader("Analyses de données :blue[démographiques], :red[économiques] et :green[environnementales]")
 
     # Zone de connexion
@@ -36,7 +36,7 @@ def login():
                 Cette application vise à utiliser les données de la Métropole Grenoble Alpes.
                 Projet Tutoré Master SSD by Tom Soheïl et Roro.
                  ''')
-        if st.button("🔑 Se connecter", key="login_button", help="Cliquez pour vous connecter"):
+        if st.button("🔑 Cliquez ici", key="login_button", help="Cliquez pour accèder aux données"):
             st.session_state.logged_in = True
             st.rerun()   
     
@@ -82,15 +82,15 @@ def login():
 
 # ---- Fonction de logout ----
 def logout():
-    st.write("### Vous êtes connecté !")
-    if st.button("🚪 Se déconnecter"):
+    st.write("### ")
+    if st.button("🚪Retour à la page d'accueil"):
         st.session_state.logged_in = False
         st.success("Déconnexion réussie !")
         st.rerun()
 
 # ---- Création des pages ----
-login_page = st.Page(login, title="Log in", icon="🔑")
-logout_page = st.Page(logout, title="Log out", icon="🚪")
+login_page = st.Page(login, title="Page d'informations", icon="ℹ️")
+logout_page = st.Page(logout, title="Information", icon="ℹ️")
 
 population = st.Page("demo/population.py", title="Population", icon="👥")
 travail = st.Page("demo/travail.py", title="Travail", icon="💼")
@@ -107,7 +107,7 @@ zfe = st.Page("environnement/zfe.py",title= "ZFE et parc automobile",icon = "�
 if st.session_state.logged_in:
     pg = st.navigation(
         {
-            "🏠 Accueil": [logout_page],
+            "": [logout_page],
             "📊 Démographie": [population, travail, menages],
             "🌱 Environnement": [meteo, energie,atmo,zfe],
         }
