@@ -97,6 +97,12 @@ with col2 :
     # 📈 Afficher le graphique
     st.plotly_chart(fig)
 
+    st.markdown(
+            "<p style='text-align: left; color: gray; margin-top: -40px;'>"
+            "Source : Données sur le parc de véhicules au niveau communal SDES</p><br><br>",
+            unsafe_allow_html=True
+        )
+
 with col1 :
         # 📉 Affichage du pourcentage d'évolution
     if evolution_pourcentage is not None:

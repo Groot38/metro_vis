@@ -62,6 +62,11 @@ df = df.rename(columns={"tntxm": "Moyenne entre la température min et max"})
 with col1:
     # 🎨 Afficher le graphique avec et sans la moyenne glissante
     st.line_chart(df, x="aaaammjj", y=["Moyenne entre la température min et max", "Moyenne Glissante"], color="nom_usuel",x_label="Date",y_label="moyenne de températures en °C")
+    st.markdown(
+            "<p style='text-align: left; color: gray; margin-top: -40px;'>"
+            "Source : Données climatologique de base quotidiennes Météo France</p><br><br>",
+            unsafe_allow_html=True
+        )
 
 #######################
 
@@ -117,6 +122,11 @@ fig.update_layout(
     )
 )
 st.plotly_chart(fig)
+st.markdown(
+            "<p style='text-align: left; color: gray; margin-top: -40px;'>"
+            "Source : Données climatologique de base quotidiennes Météo France</p><br><br>",
+            unsafe_allow_html=True
+        )
 
 
 ############################################""
@@ -147,6 +157,11 @@ with col1:
     
     # 📊 Tracer le barchart
     st.bar_chart(df_temp_annuelle, x="année", y="Moyenne entre la température min et max", color="nom_usuel", stack=False, y_label="moyenne de températures en °C")
+    st.markdown(
+            "<p style='text-align: left; color: gray; margin-top: -40px;'>"
+            "Source : Données climatologique de base quotidiennes Météo France</p><br><br>",
+            unsafe_allow_html=True
+        )
 
 
 with col2:
@@ -174,6 +189,11 @@ with col2:
 
     # Affichage de la carte dans Streamlit
     st.pydeck_chart(deck)
+    st.markdown(
+            "<p style='text-align: left; color: gray; margin-top: -40px;'>"
+            "Source : Données climatologique de base quotidiennes Météo France</p><br><br>",
+            unsafe_allow_html=True
+        )
 
 ###################################################
 
@@ -236,6 +256,7 @@ color_map = {
 }
 
 
+
 with col3:
     # 🎯 Calculer la moyenne de tntxm pour l'année et le mois sélectionnés
     moyenne_selectionnée = df_filtré["Moyenne entre la température min et max"].mean()
@@ -276,6 +297,11 @@ with col2:
 
     # 🖼️ Affichage du camembert dans Streamlit
     st.plotly_chart(fig)
+    st.markdown(
+            "<p style='text-align: left; color: gray; margin-top: -40px;'>"
+            "Source : Données climatologique de base quotidiennes Météo France</p><br><br>",
+            unsafe_allow_html=True
+        )
 
 col11, col21 = st.columns([2,3],vertical_alignment="center")
 
@@ -294,6 +320,11 @@ with col11 :
 
     # 🖼️ Affichage du graphique dans Streamlit
     st.plotly_chart(fig)
+    st.markdown(
+            "<p style='text-align: left; color: gray; margin-top: -40px;'>"
+            "Source : Données climatologique de base quotidiennes Météo France</p><br><br>",
+            unsafe_allow_html=True
+        )
 
 
 st.link_button("Source Météo France", "https://meteo.data.gouv.fr/form")
