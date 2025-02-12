@@ -160,3 +160,55 @@ if selected_variable == "PM10" :
     )
     # Affichage de la figure
     st.write(prune)
+
+
+#############################PARTIE DE ROMANE######################################################################
+@st.cache_data
+def load_data():
+    file_path_ges = "../data/environnement/5.16-ITDD-Auvergne-Rhone-Alpes-Toutes-les-communes.2024-01.csv"
+    df = pd.read_csv(file_path_ges,sep = ";",skiprows=1)
+    return(df)
+
+df= load_data()
+
+df2 = df.drop(df.index[[0]])
+ges = df2[df2["LIBELLE_VARIABLE"]=="Emissions de gaz à effet de serre par gaz"]
+
+col1, col2  = st.columns([1,1],vertical_alignment="center")
+
+with col1 :
+
+    # 🎛️ Sélecteur Streamlit pour choisir la commune et le Crit'Air
+    ville_selectionnee = st.selectbox("Sélectionnez une ville :", sorted(ges["CODGEO_LIBELLE"].unique()))
+    gaz_selectionnee = st.selectbox("Sélectionnez un gaz à effet de serre :", sorted(ges["LIBELLE_SOUS_CHAMP"].unique()))
+
+    # 📌 Filtrer les données pour la ville et le gaz sélectionnés
+    ges_filtré = ges[(ges["CODGEO_LIBELLE"] == ville_selectionnee) & (ges["LIBELLE_SOUS_CHAMP"] == gaz_selectionnee)]
+
+    # 🔄 Calcul de l'évolution en pourcentage
+    if not ges_filtré.empty:  # Vérifier si on a des données après le filtre
+        valeur_2016 = ges_filtré["A2016"].values[0]
+        valeur_2018 = ges_filtré["A2018"].values[0]
+    
+        if valeur_2016 != 0:  # Éviter une division par zéro
+            evolution = ((valeur_2018 - valeur_2016) / valeur_2016) * 100
+        else:
+            evolution = 0  # Si 2016 est 0, on met 0% d'évolution
+
+        # 📊 Afficher le pourcentage d'évolution
+        st.metric(
+            label=f"Évolution 2016 → 2018 de {gaz_selectionnee} à {ville_selectionnee} en tonnes équivalent CO2",
+            value=f"{evolution:.2f} %"
+        )
+    else:
+        st.warning("Aucune donnée disponible pour cette sélection.")
+    valeur_2018
+    st.markdown(
+        "<p style='text-align: left; color: gray;'>"
+        "Source : SDES, Indicateurs territoriaux de développement durable (ITDD)</p>",
+        unsafe_allow_html=True
+    )
+
+st.link_button("Source SDES", "https://www.statistiques.developpement-durable.gouv.fr/catalogue?page=datafile&datafileRid=318d1042-79c8-4d39-b337-9d261050cf7d")
+
+#source Indicateurs territoriaux de développement durable (ITDD) : SDES
