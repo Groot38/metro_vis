@@ -17,8 +17,7 @@ visualization_type = st.sidebar.radio("Type de Visualisation", ["Population par 
 
 # Option, choix de la colonne et de l'année
 st.sidebar.title("Options")
-if st.sidebar.checkbox("Afficher les données brutes"):
-    st.write(data)
+st.sidebar.text("Sélectionnez les années : ")
 selected_years = []
 if st.sidebar.checkbox("2010",value = True):
     selected_years.append("10")
@@ -33,7 +32,7 @@ if selected_years == []:
 year_pattern = "|".join(selected_years)
 
 selection_sex = st.sidebar.radio(
-    "",
+    "Sélectionnez un sexe : ",
     ("Les deux", "Homme", "Femme"),
 )
 
@@ -79,6 +78,8 @@ filtered_data = filtered_data.merge(nom_commune[["code_insee", "nom_commune"]],
                                      how="left").drop(columns=["code_insee"])
 
 
+if st.sidebar.checkbox("Afficher les données brutes"):
+    st.write(data)
 ###############################################################################################################
 if visualization_type == "Population par commune":
     st.subheader(f"Cartes de la Métropole de Grenoble en fonction de : {selected_variable}")
@@ -141,7 +142,7 @@ if visualization_type == "Population par commune":
                 color_continuous_scale=color_scale,
                 labels={"evolution": "Évolution",
                         "nom_commune" : "Commune"},
-                title=f"Evolution de {selected_variable} par commune entre 20{selected_years[nb_annee-2]} et 20{selected_years[nb_annee-1]}",
+                title=f"Evolution de {selected_variable} par commune\n entre 20{selected_years[nb_annee-2]} et 20{selected_years[nb_annee-1]}",
                 hover_data={"CODGEO": False, "nom_commune": True}
             )
             figue.update_geos(fitbounds="locations", visible=False)
@@ -155,10 +156,13 @@ if visualization_type == "Population par commune":
             st.plotly_chart(figue)
             st.markdown(
                 "<p style='text-align: left; color: gray; margin-top: -80px;'>"
-                "L'évolution a été calculé en faisant le rapport des années sélectionnées <br>"
+                "L'évolution a été calculée en faisant le rapport des années sélectionnées <br>"
                 "Source : INSEE, Dossier Complet 2024</p>",
                 unsafe_allow_html=True
             )
+    else:
+        with colage:
+            st.warning("Pour afficher la carte des évolutions, veuillez sélectionner aux moins 2 années")
     
     # Carte de la moyenne d'age par commune :
     # Calcul de la moyenne d'age par commune
@@ -187,7 +191,7 @@ if visualization_type == "Population par commune":
         featureidkey="properties.code",
         color="age_moy",  # Colonne avec les valeurs numériques
         color_continuous_scale=color_scale,
-        title = f"Moyenne d'âge{' ' if selection_sex == 'Les deux' else " des "+selection_sex + 's'} par commune en {'20' + max(selected_years)}",
+        title = f"Age moyen{' ' if selection_sex == 'Les deux' else " des "+selection_sex + 's'} par commune en {'20' + max(selected_years)}",
         labels={"age_moy" : "Âge moyen",
                 "nom_commune" : "Commune"},
         hover_data={"CODGEO": False, "nom_commune": True}
@@ -260,8 +264,7 @@ elif visualization_type == "Evolution de la population":
 
         st.plotly_chart(mandarine, use_container_width=True)
         st.markdown(
-            "<p style='text-align: left; color: gray; margin-top: -80px;'>"
-            "<br>"
+            "<p style='text-align: left; color: gray; margin-top: -40px;'>"
             "Source : INSEE, Dossier Complet 2024</p>",
             unsafe_allow_html=True
         )
