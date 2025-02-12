@@ -120,11 +120,6 @@ st.plotly_chart(fig)
 
 
 ############################################""
-with st.expander("Infos"):
-    st.write('''
-            Les données météo sont prises à partir de différents postes sur Grenoble. Certains postes ont étés mis en place plus tard.  
-            Les températures peuvent différer selon la localisation du poste (proche montagne, cours d'eau ou pleine ville).
-             ''')
 
 df["année"] = df["aaaammjj"].dt.year
 df2["année"] = df2["aaaammjj"].dt.year
@@ -144,6 +139,11 @@ df_temp_annuelle = df_filtré.groupby(["année","nom_usuel"])["Moyenne entre la 
 
 col1, col2  = st.columns([1,1],vertical_alignment="top")
 with col1:
+    with st.expander("Infos"):
+        st.write('''
+            Les données météo sont prises à partir de différents postes sur Grenoble. Certains postes ont étés mis en place plus tard.  
+            Les températures peuvent différer selon la localisation du poste (proche montagne, cours d'eau ou pleine ville).
+             ''')
     
     # 📊 Tracer le barchart
     st.bar_chart(df_temp_annuelle, x="année", y="Moyenne entre la température min et max", color="nom_usuel", stack=False, y_label="moyenne de températures en °C")
@@ -186,7 +186,7 @@ mois_dict = {
 }
 
 # 🌍 Colonnes pour l'affichage
-col1, col2 = st.columns([2,3],vertical_alignment="top")
+col1, col2,col3 = st.columns([1,2,2],vertical_alignment="top")
 
 with col1:
     # 🎛️ Sélecteur d'année
@@ -235,24 +235,8 @@ color_map = {
     "> 25°C": "#e74c3c"  # Rouge
 }
 
-with col2:
-    # 🎨 Création du camembert avec Plotly
-    fig = px.pie(
-        df_pie, 
-        values="Nombre de jours", 
-        names="Catégorie Température", 
-        title=f"🌡 Répartition des températures en {mois_selectionné_nom} {année_selectionnée} à {station_selectionnée}",
-        color="Catégorie Température",
-        color_discrete_map=color_map
-    )
 
-    # 🖼️ Affichage du camembert dans Streamlit
-    st.plotly_chart(fig)
-
-col11, col21 = st.columns([2,3],vertical_alignment="center")
-
-
-with col11:
+with col3:
     # 🎯 Calculer la moyenne de tntxm pour l'année et le mois sélectionnés
     moyenne_selectionnée = df_filtré["Moyenne entre la température min et max"].mean()
 
@@ -277,7 +261,25 @@ with col11:
      # 📊 Calculer la moyenne de température par année pour le mois sélectionné
     df_moyennes_mois = df[df["mois"] == mois_selectionné].groupby("année")["Moyenne entre la température min et max"].mean().reset_index()
 
-with col21 : 
+
+
+with col2:
+    # 🎨 Création du camembert avec Plotly
+    fig = px.pie(
+        df_pie, 
+        values="Nombre de jours", 
+        names="Catégorie Température", 
+        title=f"🌡 Répartition des températures en {mois_selectionné_nom} {année_selectionnée} à {station_selectionnée}",
+        color="Catégorie Température",
+        color_discrete_map=color_map
+    )
+
+    # 🖼️ Affichage du camembert dans Streamlit
+    st.plotly_chart(fig)
+
+col11, col21 = st.columns([2,3],vertical_alignment="center")
+
+with col11 : 
     # 🎨 Création du graphique avec Plotly
     fig = px.line(
         df_moyennes_mois, 

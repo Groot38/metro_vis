@@ -149,7 +149,6 @@ elec_annuel_tot = elec_tot[elec_tot["CODE GRAND SECTEUR"] == "RESIDENTIEL"]
 elec_annuel_tot["Rapport par habitant"] = elec_annuel_tot["Conso totale (MWh)"]/elec_annuel_tot["Nombre d'habitants"]
 elec_annuel_tot_commune = elec_annuel_tot.groupby(["Année", "Nom Commune"])["Rapport par habitant"].mean().reset_index()
 
-
 elec_annuel_tot_commune_2023= elec_annuel_tot_commune[elec_annuel_tot_commune["Année"] == 2023]
 
 
