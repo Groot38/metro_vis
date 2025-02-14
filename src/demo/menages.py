@@ -4,10 +4,9 @@ import altair as alt
 import plotly.express as px
 import re
 import matplotlib.pyplot as plt
-from utils import load_data,load_geojson
+from utils import load_data,load_geojson,filtre_pattern
 import numpy as np
 import plotly.graph_objects as go
-
 
 geojson_commune = load_geojson()
 data,meta_data,nom_commune= load_data()
@@ -27,38 +26,61 @@ if selected_years == []:
 
 year_pattern = "|".join(selected_years)
 
-visualization_type = st.sidebar.radio("Analyse des ménages par : ", ["Catégorie d'âge", "Sexe"])
+year_variables = ["P" + str(year) + "_POPH" for year in selected_years] + ["P" + str(year) + "_POPF" for year in selected_years]
+year_variables
+data_commune = data[["CODGEO"] + year_variables]
+pattern = re.compile(f"^C({year_pattern})_MEN(H|F)SEUL.*")
+filtered_meta_data = filtered_meta_data[filtered_meta_data["COD_VAR"].astype(str).str.match(pattern)]
+cod_var = filtered_meta_data["COD_VAR"]
+selected_columns = [col for col in data.columns if col in cod_var.values]
+filtered_data = data[["CODGEO"] + selected_columns]
+filtered_data = filtered_data.merge(nom_commune[["code_insee", "nom_commune"]], 
+                                     left_on="CODGEO", right_on="code_insee", 
+                                     how="left").drop(columns=["code_insee"])
+data_commune_melted = data_commune.melt(
+    id_vars = "CODGEO",
+    value_vars=year_variables,
+    var_name = "vars",
+    value_name="vals"
+)
+data_commune_melted["sexe"] = np.where(data_commune_melted["vars"].str[7:8] == "H", "Homme", "Femme")
+data_commune_melted["année"] = "20" + data_commune_melted["vars"].str[1:3]
+melted_data = filtered_data.melt(
+            id_vars=["nom_commune","CODGEO"],
+            value_vars=selected_columns,
+            var_name="Variable",
+            value_name="Valeur"
+        )
+melted_data["sexe"] = np.where(melted_data["Variable"].str[7:8] == "H", "Homme", "Femme")
+melted_data["année"] = "20" + melted_data["Variable"].str[1:3]
+#filtered_data_sum["Année"] = "20"+filtered_data_sum.index.str[1:3]
+melted_data = melted_data.merge(data_commune_melted,on=["CODGEO","sexe","année"])
+melted_data["Proportion"] = melted_data["Valeur"]/melted_data["vals"]
 
-# if visualization_type == "Sexe" : 
-#     selection_sex = st.sidebar.radio(
-#         "",
-#         ("Les deux", "Homme", "Femme"),
-#     )
+citron = px.bar(
+            melted_data,
+            x="sexe",
+            y="Valeur",
+            color="année",
+            barmode="group",
+            title=f"main",
+            labels={"nom_commune": "Commune", "Valeur": "Population", "Legende": "Année"}
+        )
 
-#     # Affichage du bouton sélectionné
-#     if selection_sex  == "Homme":
-#         pattern_sex = "H"
-#         st.session_state["selected_variable"] = None
-#     elif selection_sex  == "Femme":
-#         pattern_sex = "F"
-#         st.session_state["selected_variable"] = None
-#     else:
-#         pattern_sex = "Pop"
-#         st.session_state["selected_variable"] = None
+st.write(citron)
 
-#     selection, uhu = st.columns([1,4],vertical_alignment="center")
 
-#     filtered_meta_data
-#     with selection : 
-#         filtered_meta_data = filtered_meta_data.filter(regex = f"^[C]({year_pattern})_({pattern_sex})15P_CS[1-6]$")
-#         categories = elec_tot["FILIERE"].unique()
-#         secteur_selectionné = st.selectbox("Sélectionnez un secteur :", secteurs_disponibles)
+pattern = re.compile(f"^C({year_pattern})_NE24F.*")
 
-if visualization_type == "Catégorie d'âge" :
-    pattern = re.compile(f"^[P]({year_pattern})_POP(1519|2024|2539|4054|5564|6579|80P).*")
-    filtered_meta_data
-    filtered_meta_data = filtered_meta_data[filtered_meta_data["COD_VAR"].astype(str).str.match(pattern)]
-    filtered_meta_data
+filtered_data,selected_columns = filtre_pattern(meta_data[meta_data["THEME"] == "Couples - Familles - Ménages"],pattern,data,nom_commune)
+melted_data = filtered_data.melt(
+            id_vars=["nom_commune"],
+            value_vars=selected_columns,
+            var_name="Variable",
+            value_name="Valeur"
+        )   
 
-# P21_POP80P_PSEUL
-# pattern_sex = re.compile(f"^[P]({year_pattern})_(POPH|H)(0014|1529|3044|4559|6074|7589|90P|^$)*$")
+melted_data["année"] = "20" + melted_data["Variable"].str[1:3]
+melted_data["nombre enfants"] = melted_data["Variable"].str[9:11]
+melted_data = melted_data.groupby(["nombre enfants","année"]).sum(numeric_only=True).reset_index()
+melted_data

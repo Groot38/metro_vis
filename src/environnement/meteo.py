@@ -139,7 +139,7 @@ df2["mois"] = df2["aaaammjj"].dt.month
 
 stations_interessantes = ["GRENOBLE-CEA-RADOME", "ST-M-D'HERES-GALOCHERE"]  # Remplace par les num_poste que tu veux
 df_filtré = df[df["nom_usuel"].isin(stations_interessantes)]
-
+df_filtré = df[~((df["nom_usuel"] == "GRENOBLE-CEA-RADOME") & (df["année"] == 2019))]
 
 # 📊 Calculer la température moyenne par année et par station météo
 df_temp_annuelle = df_filtré.groupby(["année","nom_usuel"])["Moyenne entre la température min et max"].mean().reset_index()
@@ -156,6 +156,7 @@ with col1:
              ''')
     
     # 📊 Tracer le barchart
+    st.write("Moyenne de température par année et par station")
     st.bar_chart(df_temp_annuelle, x="année", y="Moyenne entre la température min et max", color="nom_usuel", stack=False, y_label="moyenne de températures en °C")
     st.markdown(
             "<p style='text-align: left; color: gray; margin-top: -40px;'>"

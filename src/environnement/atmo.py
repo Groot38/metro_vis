@@ -54,7 +54,6 @@ if selected_variable == "Ozone" :
 
 if selected_variable == "Dioxyde d'azote" :
     NO2 = load_atmo_data("../data/atmo/NO2")
-    st.write(NO2)
     NO2["Date"] = pd.to_datetime(NO2["Date"])
     prune = px.line(
         NO2,
