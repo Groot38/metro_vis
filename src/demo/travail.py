@@ -136,7 +136,7 @@ fig.add_trace(go.Scatter(
 
 # Mise en forme des titres et axes
 fig.update_layout(
-    title="Rapport des actifs occupés par rapport aux retraités",
+    title="Rapport des cotisants par rapport aux retraités",
     xaxis_title="Années",
     xaxis=dict(tickmode='array', tickvals=selected_years),
     yaxis=dict(range=[0, 1])

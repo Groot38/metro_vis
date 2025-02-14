@@ -30,3 +30,15 @@ def load_atmo_data(rep_path : str):
     stations_metro = ["St-Martin-d'Hères","Grenoble les Frênes","Grenoble Periurbain Sud","Grenoble Boulevards","Rocade Sud Eybens","Champ-sur-Drac"]
     data = data[data["Station"].isin(stations_metro)]
     return data
+
+def filtre_pattern(filtered_meta_data,pattern,data,nom_commune):
+    filtered_meta_data
+    filtered_meta_data = filtered_meta_data[filtered_meta_data["COD_VAR"].astype(str).str.match(pattern)]
+    st.write(filtered_meta_data)
+    cod_var = filtered_meta_data["COD_VAR"]
+    selected_columns = [col for col in data.columns if col in cod_var.values]
+    filtered_data = data[["CODGEO"] + selected_columns]
+    filtered_data = filtered_data.merge(nom_commune[["code_insee", "nom_commune"]], 
+                                        left_on="CODGEO", right_on="code_insee", 
+                                        how="left").drop(columns=["code_insee"])
+    return filtered_data,selected_columns
