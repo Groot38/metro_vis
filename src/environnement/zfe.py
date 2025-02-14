@@ -28,6 +28,16 @@ multi = '''
 st.subheader("Dans la Zone à Faibles Émissions (ZFE) de Grenoble Alpes Métropole, les restrictions de circulation s’appliquent aux véhicules suivants en fonction de leur vignette Crit’Air :")  
 st.markdown(multi)
 
+with st.expander("Infos"):
+        st.write('''
+            Au 1er janvier 2022, le parc de véhicules en circulation se compose de 38,7 millions de voitures particulières, 
+            6,3 millions de véhicules utilitaires légers, 616 000 poids lourds et 95 000 autobus et autocars. 
+            Le SDES met à disposition des statistiques par genre de véhicule (voitures particulières, véhicules utilitaires légers, 
+            poids lourds, autobus et autocars) ; par localisation (région, département, commune) ; selon les caractéristiques 
+            techniques du véhicule (motorisation, âge, vignette Crit’Air, poids total autorisé en charge — PTAC) et les 
+            caractéristiques de l’utilisateur (ménages, entreprises, administrations, et secteurs d’activité).
+            ''')
+
 codes_insee = [ # Pour limiter sur la métropole
     "38057", "38059", "38071", "38068", "38111", "38126", "38150", "38151", 
     "38158", "38169", "38170", "38179", "38185", "38188", "38200", "38516", 
@@ -114,15 +124,41 @@ with col1 :
     else:
         st.write("Pas de données disponibles pour calculer l'évolution.")
 
-with st.expander("Infos"):
-        st.write('''
-            Au 1er janvier 2022, le parc de véhicules en circulation se compose de 38,7 millions de voitures particulières, 
-            6,3 millions de véhicules utilitaires légers, 616 000 poids lourds et 95 000 autobus et autocars. 
-            Le SDES met à disposition des statistiques par genre de véhicule (voitures particulières, véhicules utilitaires légers, 
-            poids lourds, autobus et autocars) ; par localisation (région, département, commune) ; selon les caractéristiques 
-            techniques du véhicule (motorisation, âge, vignette Crit’Air, poids total autorisé en charge — PTAC) et les 
-            caractéristiques de l’utilisateur (ménages, entreprises, administrations, et secteurs d’activité).
-            ''')
+##################################################################################
+
+df_grouped = df_melted.groupby(["Année", "COMMUNE_LIBELLE"], as_index=False)["Nombre de véhicules"].sum()
+
+fig = px.line(
+    df_grouped, 
+    x="Année", 
+    y="Nombre de véhicules",  
+    color="COMMUNE_LIBELLE",   
+    title=f"Évolution du parc {critair_selectionne}",
+    markers=True
+)
+
+fig.update_layout(
+    xaxis=dict(
+        tickmode="linear",
+        dtick=1  
+    ),
+    yaxis_title="Nombre de véhicules"
+)
+st.plotly_chart(fig)
+
+st.markdown(
+            "<p style='text-align: left; color: gray; margin-top: -40px;'>"
+            "Source : Données sur le parc de véhicules au niveau communal SDES</p><br><br>",
+            unsafe_allow_html=True
+)
+
+
+
+
+
+###############################################################################
+
+
         
 st.link_button("Source SDES", "https://www.statistiques.developpement-durable.gouv.fr/catalogue?page=dataset&datasetId=64511438f3196b5b550dd093")
 
