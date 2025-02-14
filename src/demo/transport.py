@@ -3,6 +3,9 @@ import geopandas as gpd
 import folium
 from streamlit_folium import st_folium
 
+
+st.title("Etude des transports de la métropole")
+
 # 📂 Charger les fichiers GeoJSON
 @st.cache_data
 def load_data_transport():
@@ -15,13 +18,17 @@ def load_data_transport():
 
     return gdf_velo, gdf_tag
 
+col1, col2  = st.columns([1,3],vertical_alignment="top")
+
+
 # 📊 Charger les données
 velo, tag = load_data_transport()
 
-# 🎛️ Ajouter des cases à cocher pour afficher les données souhaitées
-afficher_pistes_cyclables = st.checkbox("Afficher les pistes cyclables 🚲", value=True)
-afficher_trams = st.checkbox("Afficher les lignes de tram 🚋", value=True)
-afficher_bus = st.checkbox("Afficher les lignes de bus 🚌", value=True)
+with col1:
+    # 🎛️ Ajouter des cases à cocher pour afficher les données souhaitées
+    afficher_pistes_cyclables = st.checkbox("Afficher les pistes cyclables 🚲", value=True)
+    afficher_trams = st.checkbox("Afficher les lignes de tram 🚋", value=True)
+    afficher_bus = st.checkbox("Afficher les lignes de bus 🚌", value=True)
 
 # 🌍 Créer une carte Folium centrée sur Grenoble
 m = folium.Map(location=[45.1885, 5.7245], zoom_start=11)
@@ -57,5 +64,12 @@ if afficher_bus:
         style_function=lambda x: {"color": "blue", "weight": 2},  
     ).add_to(m)
 
-# 🎛️ Affichage dans Streamlit
-st_folium(m, width=700, height=500)
+with col2 :
+    st.subheader(f"Cartes des transport de la Métropole de Grenoble")
+    # 🎛️ Affichage dans Streamlit
+    st_folium(m, width=700, height=500)
+    st.markdown(
+                "<p style='text-align: left; color: gray; margin-top: -40px;'>"
+                "Source : Lignes transport reseau TAG et Pistes cyclables de la métropole Open data Grenoble ALpes Métropole</p><br><br>",
+                unsafe_allow_html=True
+    )
