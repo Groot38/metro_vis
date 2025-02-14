@@ -32,9 +32,7 @@ def load_atmo_data(rep_path : str):
     return data
 
 def filtre_pattern(filtered_meta_data,pattern,data,nom_commune):
-    filtered_meta_data
     filtered_meta_data = filtered_meta_data[filtered_meta_data["COD_VAR"].astype(str).str.match(pattern)]
-    st.write(filtered_meta_data)
     cod_var = filtered_meta_data["COD_VAR"]
     selected_columns = [col for col in data.columns if col in cod_var.values]
     filtered_data = data[["CODGEO"] + selected_columns]

@@ -27,7 +27,6 @@ if selected_years == []:
 year_pattern = "|".join(selected_years)
 
 year_variables = ["P" + str(year) + "_POPH" for year in selected_years] + ["P" + str(year) + "_POPF" for year in selected_years]
-year_variables
 data_commune = data[["CODGEO"] + year_variables]
 pattern = re.compile(f"^C({year_pattern})_MEN(H|F)SEUL.*")
 filtered_meta_data = filtered_meta_data[filtered_meta_data["COD_VAR"].astype(str).str.match(pattern)]
@@ -67,7 +66,7 @@ citron = px.bar(
             labels={"nom_commune": "Commune", "Valeur": "Population", "Legende": "Année"}
         )
 
-st.write(citron)
+#st.write(citron) supprimé pour l'instant.
 
 
 pattern = re.compile(f"^C({year_pattern})_NE24F.*")
@@ -83,4 +82,40 @@ melted_data = filtered_data.melt(
 melted_data["année"] = "20" + melted_data["Variable"].str[1:3]
 melted_data["nombre enfants"] = melted_data["Variable"].str[9:11]
 melted_data = melted_data.groupby(["nombre enfants","année"]).sum(numeric_only=True).reset_index()
-melted_data
+#melted_data = melted_data[melted_data["année"] == 20+max(selected_years)].sort_values(by=["nom_commune", "nombre enfants"])
+melted_data = melted_data.sort_values(["nombre enfants"])
+
+# Création du barplot avec Plotly Express
+passion = px.bar(melted_data, 
+             x="année", 
+             y="Valeur", 
+             color="nombre enfants", 
+             title="Évolution du nombre d'enfants par famille",
+             labels={"Valeur": "Nombre d'enfants", "année": "Année", "nombre enfants": "Nombre d'enfants"},
+             barmode="group")
+
+st.write(passion)
+
+filtered_columns = data.filter(regex=r'^(?!P21_POP15P$)P21_POP15P').sum()
+
+filtered_columns_df = pd.DataFrame({
+    'valeur': filtered_columns.values,
+    'statut' :[
+    "Marié",
+    "Pacsé",
+    "Concubinage, Union libre",
+    "Veufs",
+    "Divorcé",
+    "Celibataire"]
+})
+
+mangue = px.bar(filtered_columns_df, 
+             x='valeur', 
+             y='statut', 
+             orientation='h', 
+             title='Nombre de personnes par statut marital',
+             color = 'statut',
+             labels={'valeur': 'Valeur', 'statut': 'Statut marital','P21_POP15P_CELIBATAIRE' : 'TEST'})
+
+st.write(mangue)
+
