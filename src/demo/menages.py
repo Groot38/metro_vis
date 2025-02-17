@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import re
-from utils import load_data,load_geojson,filtre_pattern
+from src.utils import load_data,load_geojson,filtre_pattern
 
 geojson_commune = load_geojson()
 data,meta_data,nom_commune= load_data()

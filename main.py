@@ -26,7 +26,7 @@ def login():
     col1, col2,col3  = st.columns([1,2,1])
 
     with col1:
-        st.image("../data/images/logo.png", use_container_width=True)
+        st.image("data/images/logo.png", use_container_width=True)
         with st.expander("Infos"):
              st.write('''
                 Cette application vise à utiliser les données de la Métropole Grenoble Alpes.
@@ -35,7 +35,7 @@ def login():
     
 
     with col2:
-        image_paths = ["../data/images/im1.jpg", "../data/images/im2.jpg", "../data/images/im3.jpg"]
+        image_paths = ["data/images/im1.jpg", "data/images/im2.jpg", "data/images/im3.jpg"]
         # choisi une image de façon aléatoire
         if "image_index" not in st.session_state:
             st.session_state.image_index = random.choice([-1,0,1])
@@ -112,18 +112,18 @@ login_page = st.Page(login, title="Page d'informations", icon="ℹ️")
 logout_page = st.Page(info, title="Information", icon="ℹ️")
 
 # pages démographie
-population = st.Page("demo/population.py", title="Population", icon="👥")
-travail = st.Page("demo/travail.py", title="Travail", icon="💼")
-revenu = st.Page("demo/revenu.py", title="Revenu", icon="💵")
-menages = st.Page("demo/menages.py", title="Ménages", icon="🧹")
+population = st.Page("src/demo/population.py", title="Population", icon="👥")
+travail = st.Page("src/demo/travail.py", title="Travail", icon="💼")
+revenu = st.Page("src/demo/revenu.py", title="Revenu", icon="💵")
+menages = st.Page("src/demo/menages.py", title="Ménages", icon="🧹")
 
 
 # pages environnement
-meteo = st.Page("environnement/meteo.py", title="Météo", icon="🌧️")
-energie = st.Page("environnement/energie.py", title="Energie", icon="⚡")
-atmo = st.Page("environnement/atmo.py",title= "Qualité de l'air",icon = "🌫️")
-zfe = st.Page("environnement/zfe.py",title= "ZFE et parc automobile",icon = "🚗")
-transport = st.Page("environnement/transport.py", title="Transport", icon="🚲")
+meteo = st.Page("src/environnement/meteo.py", title="Météo", icon="🌧️")
+energie = st.Page("src/environnement/energie.py", title="Energie", icon="⚡")
+atmo = st.Page("src/environnement/atmo.py",title= "Qualité de l'air",icon = "🌫️")
+zfe = st.Page("src/environnement/zfe.py",title= "ZFE et parc automobile",icon = "🚗")
+transport = st.Page("src/environnement/transport.py", title="Transport", icon="🚲")
 
 
 if st.session_state.logged_in:

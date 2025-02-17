@@ -1,5 +1,5 @@
 import streamlit as st
-from utils import load_atmo_data
+from src.utils import load_atmo_data
 import pandas as pd
 import plotly.express as px
 
@@ -12,7 +12,7 @@ else :
     st.session_state["selected_atmo"] = selected_variable
 
 if selected_variable == "Ozone" :
-    O3 = load_atmo_data("../data/atmo/O3")
+    O3 = load_atmo_data("data/atmo/O3")
     O3["Date"] = pd.to_datetime(O3["Date"])
     prune = px.line(
         O3,
@@ -41,7 +41,7 @@ if selected_variable == "Ozone" :
     )
 
 if selected_variable == "Dioxyde d'azote" :
-    NO2 = load_atmo_data("../data/atmo/NO2")
+    NO2 = load_atmo_data("data/atmo/NO2")
     NO2["Date"] = pd.to_datetime(NO2["Date"])
     prune = px.line(
         NO2,
@@ -78,7 +78,7 @@ if selected_variable == "Dioxyde d'azote" :
     )
 
 if selected_variable == "PM2.5" :
-    PM25 = load_atmo_data("../data/atmo/PM25")
+    PM25 = load_atmo_data("data/atmo/PM25")
     PM25["Date"] = pd.to_datetime(PM25["Date"])
     prune = px.line(
         PM25,
@@ -123,7 +123,7 @@ if selected_variable == "PM2.5" :
     )
 
 if selected_variable == "PM10" :
-    PM10 = load_atmo_data("../data/atmo/PM10")
+    PM10 = load_atmo_data("data/atmo/PM10")
     PM10["Date"] = pd.to_datetime(PM10["Date"])
     prune = px.line(
         PM10,
@@ -171,7 +171,7 @@ if selected_variable == "PM10" :
 #############################PARTIE DE ROMANE######################################################################
 @st.cache_data
 def load_data():
-    file_path_ges = "../data/environnement/5.16-ITDD-Auvergne-Rhone-Alpes-Toutes-les-communes.2024-01.csv"
+    file_path_ges = "data/environnement/5.16-ITDD-Auvergne-Rhone-Alpes-Toutes-les-communes.2024-01.csv"
     df = pd.read_csv(file_path_ges,sep = ";",skiprows=1)
     return(df)
 

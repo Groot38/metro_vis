@@ -9,7 +9,7 @@ def load_data_full():
     """
     Cette fonction renvoie le CSV sur le parc auto de la métro de Grenoble
     """
-    file_path_full_data = "../data/environnement/devdurable/Donnees-sur-le-parc-de-vehicule-au-niveau-communal.2023-05.csv"
+    file_path_full_data = "data/environnement/devdurable/Donnees-sur-le-parc-de-vehicule-au-niveau-communal.2023-05.csv"
     df_full = pd.read_csv(file_path_full_data,sep = ";",skiprows=1)
     return(df_full)
 

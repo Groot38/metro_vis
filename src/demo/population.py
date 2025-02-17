@@ -1,5 +1,5 @@
 import streamlit as st
-from utils import load_data,load_geojson
+from src.utils import load_data,load_geojson
 import plotly.express as px
 import re
 import numpy as np

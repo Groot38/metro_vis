@@ -10,13 +10,13 @@ def load_data_energie():
     """
     Cette fonction renvoie les df sur l'énergie de la métro contenu dans data/environnement/elec/
     """
-    file_path_gaz = "../data/environnement/elec/conso-gaz-metropole.csv"
-    file_path_elec = "../data/environnement/elec/eco2mix-metropoles-tr.csv"
+    file_path_gaz = "data/environnement/elec/conso-gaz-metropole.csv"
+    file_path_elec = "data/environnement/elec/eco2mix-metropoles-tr.csv"
     gaz = pd.read_csv(file_path_gaz,sep = ";")
     elec = pd.read_csv(file_path_elec,sep = ";")
-    file_path_elec_bat = "../data/environnement/elec/consommation_elec_grenoble_2012_2022.csv"
+    file_path_elec_bat = "data/environnement/elec/consommation_elec_grenoble_2012_2022.csv"
     elec_bat = pd.read_csv(file_path_elec_bat, sep=",")
-    file_path_elec_tot = "../data/environnement/elec/consommation-annuelle-d-electricite-et-gaz-par-commune(1).csv"
+    file_path_elec_tot = "data/environnement/elec/consommation-annuelle-d-electricite-et-gaz-par-commune(1).csv"
     elec_tot = pd.read_csv(file_path_elec_tot, sep=";")
     return(gaz,elec,elec_bat,elec_tot)
 
