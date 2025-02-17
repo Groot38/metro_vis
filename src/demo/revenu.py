@@ -42,16 +42,27 @@ selected_columns = [col for col in data.columns if col in cod_var.values]
 filtered_data = data[selected_columns]
 selection_sex = st.sidebar.radio(
     "",
-    ("Homme", "Femme", "Les deux"),
+    ("Homme", "Femme", "Les deux","comparaison homme femme"),
 )
 
 # Affichage du bouton sélectionné
 if selection_sex == "Homme":
     pattern_sex = r"^SNHMH[A-Za-z].*$"
+    sex_char = "des hommes"
+    nb_car = 36
 elif selection_sex == "Femme":
     pattern_sex = r"^SNHMF[A-Za-z].*$"
+    sex_char = "des femmes"
+    nb_car = 36
+elif selection_sex == "Les deux":
+    pattern_sex = r"^SNHM[CPEO].*$"
+    sex_char = ""
+    nb_car = 30
 else:
-    pattern_sex = r"^SNHM[^HF][A-Za-z].*$"
+    pattern_sex = r"^SNHM[F|H][CPEO].*$"
+    sex_char = "des femmes et des hommes"
+    nb_car = 30
+
 
 
 filtered_columns = [col for col in filtered_data.columns if re.match(pattern_sex, col)]
@@ -63,19 +74,72 @@ filtered_data = filtered_data.merge(nom_commune[["code_insee", "nom_commune"]],
                                      left_on="CODGEO", right_on="code_insee", 
                                      how="left").drop(columns=["code_insee"])
 filtered_data = filtered_data.dropna(thresh=3).reset_index()
-st.write(filtered_data)
 nom_var = filtered_meta_data["LIB_VAR_LONG"][filtered_meta_data["COD_VAR"].isin(filtered_data.columns)]
-st.write(nom_var)
+
+
 var_mapping = dict(zip(filtered_meta_data["COD_VAR"], filtered_meta_data["LIB_VAR_LONG"]))
 df_melted = filtered_data.melt(id_vars=["nom_commune"], var_name="Catégorie", value_name="Valeur")
-df_melted["Catégorie"] = df_melted["Catégorie"].map(var_mapping)
+df_melted["Catégorie"] = df_melted["Catégorie"].map(var_mapping).str[nb_car:-12]
+df_melted = df_melted.sort_values(by="Valeur", ascending=False)
+
+def insert_line_breaks(text, max_length=30):
+    """
+    Insère un retour à la ligne (<br>) tous les 20 caractères dans une chaîne.
+    
+    :param text: la chaîne à traiter
+    :param max_length: la longueur maximale avant d'insérer un <br>
+    :return: la chaîne modifiée avec des retours à la ligne
+    """
+    return "<br>-".join([text[i:i+max_length] for i in range(0, len(text), max_length)])
+
+# Appliquer la fonction sur la colonne "Catégorie" de df_melted
+df_melted["Catégorie"] = df_melted["Catégorie"].map(lambda x: insert_line_breaks(x) if isinstance(x, str) else x)
 # Création du barplot interactif avec Plotly Express
 fig = px.bar(df_melted, x="nom_commune", y="Valeur", color="Catégorie", 
-             labels={"Valeur": "Valeur", "nom_commune": "Nom de la Commune", "Catégorie": "Variable"},
-             title="Barplot par catégorie pour chaque ville")
+             labels={"Valeur": "Montant en euros", "nom_commune": "Nom de la Commune", "Catégorie": f"Salaire net moyen horaire {sex_char} en 2022"},
+             title="Salaire en fonction des catégories et des communes en 2022",barmode="group")
 st.write(fig)
 st.markdown(
     "<p style='text-align: left; color: gray;'>"
     "Source : INSEE, Dossier Complet 2024</p>",
     unsafe_allow_html=True
 )
+
+df_grouped = df_melted.groupby("Catégorie")["Valeur"].mean().reset_index()
+df_grouped["sexe"] = df_grouped["Catégorie"].apply(
+    lambda x: "femme" if x[0].lower() == "f" else "homme" 
+)
+if(selection_sex=="comparaison homme femme"):
+    df_grouped["categ"] = df_grouped["Catégorie"].apply(
+        lambda x: "cadres, professions intellectuelles supérieures <br>et des chefs d'entreprises salariés" if x[7:9].lower() == "ca" else 
+                "ouvriers" if x[7:9].lower() == "ou" else 
+                "professions intermédiaires" if x[7:9].lower() == "ex" else
+                "employés"
+    )
+    # Création du barplot avec Plotly Express
+    figue = px.bar(df_grouped, 
+                x="categ", 
+                y="Valeur", 
+                color = "sexe",
+                labels={"Valeur": "Montants des salaires en euros", "categ": "Catégorie"}, 
+                title=f"Comparaisons du salaire {sex_char} en 2022 par catégorie socioprofessionnelle",barmode="group")
+    st.write(figue)
+    st.markdown(
+        "<p style='text-align: left; color: gray;'>"
+        "Source : INSEE, Dossier Complet 2024</p>",
+        unsafe_allow_html=True
+    )
+else:
+    # Création du barplot avec Plotly Express
+    figue = px.bar(df_grouped, 
+                x="Catégorie", 
+                y="Valeur", 
+                color = "Catégorie",
+                labels={"Valeur": "Montants des salaires en euros", "Catégorie": "Catégorie"}, 
+                title=f"Salaire net moyen horaire {sex_char} en 2022 par catégorie")
+    st.write(figue)
+    st.markdown(
+        "<p style='text-align: left; color: gray;'>"
+        "Source : INSEE, Dossier Complet 2024</p>",
+        unsafe_allow_html=True
+    )
