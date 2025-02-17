@@ -7,6 +7,9 @@ import plotly.express as px
 
 @st.cache_data
 def load_data_energie():
+    """
+    Cette fonction renvoie les df sur l'énergie de la métro contenu dans data/environnement/elec/
+    """
     file_path_gaz = "../data/environnement/elec/conso-gaz-metropole.csv"
     file_path_elec = "../data/environnement/elec/eco2mix-metropoles-tr.csv"
     gaz = pd.read_csv(file_path_gaz,sep = ";")
@@ -35,16 +38,14 @@ st.markdown(
 
 st.title("Evolution de la consommation d'Electricité")
 
-# Extraire l'année et le mois pour regrouper les données
 elec["Année-Mois"] = elec["Date"].dt.to_period("M")
 
-# Calculer la moyenne par mois
 elec_mensuel = elec.groupby("Année-Mois")["Consommation (MW)"].mean().reset_index()
 
 elec_mensuel["Année-Mois"] = elec_mensuel["Année-Mois"].dt.to_timestamp()
 
 
-# Graphique
+# Graphique de la consommation d'éléctritie
 st.line_chart(elec_mensuel, x="Année-Mois", y="Consommation (MW)")
 st.markdown(
             "<p style='text-align: left; color: gray; margin-top: -40px;'>"
@@ -53,37 +54,27 @@ st.markdown(
         )
 #############################################################################
 
-# 📆 Convertir la colonne date_releve en datetime
 elec_bat["date_releve"] = pd.to_datetime(elec_bat["date_releve"])
 
-# 📅 Extraire année uniquement
 elec_bat["Année"] = elec_bat["date_releve"].dt.to_period("Y")
 
-# 🔢 Convertir la colonne "quantite_kwh" en float
 elec_bat["quantite_kwh"] = pd.to_numeric(elec_bat["quantite_kwh"], errors="coerce")
 
-# 📊 Calcul de la moyenne annuelle par catégorie
+# moyenne annuel par catégorie
 elec_annuel_bat = elec_bat.groupby(["Année", "libelle_niv__4"])["quantite_kwh"].mean().reset_index()
 
-# 🔄 Convertir Année en datetime pour Plotly
 elec_annuel_bat["Année"] = elec_annuel_bat["Année"].dt.to_timestamp()
 
-
-
-
-# 📌 Filtrer les données selon la catégorie choisie
 elec_filtré = elec_annuel_bat[elec_annuel_bat["libelle_niv__4"] == "ECLAIRAGE PUBLIC"]
 
-# 📊 Créer un bar chart avec la catégorie sélectionnée
 fig = px.line(
     elec_filtré, 
     x="Année", 
     y="quantite_kwh",  
     title=f"Consommation annuelle d'électricité - ECLAIRAGE PUBLIC",
-    color_discrete_sequence=["#3498db"]  # Bleu pour un style épuré
+    color_discrete_sequence=["#3498db"]
 )
 
-# 📈 Afficher dans Streamlit
 st.plotly_chart(fig)
 st.markdown(
             "<p style='text-align: left; color: gray; margin-top: -50px;'>"
@@ -97,25 +88,20 @@ col3, col4  = st.columns([1,4],vertical_alignment="center")
 
 
 with col3 :
-    # 🎛️ Sélecteur pour choisir les secteurs à afficher
     secteurs_disponibles = elec_tot["FILIERE"].unique()
     secteur_selectionné = st.selectbox("Sélectionnez un secteur :", secteurs_disponibles)
-# 📌 Filtrer les données selon le secteur sélectionné
 elec_tot_filtré = elec_tot[(elec_tot["FILIERE"] == secteur_selectionné)]
 elec_tot_filtré = elec_tot_filtré.groupby(['CODE GRAND SECTEUR','Année']).sum(numeric_only=True).reset_index()
-#melted_group_data = melted_data.groupby(['LIB_VAR_LONG',"LIB_V"]).sum(numeric_only=True).reset_index()
 with col4 :
-    # 📊 Création du barplot empilé
     fig = px.bar(
         elec_tot_filtré, 
         x="Année", 
         y="Conso totale (MWh)",  
-        color="CODE GRAND SECTEUR",  # FILIERE sera empilé
-        barmode="stack",  # Empilement des filières
+        color="CODE GRAND SECTEUR",
+        barmode="stack",
         title=f"Consommation par année pour {secteur_selectionné}"
     )
 
-    # 📈 Affichage dans Streamlit
     st.plotly_chart(fig)
     st.markdown(
             "<p style='text-align: left; color: gray; margin-top: -50px;'>"
@@ -167,7 +153,7 @@ fig = px.bar(
         elec_annuel_tot_commune_2023, 
         x="Nom Commune", 
         y="Rapport par habitant",  
-        barmode="stack",  # Empilement des filières
+        barmode="stack",
         title="Rapport de la consommation d'électricité en MWh par habitant en 2023"
         )
 
@@ -181,11 +167,3 @@ st.markdown(
 
 ###################################################
 
-
-
-
-######################################
-
-
-
-###################################################################################
