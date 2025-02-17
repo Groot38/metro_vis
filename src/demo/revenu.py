@@ -11,7 +11,6 @@ data,meta_data,nom_commune= load_data()
 pattern = re.compile(r"^TP60")
 filtered_meta_data = meta_data[meta_data["COD_VAR"].astype(str).str.match(pattern)]
 
-# Filtrage des données pour analyse
 variables = filtered_meta_data["LIB_VAR_LONG"]
 variables=list(dict.fromkeys(var[:-8] for var in variables))
 
@@ -30,7 +29,6 @@ filtered_data = filtered_data.merge(nom_commune[["code_insee", "nom_commune"]],
 pattern_salaire = re.compile(r"^SNHM")
 filtered_meta_data = meta_data[meta_data["COD_VAR"].astype(str).str.match(pattern_salaire)]
 
-# Filtrage des données pour analyse
 variables = filtered_meta_data["LIB_VAR_LONG"]
 variables=list(dict.fromkeys(var[:-8] for var in variables))
 
@@ -45,7 +43,6 @@ selection_sex = st.sidebar.radio(
     ("Homme", "Femme", "Les deux","comparaison homme femme"),
 )
 
-# Affichage du bouton sélectionné
 if selection_sex == "Homme":
     pattern_sex = r"^SNHMH[A-Za-z].*$"
     sex_char = "des hommes"
@@ -92,9 +89,7 @@ def insert_line_breaks(text, max_length=30):
     """
     return "<br>-".join([text[i:i+max_length] for i in range(0, len(text), max_length)])
 
-# Appliquer la fonction sur la colonne "Catégorie" de df_melted
 df_melted["Catégorie"] = df_melted["Catégorie"].map(lambda x: insert_line_breaks(x) if isinstance(x, str) else x)
-# Création du barplot interactif avec Plotly Express
 fig = px.bar(df_melted, x="nom_commune", y="Valeur", color="Catégorie", 
              labels={"Valeur": "Montant en euros", "nom_commune": "Nom de la Commune", "Catégorie": f"Salaire net moyen horaire {sex_char} en 2022"},
              title="Salaire en fonction des catégories et des communes en 2022",barmode="group")
@@ -116,7 +111,6 @@ if(selection_sex=="comparaison homme femme"):
                 "professions intermédiaires" if x[7:9].lower() == "ex" else
                 "employés"
     )
-    # Création du barplot avec Plotly Express
     figue = px.bar(df_grouped, 
                 x="categ", 
                 y="Valeur", 
@@ -130,7 +124,6 @@ if(selection_sex=="comparaison homme femme"):
         unsafe_allow_html=True
     )
 else:
-    # Création du barplot avec Plotly Express
     figue = px.bar(df_grouped, 
                 x="Catégorie", 
                 y="Valeur", 
