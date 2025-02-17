@@ -17,40 +17,31 @@ else :
 
 if selected_variable == "Ozone" :
     O3 = load_atmo_data("../data/atmo/O3")
-    st.write(O3)
     O3["Date"] = pd.to_datetime(O3["Date"])
     prune = px.line(
         O3,
         x="Date",
         y=O3.iloc[:,1],
         color="Station",
-        title="Évolution de la concentration d'azote (µg/m3) par Station",
+        title="Évolution de la concentration d'ozone (µg/m3) par Station",
         markers=True,
         labels={"y": "Valeur Mesurée", "Date": "Date", "Station": "Station"}
     )
     prune.add_hline(
-        y = 40,
+        y = 120,
         line_dash="dash",
         line_color="green",
-        annotation_text="Objectif de qualité FR",
+        annotation_text="Objectif de qualité pour la protection de la santé humaine",
         annotation_position="top right"
     )
-    prune.add_hline(
-        y = 30,
-        line_dash="dash",
-        line_color="red",
-        annotation_text="Niveau critique pour la protection de la végétation",
-        annotation_position="top right"
-    )
-    prune.add_hline(
-        y = 25,
-        line_dash="dash",
-        line_color="black",
-        annotation_text="Valeur limite pour la protection de la santé humaine UE",
-        annotation_position="top right"
-    )
-    # Affichage de la figure
     st.write(prune)
+    st.markdown(
+    "<p style='text-align: left; color: gray; margin-top: -50px;'>"
+    "Les données sont des moyennes mensuelles allant de février 2014 à janvier 2025.<br>"
+    "Le seuil d'objectif de qualité pour la protection de la santé humaine est un maximum journalier de la moyenne sur 8 heures par an.<br>"
+    "Source : INSEE, Dossier Complet 2024</p>",
+    unsafe_allow_html=True
+    )
 
 if selected_variable == "Dioxyde d'azote" :
     NO2 = load_atmo_data("../data/atmo/NO2")
@@ -78,15 +69,15 @@ if selected_variable == "Dioxyde d'azote" :
         annotation_text="Niveau critique pour la protection de la végétation",
         annotation_position="top right"
     )
-    prune.add_hline(
-        y = 25,
-        line_dash="dash",
-        line_color="black",
-        annotation_text="Valeur limite pour la protection de la santé humaine UE",
-        annotation_position="top right"
-    )
-    # Affichage de la figure
     st.write(prune)
+    st.markdown(
+    "<p style='text-align: left; color: gray; margin-top: -50px;'>"
+    "Les données sont des moyennes mensuelles allant de février 2014 à janvier 2025.<br>"
+    "Le seuil d'objectif de qualité est une moyenne annuelle.<br>"
+    "Le seuil critique pour la protection de la végétation est une moyenne annuelle.<br>"
+    "Source : INSEE, Dossier Complet 2024</p>",
+    unsafe_allow_html=True
+    )
 
 if selected_variable == "PM2.5" :
     PM25 = load_atmo_data("../data/atmo/PM25")
@@ -121,8 +112,16 @@ if selected_variable == "PM2.5" :
         annotation_text="Valeur limite pour la protection de la santé humaine UE",
         annotation_position="top right"
     )
-    # Affichage de la figure
     st.write(prune)
+    st.markdown(
+    "<p style='text-align: left; color: gray; margin-top: -50px;'>"
+    "Les données sont des moyennes mensuelles allant de février 2014 à janvier 2025.<br>"
+    "Le seuil d'objectif de qualité est une moyenne annuelle.<br>"
+    "La valeur cible pour la protection de la santé humaine est une moyenne annuelle.<br>"
+    "La valeur limite pour la protection de la santé humaine est une moyenne annuelle.<br>"
+    "Source : INSEE, Dossier Complet 2024</p>",
+    unsafe_allow_html=True
+    )
 
 if selected_variable == "PM10" :
     PM10 = load_atmo_data("../data/atmo/PM10")
@@ -157,8 +156,16 @@ if selected_variable == "PM10" :
         annotation_text="Seuil d'alerte FR",
         annotation_position="top right"
     )
-    # Affichage de la figure
     st.write(prune)
+    st.markdown(
+    "<p style='text-align: left; color: gray; margin-top: -50px;'>"
+    "Les données sont des moyennes mensuelles allant de février 2014 à janvier 2025.<br>"
+    "L'objectif de qualité est une moyenne annuelle.<br>"
+    "La valeur limite pour la protection de la santé humaine est une moyenne annuelle.<br>"
+    "Le seuil d'alerte est une moyenne sur 24h.<br>"
+    "Source : INSEE, Dossier Complet 2024</p>",
+    unsafe_allow_html=True
+    )
 
 
 #############################PARTIE DE ROMANE######################################################################
@@ -176,25 +183,19 @@ ges = df2[df2["LIBELLE_VARIABLE"]=="Emissions de gaz à effet de serre par gaz"]
 col1, col2  = st.columns([1,1],vertical_alignment="center")
 
 with col1 :
-
-    # 🎛️ Sélecteur Streamlit pour choisir la commune et le Crit'Air
     ville_selectionnee = st.selectbox("Sélectionnez une ville :", sorted(ges["CODGEO_LIBELLE"].unique()))
     gaz_selectionnee = st.selectbox("Sélectionnez un gaz à effet de serre :", sorted(ges["LIBELLE_SOUS_CHAMP"].unique()))
-
-    # 📌 Filtrer les données pour la ville et le gaz sélectionnés
     ges_filtré = ges[(ges["CODGEO_LIBELLE"] == ville_selectionnee) & (ges["LIBELLE_SOUS_CHAMP"] == gaz_selectionnee)]
 
-    # 🔄 Calcul de l'évolution en pourcentage
-    if not ges_filtré.empty:  # Vérifier si on a des données après le filtre
+    if not ges_filtré.empty: 
         valeur_2016 = ges_filtré["A2016"].values[0]
         valeur_2018 = ges_filtré["A2018"].values[0]
     
-        if valeur_2016 != 0:  # Éviter une division par zéro
+        if valeur_2016 != 0:
             evolution = ((valeur_2018 - valeur_2016) / valeur_2016) * 100
         else:
-            evolution = 0  # Si 2016 est 0, on met 0% d'évolution
+            evolution = 0
 
-        # 📊 Afficher le pourcentage d'évolution
         st.metric(
             label=f"Évolution 2016 → 2018 de {gaz_selectionnee} à {ville_selectionnee} en tonnes équivalent CO2",
             value=f"{evolution:.2f} %"
