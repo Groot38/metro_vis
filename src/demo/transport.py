@@ -4,7 +4,6 @@ import geopandas as gpd
 import folium
 from streamlit_folium import st_folium
 from utils import load_data,load_geojson
-import re
 import plotly.express as px
 
 
