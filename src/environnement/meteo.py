@@ -13,17 +13,17 @@ def load_data_meteo():
     """
     Cette fonction renvoie les df sur la méteo , chaque df est sur une période de 5 ans.
     """
-    file_path_vent_2000_2005 = "../data/environnement/meteo/clim-base_quot_vent-38-2000-2005.csv"
-    file_path_vent_2005_2010 = "../data/environnement/meteo/clim-base_quot_vent-38-2005-2010.csv"
-    file_path_vent_2010_2015 = "../data/environnement/meteo/clim-base_quot_vent-38-2010-2015.csv"
-    file_path_vent_2015_2020 = "../data/environnement/meteo/clim-base_quot_vent-38-2015-2020.csv"
-    file_path_vent_2020_2025 = "../data/environnement/meteo/clim-base_quot_vent-38-2020-2025.csv"
+    file_path_vent_2000_2005 = "data/environnement/meteo/clim-base_quot_vent-38-2000-2005.csv"
+    file_path_vent_2005_2010 = "data/environnement/meteo/clim-base_quot_vent-38-2005-2010.csv"
+    file_path_vent_2010_2015 = "data/environnement/meteo/clim-base_quot_vent-38-2010-2015.csv"
+    file_path_vent_2015_2020 = "data/environnement/meteo/clim-base_quot_vent-38-2015-2020.csv"
+    file_path_vent_2020_2025 = "data/environnement/meteo/clim-base_quot_vent-38-2020-2025.csv"
 
-    file_path_autre_2000_2005 = "../data/environnement/meteo/clim-base_quot_autres-38-2000-2005.csv"
-    file_path_autre_2005_2010 = "../data/environnement/meteo/clim-base_quot_autres-38-2005-2010.csv"
-    file_path_autre_2010_2015 = "../data/environnement/meteo/clim-base_quot_autres-38-2010-2015.csv"
-    file_path_autre_2015_2020 = "../data/environnement/meteo/clim-base_quot_autres-38-2015-2020.csv"
-    file_path_autre_2020_2025 = "../data/environnement/meteo/clim-base_quot_autres-38-2020-2025.csv"
+    file_path_autre_2000_2005 = "data/environnement/meteo/clim-base_quot_autres-38-2000-2005.csv"
+    file_path_autre_2005_2010 = "data/environnement/meteo/clim-base_quot_autres-38-2005-2010.csv"
+    file_path_autre_2010_2015 = "data/environnement/meteo/clim-base_quot_autres-38-2010-2015.csv"
+    file_path_autre_2015_2020 = "data/environnement/meteo/clim-base_quot_autres-38-2015-2020.csv"
+    file_path_autre_2020_2025 = "data/environnement/meteo/clim-base_quot_autres-38-2020-2025.csv"
 
     df_2000_2005 = pd.read_csv(file_path_vent_2010_2015)
     df_2005_2010 = pd.read_csv(file_path_vent_2005_2010)

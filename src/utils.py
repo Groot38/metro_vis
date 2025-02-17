@@ -16,9 +16,9 @@ def load_data():
     code_insee, nom_commune
     38057, Bresson
     """
-    data_insee = pd.read_csv("../data_insee/dossier_complet/dossier_complet.csv", sep=',')
-    meta_data = pd.read_csv("../data_insee/dossier_complet/meta_dossier_complet.csv", sep=';')
-    nom_commune = pd.read_csv("../data/communes.csv", sep=',')
+    data_insee = pd.read_csv("data_insee/dossier_complet/dossier_complet.csv", sep=',')
+    meta_data = pd.read_csv("data_insee/dossier_complet/meta_dossier_complet.csv", sep=';')
+    nom_commune = pd.read_csv("data/communes.csv", sep=',')
     return data_insee,meta_data,nom_commune
 
 @st.cache_data
@@ -28,7 +28,7 @@ def load_geojson():
     - 1 fichier json : correspond au contours geojson des communes de la métropole de Grenoble
        
     """
-    with open("../data/iris_contours/contours_communes.geojson", "r", encoding="utf-8") as f:
+    with open("data/iris_contours/contours_communes.geojson", "r", encoding="utf-8") as f:
         geojson_data = json.load(f)
     return geojson_data
 

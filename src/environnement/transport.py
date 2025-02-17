@@ -3,7 +3,8 @@ import pandas as pd
 import geopandas as gpd
 import folium
 from streamlit_folium import st_folium
-from utils import load_data,load_geojson
+from src.utils import load_data,load_geojson
+import re
 import plotly.express as px
 
 
@@ -11,8 +12,8 @@ st.title("Etude des transports de la métropole")
 
 @st.cache_data
 def load_data_transport():
-    geojson_path_velo = "../data/transport/velo.json"
-    geojson_path_tag = "../data/transport/lignes_transport_reseau_tag.geojson"
+    geojson_path_velo = "data/transport/velo.json"
+    geojson_path_tag = "data/transport/lignes_transport_reseau_tag.geojson"
 
     gdf_velo = gpd.read_file(geojson_path_velo)
     gdf_tag = gpd.read_file(geojson_path_tag)
