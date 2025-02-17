@@ -97,7 +97,7 @@ df_melted["Catégorie"] = df_melted["Catégorie"].map(lambda x: insert_line_brea
 # Création du barplot interactif avec Plotly Express
 fig = px.bar(df_melted, x="nom_commune", y="Valeur", color="Catégorie", 
              labels={"Valeur": "Montant en euros", "nom_commune": "Nom de la Commune", "Catégorie": f"Salaire net moyen horaire {sex_char} en 2022"},
-             title="Salaire en fonction des catégories et des communes",barmode="group")
+             title="Salaire en fonction des catégories et des communes en 2022",barmode="group")
 st.write(fig)
 st.markdown(
     "<p style='text-align: left; color: gray;'>"
@@ -111,7 +111,7 @@ df_grouped["sexe"] = df_grouped["Catégorie"].apply(
 )
 if(selection_sex=="comparaison homme femme"):
     df_grouped["categ"] = df_grouped["Catégorie"].apply(
-        lambda x: "cadres, professions intellectuelles supérieures <br>et des chefs d'entreprises salariés en 2022 (€)" if x[7:9].lower() == "ca" else 
+        lambda x: "cadres, professions intellectuelles supérieures <br>et des chefs d'entreprises salariés" if x[7:9].lower() == "ca" else 
                 "ouvriers" if x[7:9].lower() == "ou" else 
                 "professions intermédiaires" if x[7:9].lower() == "ex" else
                 "employés"
@@ -122,7 +122,7 @@ if(selection_sex=="comparaison homme femme"):
                 y="Valeur", 
                 color = "sexe",
                 labels={"Valeur": "Montants des salaires en euros", "categ": "Catégorie"}, 
-                title=f"Comparaisons du salaire {sex_char} en 2022 par catégorie",barmode="group")
+                title=f"Comparaisons du salaire {sex_char} en 2022 par catégorie socioprofessionnelle",barmode="group")
     st.write(figue)
     st.markdown(
         "<p style='text-align: left; color: gray;'>"
