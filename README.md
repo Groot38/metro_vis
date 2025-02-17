@@ -5,5 +5,5 @@ On a choisi de répondre à cette question à l'aide de 2 axes :
     - Un point sur l'environnement, pour connaître la métropole à travers ses consommations, d'énergie, sa température ou même son parc automobile  
   
 # Comment lancer l'application :  
-Rendez simplement à l'adresse :\ 
+Rendez simplement à l'adresse :  
 https://metro-vis.streamlit.app/
