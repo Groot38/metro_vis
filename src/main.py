@@ -78,18 +78,22 @@ def login():
 
     
 
-def logout():
+def info():
     """
     Cette fonction permet de passer de l'application à la page d'accueil.
     """
-    st.write("### ")
+    st.title("Bienvenue sur la page d'information")
+
+    st.text("Cette application est dédié à la métropole de Grenoble, les 2 axes de travail sont l'environnement et la démographie.")
+    st.text("N'hésitez pas à parcourir chaque page une par une")
+
     if st.button("🚪Retour à la page d'accueil"):
         st.session_state.logged_in = False
         st.rerun()
 
 # page d'accueil et page d'info
 login_page = st.Page(login, title="Page d'informations", icon="ℹ️")
-logout_page = st.Page(logout, title="Information", icon="ℹ️")
+logout_page = st.Page(info, title="Information", icon="ℹ️")
 
 # pages démographie
 population = st.Page("demo/population.py", title="Population", icon="👥")
