@@ -74,6 +74,7 @@ fig = px.line(
     title=f"Consommation annuelle d'électricité - ECLAIRAGE PUBLIC",
     color_discrete_sequence=["#3498db"]
 )
+fig.update_yaxes(rangemode="tozero")
 
 st.plotly_chart(fig)
 st.markdown(

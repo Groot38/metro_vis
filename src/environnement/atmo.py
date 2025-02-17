@@ -30,6 +30,7 @@ if selected_variable == "Ozone" :
         annotation_text="Objectif de qualité pour la protection de la santé humaine",
         annotation_position="top right"
     )
+    prune.update_yaxes(rangemode="tozero")
     st.write(prune)
     st.markdown(
     "<p style='text-align: left; color: gray; margin-top: -50px;'>"
@@ -65,6 +66,7 @@ if selected_variable == "Dioxyde d'azote" :
         annotation_text="Niveau critique pour la protection de la végétation",
         annotation_position="top right"
     )
+    prune.update_yaxes(rangemode="tozero")
     st.write(prune)
     st.markdown(
     "<p style='text-align: left; color: gray; margin-top: -50px;'>"
@@ -108,6 +110,7 @@ if selected_variable == "PM2.5" :
         annotation_text="Valeur limite pour la protection de la santé humaine UE",
         annotation_position="top right"
     )
+    prune.update_yaxes(rangemode="tozero")
     st.write(prune)
     st.markdown(
     "<p style='text-align: left; color: gray; margin-top: -50px;'>"
@@ -152,6 +155,7 @@ if selected_variable == "PM10" :
         annotation_text="Seuil d'alerte FR",
         annotation_position="top right"
     )
+    prune.update_yaxes(rangemode="tozero")
     st.write(prune)
     st.markdown(
     "<p style='text-align: left; color: gray; margin-top: -50px;'>"
@@ -179,6 +183,7 @@ ges = df2[df2["LIBELLE_VARIABLE"]=="Emissions de gaz à effet de serre par gaz"]
 col1, col2  = st.columns([1,1],vertical_alignment="center")
 
 with col1 :
+    st.subheader("Cette partie permet de comparer l'évolution des gaz à effet de serre par ville")
     ville_selectionnee = st.selectbox("Sélectionnez une ville :", sorted(ges["CODGEO_LIBELLE"].unique()))
     gaz_selectionnee = st.selectbox("Sélectionnez un gaz à effet de serre :", sorted(ges["LIBELLE_SOUS_CHAMP"].unique()))
     ges_filtré = ges[(ges["CODGEO_LIBELLE"] == ville_selectionnee) & (ges["LIBELLE_SOUS_CHAMP"] == gaz_selectionnee)]
