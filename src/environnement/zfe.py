@@ -126,7 +126,7 @@ with col1 :
 
 ##################################################################################
 
-df_grouped = df_melted.groupby(["Année", "COMMUNE_LIBELLE"], as_index=False)["Nombre de véhicules"].sum()
+df_grouped = df_melted[df_melted["CRITAIR"] == critair_selectionne].groupby(["Année", "COMMUNE_LIBELLE"], as_index=False)["Nombre de véhicules"].sum()
 
 fig = px.line(
     df_grouped, 
@@ -153,7 +153,31 @@ st.markdown(
 )
 
 
+df_group_critair = df_melted.groupby(["CRITAIR","Année"]).sum(numeric_only = True).reset_index()
 
+kiwi = px.line(
+    df_group_critair, 
+    x="Année", 
+    y="Nombre de véhicules",  
+    color="CRITAIR",   
+    title=f"Évolution du parc automobile par vignette Crit'Air",
+    markers=True
+)
+
+kiwi.update_layout(
+    xaxis=dict(
+        tickmode="linear",
+        dtick=1  
+    ),
+    yaxis_title="Nombre de véhicules"
+)
+st.plotly_chart(kiwi)
+
+st.markdown(
+            "<p style='text-align: left; color: gray; margin-top: -40px;'>"
+            "Source : Données sur le parc de véhicules au niveau communal SDES</p><br><br>",
+            unsafe_allow_html=True
+)
 
 
 ###############################################################################
