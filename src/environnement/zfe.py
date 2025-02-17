@@ -6,6 +6,9 @@ import plotly.express as px
 
 @st.cache_data
 def load_data_full():
+    """
+    Cette fonction renvoie le CSV sur le parc auto de la métro de Grenoble
+    """
     file_path_full_data = "../data/environnement/devdurable/Donnees-sur-le-parc-de-vehicule-au-niveau-communal.2023-05.csv"
     df_full = pd.read_csv(file_path_full_data,sep = ";",skiprows=1)
     return(df_full)
@@ -38,7 +41,8 @@ with st.expander("Infos"):
             caractéristiques de l’utilisateur (ménages, entreprises, administrations, et secteurs d’activité).
             ''')
 
-codes_insee = [ # Pour limiter sur la métropole
+# codes insee de la métropole
+codes_insee = [
     "38057", "38059", "38071", "38068", "38111", "38126", "38150", "38151", 
     "38158", "38169", "38170", "38179", "38185", "38188", "38200", "38516", 
     "38187", "38317", "38471", "38229", "38235", "38258", "38252", "38271", 
@@ -50,16 +54,13 @@ codes_insee = [ # Pour limiter sur la métropole
 
 codes_insee = list(map(str, codes_insee)) 
 
-
-# 📂 Charger les données (assure-toi que df_full est bien défini)
+# on garde uniquement les codes communes de la métro
 df_metroGRE = df_full[df_full["COMMUNE_CODE"].isin(codes_insee)]
 
-# 📊 Sélection des colonnes utiles (années du parc automobile)
 colonnes_annees = ["PARC_2011", "PARC_2012", "PARC_2013", "PARC_2014", "PARC_2015", 
                    "PARC_2016", "PARC_2017", "PARC_2018", "PARC_2019", "PARC_2020", 
                    "PARC_2021", "PARC_2022"]
 
-# 🔄 Transformer les données en format long (melt)
 df_melted = df_metroGRE.melt(
     id_vars=["COMMUNE_CODE", "COMMUNE_LIBELLE", "CATEGORIE_VEHICULE", "CRITAIR"],  
     value_vars=colonnes_annees, 
@@ -67,23 +68,20 @@ df_melted = df_metroGRE.melt(
     value_name="Nombre de véhicules"
 )
 
-# 🔢 Convertir Année pour un affichage propre
 df_melted["Année"] = df_melted["Année"].str.extract(r"(\d{4})").astype(int)
 
 col1, col2  = st.columns([1,3],vertical_alignment="center")
 
 with col1 :
-    # 🎛️ Sélecteur Streamlit pour choisir la commune et le Crit'Air
     ville_selectionnee = st.selectbox("Sélectionnez une ville :", sorted(df_melted["COMMUNE_LIBELLE"].unique()))
     critair_selectionne = st.selectbox("Sélectionnez un Crit'Air :", sorted(df_melted["CRITAIR"].dropna().unique()))
 
-# 📌 Filtrer les données selon la sélection
 df_filtré = df_melted[
     (df_melted["COMMUNE_LIBELLE"] == ville_selectionnee) & 
     (df_melted["CRITAIR"] == critair_selectionne)
 ]
 
-# 📊 Calcul du pourcentage d'évolution (2011 → 2022)
+# on a un df qui fait la somme des véhicules par année
 df_evolution = df_filtré.groupby("Année")["Nombre de véhicules"].sum()
 val_2011 = df_evolution.get(2011, 0)
 val_2022 = df_evolution.get(2022, 0)
@@ -94,7 +92,6 @@ else:
     evolution_pourcentage = None
 
 with col2 :
-    # 📊 Tracer le bar chart empilé par catégorie de véhicule
     fig = px.bar(
         df_filtré, 
         x="Année", 
@@ -104,7 +101,6 @@ with col2 :
         title=f"Évolution du parc {critair_selectionne} à {ville_selectionnee} par catégorie de véhicule"
     )
 
-    # 📈 Afficher le graphique
     st.plotly_chart(fig)
 
     st.markdown(
@@ -114,7 +110,6 @@ with col2 :
         )
 
 with col1 :
-        # 📉 Affichage du pourcentage d'évolution
     if evolution_pourcentage is not None:
         st.metric(
             label=f"Évolution 2011 → 2022 ({critair_selectionne} à {ville_selectionnee})",
