@@ -1,12 +1,8 @@
 import streamlit as st
-import pandas as pd
-import plotly.express as px
-import json
-import re
-import matplotlib.pyplot as plt
 from utils import load_data,load_geojson
+import plotly.express as px
+import re
 import numpy as np
-import plotly.graph_objects as go
 
 
 geojson_commune = load_geojson()
@@ -34,7 +30,6 @@ selection_sex = st.sidebar.radio(
     ("Les deux", "Homme", "Femme"),
 )
 
-# Affichage du bouton sélectionné
 if selection_sex  == "Homme":
     pattern_sex = re.compile(f"^[P]({year_pattern})_(POPH|H)(0014|1529|3044|4559|6074|7589|90P|^$)*$")
     st.session_state["selected_variable"] = None
@@ -50,7 +45,7 @@ filtered_meta_data = meta_data[meta_data["COD_VAR"].astype(str).str.match(patter
 # Deuxième filtre sur le sexe
 filtered_meta_data = meta_data[meta_data["COD_VAR"].astype(str).str.match(pattern_sex)]
 meta_data_age_répartition = filtered_meta_data
-# Filtrage des données pour analyse
+
 variables = filtered_meta_data["LIB_VAR_LONG"]
 variables=list(dict.fromkeys(var[:-8] for var in variables))
 
@@ -63,7 +58,6 @@ else :
 
 
 
-# Filtrer les données pour la variable choisie
 filtered_meta_data["LIB_VAR_LONG_trimmed"] = filtered_meta_data["LIB_VAR_LONG"].str[:-8]
 filtered_meta_data = filtered_meta_data[filtered_meta_data["LIB_VAR_LONG_trimmed"] == selected_variable]
 cod_var = filtered_meta_data["COD_VAR"]
@@ -75,25 +69,21 @@ filtered_data = filtered_data.merge(nom_commune[["code_insee", "nom_commune"]],
                                      left_on="CODGEO", right_on="code_insee", 
                                      how="left").drop(columns=["code_insee"])
 
-
-if st.sidebar.checkbox("Afficher les données brutes"):
-    st.write(data)
 ###############################################################################################################
 if visualization_type == "Population par commune":
     st.subheader(f"Cartes de la Métropole de Grenoble en fonction de : {selected_variable}")
     colpop, colage  = st.columns([1,1],vertical_alignment="center")
     with colpop:
-        # Exemple de visualisation avec Plotly
         color_scale = [
-                [0, "white"],  # Rouge pour les plus petites valeurs
-                [1, "blue"]  # Vert pour les grandes valeurs
+                [0, "white"],
+                [1, "blue"]
             ]
         fig = px.choropleth_mapbox(
             filtered_data,
             geojson=geojson_commune,
-            locations="CODGEO",  # Code géographique (par exemple, code INSEE)
+            locations="CODGEO",
             featureidkey="properties.code",
-            color=selected_columns[0],  # Colonne avec les valeurs numériques
+            color=selected_columns[0],
             color_continuous_scale=color_scale,
             labels={selected_columns[0]: "Population",
                     "nom_commune" : "Commune"},
@@ -102,10 +92,10 @@ if visualization_type == "Population par commune":
         )
         fig.update_geos(fitbounds="locations", visible=False)
         fig.update_layout(
-            mapbox_style="open-street-map",  # Fond de carte OSM
-            mapbox_zoom=9,  # Zoom initial, ajuste selon besoin
+            mapbox_style="open-street-map",
+            mapbox_zoom=9,
             mapbox_center={"lat": 45.166672, "lon": 5.71667},
-            height=700  # Centre de la France (ajuste selon tes données)
+            height=700
         )
         fig.update_traces(marker=dict(opacity=0.7))
         st.plotly_chart(fig)
@@ -121,22 +111,21 @@ if visualization_type == "Population par commune":
         min_val = min(filtered_data["evolution"])
         max_val = max(filtered_data["evolution"])
 
-        # Palette personnalisée pour les couleurs
+        #Palette personalisée
         color_scale = [
-            [0, "red"],  # Rouge pour les plus petites valeurs
-            [(1 - min_val) / (max_val - min_val), "white"],  # Blanc autour de 1
-            [1, "green"]  # Vert pour les grandes valeurs
+            [0, "red"],
+            [(1 - min_val) / (max_val - min_val), "white"],  
+            [1, "green"] 
         ]
         
-        # Exemple de visualisation avec Plotly
         nb_annee = len(selected_years)
         with colage:
             figue = px.choropleth_mapbox(
                 filtered_data,
                 geojson=geojson_commune,
-                locations="CODGEO",  # Code géographique (par exemple, code INSEE)
+                locations="CODGEO",  
                 featureidkey="properties.code",
-                color="evolution",  # Colonne avec les valeurs numériques
+                color="evolution",
                 color_continuous_scale=color_scale,
                 labels={"evolution": "Évolution",
                         "nom_commune" : "Commune"},
@@ -145,10 +134,10 @@ if visualization_type == "Population par commune":
             )
             figue.update_geos(fitbounds="locations", visible=False)
             figue.update_layout(
-                mapbox_style="open-street-map",  # Fond de carte OSM
-                mapbox_zoom=9,  # Zoom initial, ajuste selon besoin
+                mapbox_style="open-street-map",
+                mapbox_zoom=9, 
                 mapbox_center={"lat": 45.166672, "lon": 5.71667},
-                height=700  # Centre de la France (ajuste selon tes données)
+                height=700
             )
             figue.update_traces(marker=dict(opacity=0.7))
             st.plotly_chart(figue)
@@ -163,7 +152,6 @@ if visualization_type == "Population par commune":
             st.warning("Pour afficher la carte des évolutions, veuillez sélectionner aux moins 2 années")
     
     # Carte de la moyenne d'age par commune :
-    # Calcul de la moyenne d'age par commune
     cod_var = meta_data_age_répartition["COD_VAR"]
     selected_columns = [col for col in data.columns if col in cod_var.values]
 
@@ -172,7 +160,6 @@ if visualization_type == "Population par commune":
                                         left_on="CODGEO", right_on="code_insee", 
                                         how="left").drop(columns=["code_insee"])
     
-    #vecteurs des centres de chaque catégorie :
     centres = [7, 22, 37, 52, 67, 82, 92]
     filtered_data["age_moy"] = np.dot(filtered_data.iloc[:,2:9],centres)/ filtered_data.iloc[:,1]
     color_scale = [
@@ -185,9 +172,9 @@ if visualization_type == "Population par commune":
     abricot = px.choropleth_mapbox(
         filtered_data,
         geojson=geojson_commune,
-        locations="CODGEO",  # Code géographique (par exemple, code INSEE)
+        locations="CODGEO",
         featureidkey="properties.code",
-        color="age_moy",  # Colonne avec les valeurs numériques
+        color="age_moy",
         color_continuous_scale=color_scale,
         title = f"Age moyen{' ' if selection_sex == 'Les deux' else " des "+selection_sex + 's'} par commune en {'20' + max(selected_years)}",
         labels={"age_moy" : "Âge moyen",
@@ -196,10 +183,10 @@ if visualization_type == "Population par commune":
     )
     abricot.update_geos(fitbounds="locations", visible=False)
     abricot.update_layout(
-        mapbox_style="open-street-map",  # Fond de carte OSM
-        mapbox_zoom=9,  # Zoom initial, ajuste selon besoin
+        mapbox_style="open-street-map",
+        mapbox_zoom=9,
         mapbox_center={"lat": 45.166672, "lon": 5.71667},
-        height=700  # Centre de la France (ajuste selon tes données)
+        height=700
     )
     abricot.update_traces(marker=dict(opacity=0.7))
     st.plotly_chart(abricot)
@@ -213,14 +200,12 @@ if visualization_type == "Population par commune":
 elif visualization_type == "Evolution de la population":
     st.subheader(f"Histogramme : {selected_variable}")
 
-    # Vérification que des colonnes sont bien sélectionnées
     if not selected_columns:
         st.warning("Aucune année sélectionnée pour l'histogramme.")
     else:
-        # Ajouter le classement
         filtered_data["rank"] = filtered_data.iloc[:, 1].rank(method="min", ascending=False)
 
-        # Transformer les données
+        # On adapte les données pour le barchart
         melted_data = filtered_data.melt(
             id_vars=["nom_commune"],
             value_vars=selected_columns,
@@ -228,18 +213,16 @@ elif visualization_type == "Evolution de la population":
             value_name="Valeur"
         )
 
-        # Ajouter les rangs pour chaque commune
+        # Ajout des rangs
         melted_data["Rank"] = melted_data["nom_commune"].map(filtered_data.set_index("nom_commune")["rank"])
         melted_data = melted_data.sort_values(by=["Rank", "nom_commune", "Variable"])
 
-        # Sélectionner le nombre de lignes affichées
         num_lines = st.sidebar.number_input("Nombre de lignes à afficher", min_value=1, max_value=49, value=10)
         custom_labels = {"21": "2021", "15": "2015", "10": "2010"}
 
         melted_data["Legende"] = melted_data["Variable"].str[1:3].replace(custom_labels)
         melted_data_tronc = melted_data.head(num_lines * len(selected_years))
 
-        # Premier graphique en barres
         mandarine = px.bar(
             melted_data_tronc,
             x="nom_commune",
@@ -266,12 +249,10 @@ elif visualization_type == "Evolution de la population":
             unsafe_allow_html=True
         )
 
-        # Données regroupées pour la métropole de Grenoble
         melted_group_data = melted_data.groupby('Variable')['Valeur'].sum().reset_index()
         melted_group_data["nom"] = ["Grenoble Alpes Metropole"] * len(selected_years)
         melted_group_data["Legende"] = melted_group_data["Variable"].str[1:3].replace(custom_labels)
 
-        # Deuxième graphique en barres
         banane = px.bar(
             melted_group_data,
             x="nom",
@@ -317,24 +298,17 @@ elif visualization_type == "Repartition par âge":
                                         left_on="CODGEO", right_on="code_insee", 
                                         how="left").drop(columns=["code_insee"])
     melted_data = filtered_data.melt(
-        id_vars=["nom_commune"],  # Maintenir CODGEO comme identifiant
-        value_vars=selected_columns,  # Variables à "fondre"
-        var_name="LIB_V",  # Nom de la colonne pour les années
-        value_name="Valeur"  # Nom de la colonne pour les valeurs
+        id_vars=["nom_commune"],
+        value_vars=selected_columns,
+        var_name="LIB_V",
+        value_name="Valeur" 
     )
-    melted_data = melted_data.merge(
-        filtered_meta_data[["COD_VAR", "LIB_VAR_LONG"]],
-        left_on="LIB_V",  # Colonne dans `melted_data`
-        right_on="COD_VAR",  # Colonne dans `filtered_meta_data`
-        how="inner"  # Pour ne pas perdre d'informations
-    )
+    melted_data = melted_data.merge(filtered_meta_data[["COD_VAR", "LIB_VAR_LONG"]],left_on="LIB_V",right_on="COD_VAR",how="inner")
 
     melted_group_data = melted_data.groupby(['LIB_VAR_LONG',"LIB_V"]).sum(numeric_only=True).reset_index()
     melted_group_data["Année"] = "20"+melted_group_data["LIB_V"].str[1:3]
     melted_group_data["Catégorie"] = melted_group_data["LIB_VAR_LONG"].str[:-8]
-    melted_group_data
-    #melted_group_data["Pourcentage"] = melted_group_data[]
-    # Création du barplot
+
     fig = px.bar(
         melted_group_data, 
         x="Année", 
@@ -347,7 +321,6 @@ elif visualization_type == "Repartition par âge":
     fig.update_traces(width=1)
     fig.update_layout(xaxis=dict(tickmode='array', tickvals=melted_group_data["Année"].unique()))
 
-    # Affichage de la figure
     st.write(fig)
     st.markdown(
         "<p style='text-align: left; color: gray;'>"

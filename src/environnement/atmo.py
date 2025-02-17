@@ -1,11 +1,7 @@
 import streamlit as st
-import matplotlib.pyplot as plt
 from utils import load_atmo_data
 import pandas as pd
-import re
 import plotly.express as px
-from plotly.subplots import make_subplots
-import plotly.graph_objects as go
 
 variables = ["PM10","PM2.5","Dioxyde d'azote","Ozone"]
 if "selected_atmo" not in st.session_state or st.session_state["selected_atmo"] == None: 

@@ -1,12 +1,8 @@
 import streamlit as st
 import pandas as pd
-import altair as alt
 import plotly.express as px
 import re
-import matplotlib.pyplot as plt
 from utils import load_data,load_geojson,filtre_pattern
-import numpy as np
-import plotly.graph_objects as go
 
 geojson_commune = load_geojson()
 data,meta_data,nom_commune= load_data()
