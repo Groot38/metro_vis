@@ -4,8 +4,7 @@ import numpy as np
 import plotly.express as px
 
 
-#dépenses dans domaine environnement
-# type dep T2 ; 
+
 @st.cache_data
 def load_data_energie():
     file_path_gaz = "../data/environnement/elec/conso-gaz-metropole.csv"
