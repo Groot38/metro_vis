@@ -12,10 +12,8 @@ import plotly.graph_objects as go
 geojson_commune = load_geojson()
 data,meta_data,nom_commune= load_data()
 
-#st.write(data.head())
 visualization_type = st.sidebar.radio("Type de Visualisation", ["Population par commune", "Evolution de la population","Repartition par âge"])
 
-# Option, choix de la colonne et de l'année
 st.sidebar.title("Options")
 st.sidebar.text("Sélectionnez les années : ")
 selected_years = []
