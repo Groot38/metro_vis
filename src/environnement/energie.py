@@ -26,7 +26,7 @@ gaz["Date"] = pd.to_datetime(gaz["Date"], format="%Y-%m")
 elec["Date"] = pd.to_datetime(elec["Date"], format="%Y-%m-%d")
 
 ######################################################################
-st.title("Evolution de la consommation de Gaz")
+st.subheader("Evolution de la consommation de Gaz")
 
 st.line_chart(gaz,x="Date", y= "Consommation de gaz (en KWh PCS 0°C)")
 st.markdown(
@@ -36,7 +36,7 @@ st.markdown(
         )
 #####################################################################
 
-st.title("Evolution de la consommation d'Electricité")
+st.subheader("Evolution de la consommation d'Electricité")
 
 elec["Année-Mois"] = elec["Date"].dt.to_period("M")
 

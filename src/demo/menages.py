@@ -37,7 +37,7 @@ melted_data["nombre enfants"] = melted_data["Variable"].str[9:11]
 melted_data = melted_data.groupby(["nombre enfants","année"]).sum(numeric_only=True).reset_index()
 #melted_data = melted_data[melted_data["année"] == 20+max(selected_years)].sort_values(by=["nom_commune", "nombre enfants"])
 melted_data = melted_data.sort_values(["nombre enfants"])
-st.subheader("Analyse de la population au travers des ménages : du nombre d'enfant et du statut pariétal")
+st.subheader("Analyse des ménages : du nombre d'enfant et du statut marital")
 # Création du barplot avec Plotly Express
 passion = px.bar(melted_data, 
              x="année", 

@@ -8,7 +8,7 @@ import re
 import plotly.express as px
 
 
-st.title("Etude des transports de la métropole")
+st.title("Etude des mobilités de la métropole")
 
 @st.cache_data
 def load_data_transport():
@@ -60,8 +60,7 @@ if afficher_bus:
     ).add_to(m)
 
 with col2 :
-    st.subheader(f"Cartes des transport de la Métropole de Grenoble")
-    # 🎛️ Affichage dans Streamlit
+    st.subheader(f"Cartes des transports de la Métropole de Grenoble")
     st_folium(m, width=700, height=500)
     st.markdown(
                 "<p style='text-align: left; color: gray; margin-top: -40px;'>"

@@ -89,18 +89,19 @@ def info():
 
     st.subheader("Descriptif des pages lié à la démographie :")
 
-    st.text("Page menages : On va trouver ici ce qui est lié aux nombre d'enfants et statut mariétal")
     st.text("Page population : On va trouver des informations sur le nombre d'habitants, l'âge de la population et plus encore...")
-    st.text("Page revenu : On va avoir les informations sur les salaires en fonction du sexe et de la commune")
+    st.text("Page menages : On va trouver ici ce qui est lié aux nombre d'enfants et statut mariétal")
     st.text("Page travail : On aura les catégories socioprofessionelles et le nombre d'actifs par rapport au nombre de retraité")
+    st.text("Page revenu : On va avoir les informations sur les salaires en fonction du sexe et de la commune")
+    
 
     st.subheader("Descriptif des pages lié à l'environnement :") 
-    
-    st.text("Page atmo : On aura sur cette page les informations liés à la qualité de l'air selon certains polluants")
-    st.text("Page energie : On aura sur cette page les informations liés à la consommation de gaz et d'éléctricité de la métropole")
     st.text("Page meteo : On a ici les informations sur la météo sur 6 stations différentes")
-    st.text("Page transport : On a ici les informations lié aux mobilités pour aller au travail")
+    st.text("Page energie : On aura sur cette page les informations liés à la consommation de gaz et d'éléctricité de la métropole")
+    st.text("Page qualité de l'air : On aura sur cette page les informations liés à la qualité de l'air selon certains polluants")
     st.text("Page zfe : On a ici les informations sur les ZFE et l'évolution du parc automobile de la metropole")
+    st.text("Page transport : On a ici les informations lié aux mobilités pour aller au travail")
+    
 
 
     if st.button("🚪Retour à la page d'accueil"):
@@ -123,14 +124,14 @@ meteo = st.Page("src/environnement/meteo.py", title="Météo", icon="🌧️")
 energie = st.Page("src/environnement/energie.py", title="Energie", icon="⚡")
 atmo = st.Page("src/environnement/atmo.py",title= "Qualité de l'air",icon = "🌫️")
 zfe = st.Page("src/environnement/zfe.py",title= "ZFE et parc automobile",icon = "🚗")
-transport = st.Page("src/environnement/transport.py", title="Transport", icon="🚲")
+transport = st.Page("src/environnement/transport.py", title="Mobilité", icon="🚲")
 
 
 if st.session_state.logged_in:
     pg = st.navigation(
         {
             "": [logout_page],
-            "📊 Démographie": [population, travail, menages,revenu],
+            "📊 Démographie": [population,menages, travail,revenu],
             "🌱 Environnement": [meteo, energie,atmo,zfe,transport],
         }
     )

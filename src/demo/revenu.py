@@ -24,7 +24,7 @@ filtered_data = filtered_data.merge(nom_commune[["code_insee", "nom_commune"]],
                                      left_on="CODGEO", right_on="code_insee", 
                                      how="left").drop(columns=["code_insee"])
 
-
+st.subheader("Analyse des salaires")
 
 pattern_salaire = re.compile(r"^SNHM")
 filtered_meta_data = meta_data[meta_data["COD_VAR"].astype(str).str.match(pattern_salaire)]

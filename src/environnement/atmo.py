@@ -3,6 +3,7 @@ from src.utils import load_atmo_data
 import pandas as pd
 import plotly.express as px
 
+st.subheader("Analyse de la qualité de l'air")
 variables = ["PM10","PM2.5","Dioxyde d'azote","Ozone"]
 if "selected_atmo" not in st.session_state or st.session_state["selected_atmo"] == None: 
     selected_variable = st.sidebar.selectbox("Choisissez une catégorie à analyser", variables,index = 0)

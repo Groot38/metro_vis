@@ -63,7 +63,7 @@ CSP["indice"] = range(1,9)
 filtered_data_global["indice"] = filtered_data_global["subcat"].str[2].astype(int)
 resultat = pd.merge(filtered_data_global, CSP, on="indice", how="left").sort_values(by = "Catégorie",ascending=True)
 resultat["Année"] = "20"+resultat["Catégorie"].str[1:]
-st.subheader("Analyse de la population au travers des catégories socio-professionnelles")
+st.subheader("Analyse des catégories socio-professionnelles")
 fig = px.bar(
     resultat, 
     x="Année", 
@@ -103,7 +103,7 @@ retraites.index = ["20" + year for year in reversed(selected_years)]
 retraites = retraites.sort_index()
 rapport = cotisant/retraites
 
-
+st.subheader("Analyse du rapport entre le nombre d'actifs et le nombre de retraités")
 fig = make_subplots(specs=[[{"secondary_y": True}]])
 
 # courbes des rapports démo
