@@ -15,7 +15,8 @@ else :
 if selected_variable == "Ozone" :
     O3 = load_atmo_data("data/atmo/O3")
     O3["Date"] = pd.to_datetime(O3["Date"])
-    prune = px.line(
+    O3 = O3.sort_values(by = "Date")
+    mirabelle = px.line(
         O3,
         x="Date",
         y=O3.iloc[:,1],
@@ -24,15 +25,15 @@ if selected_variable == "Ozone" :
         markers=True,
         labels={"y": "Valeur Mesurée", "Date": "Date", "Station": "Station"}
     )
-    prune.add_hline(
+    mirabelle.add_hline(
         y = 120,
         line_dash="dash",
         line_color="green",
         annotation_text="Objectif de qualité pour la protection de la santé humaine",
         annotation_position="top right"
     )
-    prune.update_yaxes(rangemode="tozero")
-    st.write(prune)
+    mirabelle.update_yaxes(rangemode="tozero")
+    st.write(mirabelle)
     st.markdown(
     "<p style='text-align: left; color: gray; margin-top: -50px;'>"
     "Les données sont des moyennes mensuelles allant de février 2014 à janvier 2025.<br>"
@@ -45,7 +46,7 @@ if selected_variable == "Dioxyde d'azote" :
     NO2 = load_atmo_data("data/atmo/NO2")
     NO2["Date"] = pd.to_datetime(NO2["Date"])
     NO2 = NO2.sort_values(by = "Date")
-    prune = px.line(
+    coing = px.line(
         NO2,
         x="Date",
         y=NO2.iloc[:,1],
@@ -54,22 +55,22 @@ if selected_variable == "Dioxyde d'azote" :
         markers=True,
         labels={"y": "Valeur Mesurée", "Date": "Date", "Station": "Station"}
     )
-    prune.add_hline(
+    coing.add_hline(
         y = 40,
         line_dash="dash",
         line_color="green",
         annotation_text="Objectif de qualité FR",
         annotation_position="top right"
     )
-    prune.add_hline(
+    coing.add_hline(
         y = 30,
         line_dash="dash",
         line_color="red",
         annotation_text="Niveau critique pour la protection de la végétation",
         annotation_position="top right"
     )
-    prune.update_yaxes(rangemode="tozero")
-    st.write(prune)
+    coing.update_yaxes(rangemode="tozero")
+    st.write(coing)
     st.markdown(
     "<p style='text-align: left; color: gray; margin-top: -50px;'>"
     "Les données sont des moyennes mensuelles allant de février 2014 à janvier 2025.<br>"
@@ -82,7 +83,8 @@ if selected_variable == "Dioxyde d'azote" :
 if selected_variable == "PM2.5" :
     PM25 = load_atmo_data("data/atmo/PM25")
     PM25["Date"] = pd.to_datetime(PM25["Date"])
-    prune = px.line(
+    PM25 = PM25.sort_values(by = "Date")
+    mure = px.line(
         PM25,
         x="Date",
         y=PM25.iloc[:,1],
@@ -91,29 +93,29 @@ if selected_variable == "PM2.5" :
         markers=True,
         labels={"y": "Valeur Mesurée", "Date": "Date", "Station": "Station"}
     )
-    prune.add_hline(
+    mure.add_hline(
         y = 10,
         line_dash="dash",
         line_color="green",
         annotation_text="Objectif de qualité FR",
         annotation_position="top right"
     )
-    prune.add_hline(
+    mure.add_hline(
         y = 20,
         line_dash="dash",
         line_color="red",
         annotation_text="Valeur cible pour la protection de la santé humaine FR",
         annotation_position="top right"
     )
-    prune.add_hline(
+    mure.add_hline(
         y = 25,
         line_dash="dash",
         line_color="black",
         annotation_text="Valeur limite pour la protection de la santé humaine UE",
         annotation_position="top right"
     )
-    prune.update_yaxes(rangemode="tozero")
-    st.write(prune)
+    mure.update_yaxes(rangemode="tozero")
+    st.write(mure)
     st.markdown(
     "<p style='text-align: left; color: gray; margin-top: -50px;'>"
     "Les données sont des moyennes mensuelles allant de février 2014 à janvier 2025.<br>"
@@ -127,7 +129,8 @@ if selected_variable == "PM2.5" :
 if selected_variable == "PM10" :
     PM10 = load_atmo_data("data/atmo/PM10")
     PM10["Date"] = pd.to_datetime(PM10["Date"])
-    prune = px.line(
+    PM10 = PM10.sort_values(by = "Date")
+    noix = px.line(
         PM10,
         x="Date",
         y=PM10.iloc[:,1],
@@ -136,29 +139,29 @@ if selected_variable == "PM10" :
         markers=True,
         labels={"y": "Valeur Mesurée", "Date": "Date", "Station": "Station"}
     )
-    prune.add_hline(
+    noix.add_hline(
         y = 30,
         line_dash="dash",
         line_color="green",
         annotation_text="Objectif de qualité FR",
         annotation_position="top right"
     )
-    prune.add_hline(
+    noix.add_hline(
         y = 40,
         line_dash="dash",
         line_color="red",
         annotation_text="Valeurs limites pour la protection de la santé humaine UE",
         annotation_position="top right"
     )
-    prune.add_hline(
+    noix.add_hline(
         y = 80,
         line_dash="dash",
         line_color="black",
         annotation_text="Seuil d'alerte FR",
         annotation_position="top right"
     )
-    prune.update_yaxes(rangemode="tozero")
-    st.write(prune)
+    noix.update_yaxes(rangemode="tozero")
+    st.write(noix)
     st.markdown(
     "<p style='text-align: left; color: gray; margin-top: -50px;'>"
     "Les données sont des moyennes mensuelles allant de février 2014 à janvier 2025.<br>"
