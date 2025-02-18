@@ -43,6 +43,7 @@ if selected_variable == "Ozone" :
 if selected_variable == "Dioxyde d'azote" :
     NO2 = load_atmo_data("data/atmo/NO2")
     NO2["Date"] = pd.to_datetime(NO2["Date"])
+    NO2 = NO2.sort_values(by = "Date")
     prune = px.line(
         NO2,
         x="Date",
