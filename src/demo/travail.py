@@ -70,7 +70,7 @@ fig = px.bar(
     y="Valeur", 
     color="CSP", 
     title="Diagramme empilé des catégories socio-professionneles", 
-    labels={"Category": "Catégories", "Value": "Valeurs", "Subcategory": "Sous-catégories"},
+    labels={"Category": "Catégories", "Valeur": "Nombre", "Subcategory": "Sous-catégories"},
     barmode="stack"
 )
 fig.update_traces(width=1)

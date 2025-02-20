@@ -208,7 +208,7 @@ with col1 :
         )
     else:
         st.warning("Aucune donnée disponible pour cette sélection.")
-    valeur_2018
+    st.write(round(valeur_2018-valeur_2016))
     st.markdown(
         "<p style='text-align: left; color: gray;'>"
         "Source : SDES, Indicateurs territoriaux de développement durable (ITDD)</p>",
