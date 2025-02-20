@@ -301,7 +301,7 @@ elif visualization_type == "Repartition par âge":
         id_vars=["nom_commune"],
         value_vars=selected_columns,
         var_name="LIB_V",
-        value_name="Valeur" 
+        value_name="Nombre" 
     )
     melted_data = melted_data.merge(filtered_meta_data[["COD_VAR", "LIB_VAR_LONG"]],left_on="LIB_V",right_on="COD_VAR",how="inner")
 
@@ -312,10 +312,10 @@ elif visualization_type == "Repartition par âge":
     fig = px.bar(
         melted_group_data, 
         x="Année", 
-        y="Valeur", 
+        y="Nombre", 
         color="Catégorie", 
         title="Diagramme empilé des catégories d'âge", 
-        labels={"Category": "Catégories", "Value": "Valeurs", "Subcategory": "Sous-catégories"},
+        labels={"Category": "Catégories"},
         barmode="stack"
     )
     fig.update_traces(width=1)

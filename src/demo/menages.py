@@ -73,7 +73,7 @@ mangue = px.bar(filtered_columns_df,
              orientation='h', 
              title='Nombre de personnes par statut marital',
              color = 'statut',
-             labels={'valeur': 'Valeur', 'statut': 'Statut marital','P21_POP15P_CELIBATAIRE' : 'TEST'},
+             labels={'valeur': 'Nombre', 'statut': 'Statut marital','P21_POP15P_CELIBATAIRE' : 'TEST'},
              ).update_yaxes(categoryorder="total ascending")
 
 st.write(mangue)

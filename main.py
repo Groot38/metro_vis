@@ -84,23 +84,24 @@ def info():
     """
     st.title("Bienvenue sur la page d'information")
 
-    st.text("Cette application est dédié à la métropole de Grenoble, les 2 axes de travail sont l'environnement et la démographie.")
+    st.text("Cette application est dédiée à la métropole de Grenoble, les 2 axes de travail sont l'environnement et la démographie.")
     st.text("N'hésitez pas à parcourir chaque page une par une")
+    st.text("Voici les informations qu'on va trouver sur les différentes pages")
 
-    st.subheader("Descriptif des pages lié à la démographie :")
 
-    st.text("Page population : On va trouver des informations sur le nombre d'habitants, l'âge de la population et plus encore...")
-    st.text("Page menages : On va trouver ici ce qui est lié aux nombre d'enfants et statut mariétal")
-    st.text("Page travail : On aura les catégories socioprofessionelles et le nombre d'actifs par rapport au nombre de retraité")
-    st.text("Page revenu : On va avoir les informations sur les salaires en fonction du sexe et de la commune")
+    st.subheader("Descriptif des pages liées à la démographie :")
+    st.text("Page population : Le nombre d'habitants par commune, l'âge de la population et plus encore...")
+    st.text("Page menages : Nombre d'enfants par famille et statut mariétal")
+    st.text("Page travail : Catégories socioprofessionelles et le nombre d'actifs par rapport au nombre de retraité")
+    st.text("Page revenu : Informations sur les salaires en fonction du sexe et de la commune")
     
 
-    st.subheader("Descriptif des pages lié à l'environnement :") 
-    st.text("Page meteo : On a ici les informations sur la météo sur 6 stations différentes")
-    st.text("Page energie : On aura sur cette page les informations liés à la consommation de gaz et d'éléctricité de la métropole")
-    st.text("Page qualité de l'air : On aura sur cette page les informations liés à la qualité de l'air selon certains polluants")
-    st.text("Page zfe : On a ici les informations sur les ZFE et l'évolution du parc automobile de la metropole")
-    st.text("Page transport : On a ici les informations lié aux mobilités pour aller au travail")
+    st.subheader("Descriptif des pages liées à l'environnement :") 
+    st.text("Page meteo : Informations sur la météo sur 2 stations différentes")
+    st.text("Page energie : Informations liés à la consommation de gaz et d'éléctricité de la métropole")
+    st.text("Page qualité de l'air : Informations liés à la qualité de l'air selon certains polluants")
+    st.text("Page zfe : Informations sur les ZFE et l'évolution du parc automobile de la metropole")
+    st.text("Page transport : Informations lié aux mobilités pour aller au travail")
     
 
 
