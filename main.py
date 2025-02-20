@@ -98,10 +98,10 @@ def info():
 
     st.subheader("Descriptif des pages liées à l'environnement :") 
     st.text("Page meteo : Informations sur la météo sur 2 stations différentes")
-    st.text("Page energie : Informations liés à la consommation de gaz et d'éléctricité de la métropole")
-    st.text("Page qualité de l'air : Informations liés à la qualité de l'air selon certains polluants")
+    st.text("Page energie : Informations liées à la consommation de gaz et d'éléctricité de la métropole")
+    st.text("Page qualité de l'air : Informations liées à la qualité de l'air selon certains polluants")
     st.text("Page zfe : Informations sur les ZFE et l'évolution du parc automobile de la metropole")
-    st.text("Page transport : Informations lié aux mobilités pour aller au travail")
+    st.text("Page transport : Informations liées aux mobilités pour aller au travail")
     
 
 
